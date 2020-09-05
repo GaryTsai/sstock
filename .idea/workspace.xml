@@ -187,7 +187,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="566" />
     <option name="y" value="191" />
     <option name="width" value="1172" />
@@ -230,6 +230,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/component" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
@@ -269,12 +270,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1598454987487</updated>
-      <workItem from="1598454988826" duration="61335000" />
+      <workItem from="1598454988826" duration="61642000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="61335000" />
+    <option name="totallyTimeSpent" value="61642000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
