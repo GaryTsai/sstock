@@ -1,0 +1,16 @@
+.react-datepicker-wrapper{
+    margin: 2px 0px;
+    display: inline-block;
+    padding: 0;
+    border: 0;
+    width:inherit;
+}
+.input-sale-frame{
+    margin:0px 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+    border-radius: 0px;
+}
+.react-datepicker__input-container input{
+    width: 100%;
+}
