@@ -66,7 +66,7 @@ export default class Stock extends Component {
               </div>
             </div>
           </td>}
-          <td>{stock.date}</td>
+          {this.props.saleStatus !== 'sale' ? <td>{stock.date}</td> :  <td>{stock.sale_date}</td>}
           <td>{stock.name}</td>
           <td>{stock.number}</td>
           <td>{averagePrice}</td>

@@ -58,8 +58,12 @@ export default class App extends Component {
       let stocks = items.sort(function (a, b) {
         return a.date < b.date ? 1 : -1
       });
-      let unSaleStocks = stocks.filter(a => a.status !=='sale');
-      let saleStocks = stocks.filter(a => a.status !=='unsale');
+      let unSaleStocks = stocks.filter(a => a.status !=='sale').sort(function (a, b) {
+        return a.sale_date < b.sale_date ? 1 : -1
+      });
+      let saleStocks = stocks.filter(a => a.status ==='sale').sort(function (a, b) {
+        return a.sale_date < b.sale_date ? 1 : -1
+      });
 
       if(!!items) {
         let total = 0;
@@ -149,17 +153,14 @@ export default class App extends Component {
     let profit = 0;
     let saleCost = 0;
     let profitAndLoss = 0;
+    this.setState({saleStatus:stockInfo.saleStatus});
     if(stockInfo.stockStatus === 'individual'){
       switch(stockInfo.saleStatus){
         case 'all':
           let all = allStocks.filter(a => (startRegion <= a.date && a.date <= endRegion));
           for (let item in all) {
             total += all[item].cost;
-          }
-          for (let item in all) {
             profitAndLoss += all[item].income;
-          }
-          for (let item in all) {
             saleCost += all[item].sale_cost;
           }
           for (let item in all) {
@@ -171,27 +172,19 @@ export default class App extends Component {
           let sale = saleStocks.filter(a => startRegion <= a.date && a.date <= endRegion );
           for (let item in sale) {
             total += sale[item].cost;
-          }
-          for (let item in sale) {
             profitAndLoss += sale[item].income;
-          }
-          for (let item in sale) {
             saleCost += sale[item].sale_cost;
           }
           for (let item in sale) {
             profit = (profitAndLoss/saleCost*100).toFixed(2)
           }
-          this.setState({showStocks:sale, profit:profit, saleCost:saleCost, profitAndLoss:profitAndLoss});
+          this.setState({showStocks: sale, profit:profit, saleCost:saleCost, profitAndLoss:profitAndLoss});
           break;
         case 'unsale':
           let unSale = unSaleStocks.filter(a => startRegion <= a.date && a.date <= endRegion );
           for (let item in unSale) {
             total += unSale[item].cost;
-          }
-          for (let item in unSale) {
             profitAndLoss += unSale[item].income;
-          }
-          for (let item in unSale) {
             saleCost += unSale[item].sale_cost;
           }
           for (let item in unSale) {
@@ -213,6 +206,14 @@ export default class App extends Component {
 
   saleIsOpen = () => this.setState({saleIsOpen:!this.state.saleIsOpen});
 
+  getSaleIsStatus = () =>{
+    if(!browserUtils.isMobile()){
+      return true
+    }else{
+      return this.state.saleIsOpen;
+    }
+  };
+
     render() {
     const inputData = this.state.inputData;
     const unSaleStocks = this.state.unSaleStocks;
@@ -224,11 +225,11 @@ export default class App extends Component {
         margin: '0 auto',
       }}>
         <Navbar totalCost={this.state.totalCost} profitAndLoss={this.state.profitAndLoss} route={this.state.route} changeRoute={this.changeRoute} profit={this.state.profit} saleCost={this.state.saleCost}/>
-        { browserUtils.isMobile() && !this.state.saleIsOpen && this.state.route === 'home' && <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit"  onClick={this.saleIsOpen}>買入</button>}
-        { browserUtils.isMobile() && this.state.saleIsOpen && this.state.route === 'home' && <button className="btn btn-secondary from-group col-md-2 input-sale-frame" type="submit"  onClick={this.saleIsOpen}>隱藏</button>}
-        { this.state.saleIsOpen && this.state.route === 'home' && <Input callback={this.inputData} />}
+        { browserUtils.isMobile() && !this.state.saleIsOpen && this.state.route === 'home' && <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit"  onClick={() => this.saleIsOpen(true)}>買入</button>}
+        { browserUtils.isMobile() && this.state.saleIsOpen && this.state.route === 'home' && <button className="btn btn-secondary from-group col-md-2 input-sale-frame" type="submit"  onClick={() => this.saleIsOpen(false)}>隱藏</button>}
+        { this.getSaleIsStatus() && this.state.route === 'home' && <Input callback={this.inputData} />}
         {this.state.route === 'home' && <Stocks hideFiled={false} inputData={inputData} allStocks={unSaleStocks} deleteCallback={this.deleteStock} saleStockCallback={this.saleStock}/>}
-        {this.state.route === 'summary' && <Stocks hideFiled={true} inputData={inputData} allStocks={showStocks} deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={this.state.route}
+        {this.state.route === 'summary' && <Stocks hideFiled={true} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={showStocks} deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={this.state.route}
                                                    queryDataCallback={this.updateQueryData} resetCallBack={this.reset}/>}
       </div>
     )

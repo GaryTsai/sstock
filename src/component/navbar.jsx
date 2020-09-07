@@ -48,7 +48,7 @@ export default class Navbar extends Component {
     return (
       <div>
         <nav className="navbar navbar-expand-md navbar-light " style={{backgroundColor: 'rgb(52 149 220)'}}>
-          <a className="navbar-brand" href="/#" onClick={e => this.props.changeRoute('home')}>Freedom of wealth</a>
+          <a className="navbar-brand"  onClick={e => this.props.changeRoute('home')}>Freedom of wealth</a>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                   aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
@@ -56,10 +56,10 @@ export default class Navbar extends Component {
           <div className="collapse navbar-collapse" id="navbarCollapse">
             <ul className="navbar-nav mr-auto">
               <li className={`nav-item`} style={{...this.getActiveStyle()}}>
-                <a className="nav-link" href="/#" onClick={e => this.props.changeRoute('summary')}>歷史紀錄 <span className="sr-only"></span></a>
+                <a className="nav-link"  onClick={e => this.props.changeRoute('summary')}>歷史紀錄 <span className="sr-only"></span></a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/#">Yor Money</a>
+                <a className="nav-link" >Yor Money</a>
               </li>
             </ul>
             {/*<form className="form-inline mt-2 mt-md-0">*/}

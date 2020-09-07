@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Stock from './stock';
 import InputRegion from "./inputRegion";
+import browserUtils from "./../utils/browserUtils";
 const initialState = {
   allData:[],
   allStocks:"",
@@ -33,25 +34,33 @@ export default class Stocks extends Component {
     this.props.deleteCallback(timestamp);
   };
 
-  isQueryOpen =() => this.setState({isQueryOpen:!this.state.isQueryOpen})
+  isQueryOpen = status => this.setState({isQueryOpen:status});
+
+  getQueryStatus = () =>{
+    if(!browserUtils.isMobile()){
+      return true
+    }else{
+      return this.state.isQueryOpen;
+    }
+  };
 
 
   render() {
     const {allStocks, route}= this.props;
     const {isQueryOpen}= this.state;
-
+    const isMobile = browserUtils.isMobile();
     return (
       <div>
-        {route === 'summary' && !isQueryOpen && <button className="btn btn-warning from-group col-md-2" type="submit" onClick={this.isQueryOpen}>查詢時區</button>}
-        {route === 'summary' && isQueryOpen && <button className="btn btn-secondary from-group col-md-2" type="submit" onClick={this.isQueryOpen}>隱藏</button>}
-        {route === 'summary' && isQueryOpen && <InputRegion callback={this.queryData} resetCallBack={this.props.resetCallBack}/>}
-        <div style={{overflowY: 'scroll'}}>
+        {route === 'summary' && !isQueryOpen && isMobile && <button className="btn btn-warning from-group col-md-2" type="submit" onClick={() => this.isQueryOpen(true)}>查詢時區</button>}
+        {route === 'summary' && isQueryOpen && isMobile && <button className="btn btn-secondary from-group col-md-2" type="submit" onClick={() => this.isQueryOpen(false)}>隱藏</button>}
+        {route === 'summary' && this.getQueryStatus() && <InputRegion callback={this.queryData} resetCallBack={this.props.resetCallBack}/>}
+        <div style={{overflowY: browserUtils.isMobile() ? 'scroll' : 'unset'}}>
         <table className="table table-dark">
           <thead>
           <tr>
             <th scope="col">#</th>
             {!this.props.hideFiled && <th scope="col">賣出</th>}
-            <th scope="col">購買日期</th>
+            {this.props.saleStatus !== 'sale' ? <th scope="col">購買日期</th> :  <th scope="col">賣出日期</th> }
             <th scope="col">股票名稱</th>
             <th scope="col">編號</th>
             <th scope="col">平均單價</th>
@@ -67,7 +76,7 @@ export default class Stocks extends Component {
           <tbody>
           {
             !!allStocks && (allStocks.length !== 0) && allStocks.map((stock, index) => (
-            <Stock hideFiled={this.props.hideFiled} key={stock.number+index} stock={stock} index={index+1} stockSaleCallback = {this.props.saleStockCallback}delete={index => this.delete(index)}/>
+            <Stock hideFiled={this.props.hideFiled} saleStatus={this.props.saleStatus} key={stock.number+index} stock={stock} index={index+1} stockSaleCallback = {this.props.saleStockCallback}delete={index => this.delete(index)}/>
             ))
           }
           </tbody>

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import DatePicker from "react-datepicker";
 import utils from "./../utils/dateFormat";
+import browserUtils from "./../utils/browserUtils";
 import "./styles.css";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -78,27 +79,45 @@ export default class Stocks extends Component {
 
   render() {
     const {startStandardDate, endStandardDate} = this.state;
+    const isMobile = browserUtils.isMobile();
     return (
-      <div style={{overflowY: 'scroll'}}>
-          <div className="form-row" style={{margin:'5px', overflowY: 'scroll'}}>
-            <button type="button" className="btn btn-info from-group col-md-2" style={{margin: '0px 5px'}}  onClick={this.props.resetCallBack}>顯示全部 Stock </button>
-            <div className={'from-group col-md-2'}>
+      <div>
+          <div className="form-row" style={{margin:'5px', overflowY: isMobile ? 'scroll' : 'unset'}}>
+            <button type="button" className="btn btn-info from-group col-md-2" style={{margin: '3px 5px'}}  onClick={this.props.resetCallBack}>顯示全部 Stock </button>
+            {!isMobile &&
+              <div style={{margin:'5px', float: 'left'}}>起始區間:
+              <DatePicker
+                style={{marginRight:'4px'}}
+                selected={startStandardDate}
+                onChange={this.handleStartDateChange}
+                onFocus={e=>{e.preventDefault();e.stopPropagation();}}
+              />
+            </div>}
+            {!isMobile &&
+              <div style={{margin:'5px', float: 'left'}}>結束區間:
+              <DatePicker
+                style={{marginRight:'4px'}}
+                selected={endStandardDate}
+                onChange={this.handleEndDateChange}
+                onFocus={e=>{e.preventDefault();e.stopPropagation();}}
+              /></div>}
+            {isMobile && <div className={'from-group col-md-2'}>
             <div style={{margin:'5px', float: 'left'}}>起始區間: <DatePicker
               style={{marginRight:'4px'}}
               selected={startStandardDate}
               onChange={this.handleStartDateChange}
               onFocus={e=>{e.preventDefault();e.stopPropagation();}}
             /></div>
-            </div>
-            <div className={'from-group col-md-2'}>
+            </div>}
+            {isMobile && <div className={'from-group col-md-2'}>
             <div style={{margin:'5px', float: 'left'}}>結束區間: <DatePicker
               style={{marginRight:'4px'}}
               selected={endStandardDate}
               onChange={this.handleEndDateChange}
               onFocus={e=>{e.preventDefault();e.stopPropagation();}}
             /></div>
-            </div>
-            <div className="btn-group btn-group-toggle from-group col-md-6" data-toggle="buttons" style={{margin: '0px 10px', zIndex: 0, ...this.getMobileStyleOfButton()}}>
+            </div>}
+            <div className={"btn-group btn-group-toggle" + (isMobile ? ' from-group col-md-6' : ' from-group col-md-2')} data-toggle="buttons" style={{margin: '0px 10px', zIndex: 0, ...this.getMobileStyleOfButton()}}>
               <label className="btn btn-secondary active" onClick={this.getSaleOptions}>
                 <input type="radio" name="saleOption" id="saleOption1" value='all' autoComplete="off" /> 全部
               </label>
@@ -117,7 +136,7 @@ export default class Stocks extends Component {
               {/*  <input type="radio" name="stockOption" id="mutual" value='mutual' autoComplete="off" /> 共同股*/}
               {/*</label>*/}
             </div>
-            <button className="btn btn-primary from-group col-md-2" type="submit" style={{margin: '3px 5px'}} onClick={this.queryRegion}>查詢送出</button>
+            <button className={"btn btn-primary "+ (isMobile ? ' from-group col-md-2' : ' from-group col-md-1') }type="submit" style={{margin: '3px 5px'}} onClick={this.queryRegion}>查詢送出</button>
           </div>
       </div>
     )
