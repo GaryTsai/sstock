@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8d947a1e-29b2-427a-ad9a-bcafc36e3549" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/inputRegion.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/inputRegion.jsx" afterDir="false" />
-    </list>
+    <list default="true" id="8d947a1e-29b2-427a-ad9a-bcafc36e3549" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -82,7 +79,7 @@
         <entry file="file://$PROJECT_DIR$/src/component/inputRegion.jsx">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="184">
-              <caret line="20" column="30" lean-forward="true" selection-start-line="20" selection-start-column="30" selection-end-line="21" selection-end-column="3" />
+              <caret line="20" column="30" selection-start-line="20" selection-start-column="30" selection-end-line="21" selection-end-column="3" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -187,7 +184,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="565" />
     <option name="y" value="190" />
     <option name="width" value="1173" />
@@ -289,12 +286,12 @@
       <updated>1598454987487</updated>
       <workItem from="1598454988826" duration="62567000" />
       <workItem from="1599330893631" duration="4821000" />
-      <workItem from="1599482473310" duration="12938000" />
+      <workItem from="1599482473310" duration="13343000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="80326000" />
+    <option name="totallyTimeSpent" value="80731000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -306,7 +303,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.01981506" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -516,7 +513,7 @@
     <entry file="file://$PROJECT_DIR$/src/component/inputRegion.jsx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="184">
-          <caret line="20" column="30" lean-forward="true" selection-start-line="20" selection-start-column="30" selection-end-line="21" selection-end-column="3" />
+          <caret line="20" column="30" selection-start-line="20" selection-start-column="30" selection-end-line="21" selection-end-column="3" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>
