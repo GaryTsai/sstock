@@ -44,7 +44,7 @@ export default class Navbar extends Component {
 
 
   render() {
-
+    console.log(this.props.totalCost,this.props.profitAndLoss,this.props.profit,this.props.saleCost);
     return (
       <div>
         <nav className="navbar navbar-expand-md navbar-light " style={{backgroundColor: 'rgb(52 149 220)'}}>

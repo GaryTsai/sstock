@@ -19,7 +19,7 @@ export default class Stocks extends Component {
   }
 
   componentDidMount() {
-    this.setState({date: this.getFormatDate(new Date())})
+    this.setState({date: this.getFormatDate(new Date()), datePickerDate:this.getFormatDate(new Date())})
   }
 
   inputDate = date =>{
@@ -78,27 +78,27 @@ export default class Stocks extends Component {
   };
 
   handleChange = (date) =>{
-    this.setState({date: this.getFormatDate(date), datePickerDate:date})
+    this.setState({date: this.getFormatDate(date), datePickerDate:this.getFormatDate(date)})
   };
 
 
   render() {
     const {datePickerDate} = this.state;
     return (
-      <div style={{margin:'0px 5px'}}>
+      <div style={{margin:'5px 5px'}}>
           <div className="form-row">
-            {/*<div className="col">*/}
-            {/*  <input type="text" className="form-control" placeholder="日期" onChange={(c) => this.inputDate(c.target.value)} value={this.state.date}/>*/}
-            {/*</div>*/}
-            <div className="from-group col-md-2 input-sale-frame" >
-            <DatePicker
-              selected={datePickerDate}
-              onChange={this.handleChange}
-              // onFocus={e=>{e.preventDefault();e.stopPropagation();}
-              onFocus={e => e.preventDefault()}
-              // readOnly={true}
-            />
+            <div className="col">
+              <input type="date" className="form-control" placeholder="日期" onChange={(c) => this.handleChange(c.target.value)} value={datePickerDate}/>
             </div>
+            {/*<div className="from-group col-md-2 input-sale-frame" >*/}
+            {/*<DatePicker*/}
+            {/*  selected={datePickerDate}*/}
+            {/*  onChange={this.handleChange}*/}
+            {/*  // onFocus={e=>{e.preventDefault();e.stopPropagation();}*/}
+            {/*  onFocus={e => e.preventDefault()}*/}
+            {/*  readOnly={true}*/}
+            {/*/>*/}
+            {/*</div>*/}
             <div className="from-group col-md-2 input-sale-frame">
               <input type="text" className="form-control" placeholder="股票名稱" onChange={(c) => this.inputName(c.target.value)} value={this.state.name}/>
             </div>
