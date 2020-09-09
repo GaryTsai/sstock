@@ -72,14 +72,14 @@ export default class Stocks extends Component {
           <div className="form-row" style={{margin:'5px', overflowY: isMobile ? 'scroll' : 'unset'}}>
             <button type="button" className="btn btn-info from-group col-md-2" style={{margin: '3px 5px'}}  onClick={this.props.resetCallBack}>顯示全部 Stock </button>
             {
-              <div style={{margin:'5px', float: 'left', display: 'flex', alignItems: 'center'}}>
+              <div style={{margin:'5px', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
                 <div>起始區間:</div>
                 <div className="col">
                   <input type="date" className="form-control" placeholder="日期" onChange={(c) => this.handleStartDateChange(c.target.value)} value={startStandardDate}/>
                 </div>
             </div>}
             {
-            <div style={{margin:'5px', float: 'left', display: 'flex', alignItems: 'center'}}>
+            <div style={{margin:'5px', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
                 <div>結束區間:</div>
                 <div className="col">
                   <input type="date" className="form-control" placeholder="日期" onChange={(c) => this.handleEndDateChange(c.target.value)} value={endStandardDate}/>
@@ -105,7 +105,7 @@ export default class Stocks extends Component {
               {/*  <input type="radio" name="stockOption" id="mutual" value='mutual' autoComplete="off" /> 共同股*/}
               {/*</label>*/}
             </div>
-            <button className={"btn btn-primary "+ (isMobile ? ' from-group col-md-2' : ' from-group col-md-1') }type="submit" style={{margin: '3px 5px'}} onClick={this.queryRegion}>查詢送出</button>
+            <button className={"btn btn-primary "+ (isMobile ? ' from-group col-md-2' : ' from-group col-md-1') } type="submit" style={{margin: '3px 5px'}} onClick={this.queryRegion}>查詢送出</button>
           </div>
       </div>
     )

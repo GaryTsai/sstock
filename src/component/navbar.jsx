@@ -16,13 +16,15 @@ export default class Navbar extends Component {
   getActiveStyle = () =>{
     if(browserUtils.isMobile() && this.props.route === 'summary'){
       return {
+        marginTop: '5px',
         background:'rgb(232 232 232)',
       }
     }
     if(this.props.route === 'summary')
       return {
+        cursor: 'pointer',
         background:'rgb(232 232 232)',
-        borderRadius: '10%'
+        borderRadius: '10px'
       }
   };
 
@@ -47,7 +49,7 @@ export default class Navbar extends Component {
     console.log(this.props.totalCost,this.props.profitAndLoss,this.props.profit,this.props.saleCost);
     return (
       <div>
-        <nav className="navbar navbar-expand-md navbar-light " style={{backgroundColor: 'rgb(52 149 220)'}}>
+        <nav className="navbar navbar-expand-md navbar-light " style={{backgroundColor: 'rgb(52 149 220)', cursor: 'pointer'}}>
           <a className="navbar-brand"  onClick={e => this.props.changeRoute('home')}>Freedom of wealth</a>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                   aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,12 +69,15 @@ export default class Navbar extends Component {
             {/*    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>*/}
             {/*</form>*/}
           </div>
-          {this.props.route === 'home' && <div style={{fontSize:'18px', fontWeight:'bold',...this.getComputeStyleForMobile()}}>總成本: {this.props.totalCost}元</div>}
+          <div style={{display: 'inherit'}}>
           {this.props.route === 'summary' && <div style={{fontSize:'18px', fontWeight:'bold',...this.getComputeStyleForMobile()}}>投入成本:{this.props.saleCost}元</div>}
           {this.props.route === 'summary' && <div style={{fontSize:'18px', fontWeight:'bold',...this.getComputeStyleForMobile()}}>總損益: {this.props.profitAndLoss}元</div>}
           {this.props.route === 'summary' && <div style={{fontSize:'18px', fontWeight:'bold',...this.getComputeStyleForMobile()}}>投殖利率: {this.props.profit}%</div>}
+            {this.props.route === 'home' && <div style={{width:'100%',fontSize:'18px', fontWeight:'bold',...this.getComputeStyleForMobile()}}>總成本: {this.props.totalCost}元</div>}
 
+          </div>
         </nav>
+
       </div>
     )
   }

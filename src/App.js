@@ -8,15 +8,6 @@ import 'bootstrap/dist/js/bootstrap.bundle.js';
 import Navbar from './component/navbar';
 import Input from './component/input';
 import Stocks from './component/stocks';
-import firebaseConfig from './settings/firebaseConfig';
-// Firebase App (the core Firebase SDK) is always required and must be listed first
-import * as firebase from "firebase/app";
-// If you enabled Analytics in your project, add the Firebase SDK for Analytics
-import "firebase/analytics";
-import "firebase/database";
-// Add the Firebase products that you want to use
-import "firebase/auth";
-import "firebase/firestore";
 import utils from "./utils/dateFormat";
 import browserUtils from "./utils/browserUtils";
 import api from './api/api'
@@ -32,6 +23,7 @@ const initialState = {
     profit: 0,
     saleCost:0,
     saleIsOpen: false,
+    saleStatus:'all'
 };
 
 export default class App extends Component {
@@ -47,6 +39,7 @@ export default class App extends Component {
   updateAllData = () =>{
     api.getAllData().then((stockData) =>{
       this.setState({
+        saleStatus: 'all',
         showStocks:stockData.showStocks,
         allStocks:stockData.allStocks,
         saleStocks:stockData.saleStocks,
@@ -87,6 +80,7 @@ export default class App extends Component {
 
     return year + '-' + month + '-' + day
   };
+
   updateQueryData = (stockInfo) =>{
     const {allStocks ,unSaleStocks,saleStocks}= this.state;
     const startRegion = stockInfo.dateRegion1;
@@ -111,7 +105,7 @@ export default class App extends Component {
           this.setState({showStocks:all, profit:profit, saleCost:saleCost, profitAndLoss:profitAndLoss});
           break;
         case 'sale':
-          let sale = saleStocks.filter(a => startRegion <= a.date && a.date <= endRegion );
+          let sale = saleStocks.filter(a => startRegion <= a.sale_date && a.sale_date <= endRegion );
           for (let item in sale) {
             total += sale[item].cost;
             profitAndLoss += sale[item].income;
@@ -135,8 +129,7 @@ export default class App extends Component {
           this.setState({showStocks:unSale, profit:profit, saleCost:saleCost, profitAndLoss:profitAndLoss});
           break;
         default:
-          let defaultAll = allStocks.filter(a => startRegion <= a.date <= endRegion );
-          this.setState({showStocks:defaultAll});
+          break;
       }
     }
     else if (stockInfo.stockStatus === 'mutual'){

@@ -49,6 +49,7 @@ export default class Stocks extends Component {
     const {allStocks, route}= this.props;
     const {isQueryOpen}= this.state;
     const isMobile = browserUtils.isMobile();
+
     return (
       <div>
         {route === 'summary' && !isQueryOpen && isMobile && <button className="btn btn-warning from-group col-md-2" type="submit" onClick={() => this.isQueryOpen(true)}>查詢時區</button>}
@@ -60,7 +61,7 @@ export default class Stocks extends Component {
           <tr>
             <th scope="col">#</th>
             {!this.props.hideFiled && <th scope="col">賣出</th>}
-            {this.props.saleStatus !== 'sale' ? <th scope="col">購買日期</th> :  <th scope="col">賣出日期</th> }
+            {this.props.saleStatus === 'sale' ? <th scope="col">賣出日期</th> :  <th scope="col">購買日期</th> }
             <th scope="col">股票名稱</th>
             <th scope="col">編號</th>
             <th scope="col">平均單價</th>
