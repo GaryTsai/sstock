@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import DatePicker from "react-datepicker";
 import utils from "./../utils/dateFormat";
 import browserUtils from "./../utils/browserUtils";
 import "./styles.css";
@@ -22,19 +21,12 @@ export default class Stocks extends Component {
   }
 
   componentDidMount() {
-    this.setState({date: this.getFormatDate(new Date()),dateRegion1:this.getFormatDate(new Date()),dateRegion2:this.getFormatDate(new Date()), startStandardDate:this.getFormatDate(new Date()), endStandardDate:this.getFormatDate(new Date())})
+    this.setState({date: utils.dateFormat(new Date()),dateRegion1: utils.dateFormat(new Date()),dateRegion2: utils.dateFormat(new Date()), startStandardDate: utils.dateFormat(new Date()), endStandardDate: utils.dateFormat(new Date())})
   }
-  getFormatDate = date => {
 
-    const year = date.getFullYear();
-    const month = utils.toDualDigit(date.getMonth() + 1);
-    const day = utils.toDualDigit(date.getDate());
-
-    return year + '-' + month + '-' + day
-  };
   queryRegion = () =>{
     const {dateRegion1, dateRegion2, saleStatus, stockStatus} = this.state;
-    console.log(dateRegion1 , dateRegion2 , saleStatus , stockStatus);
+
     if(dateRegion1 && dateRegion2 && saleStatus && stockStatus){
       const stockInfo ={'dateRegion1':dateRegion1, 'dateRegion2':dateRegion2, 'saleStatus':saleStatus, 'stockStatus':stockStatus};
       this.props && this.props.callback(stockInfo);

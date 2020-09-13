@@ -4,26 +4,26 @@ import './App.css';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
-
-import Navbar from './component/navbar';
+import Account from './component/account/account';
+import Navbar from './component/navbar/navbar';
 import Input from './component/input';
-import Stocks from './component/stocks';
-import utils from "./utils/dateFormat";
+import Stocks from './component/stock/stocks';
 import browserUtils from "./utils/browserUtils";
 import api from './api/api'
+
 const initialState = {
-    inputData: [],
-    unSaleStocks: [],
-    saleStocks: [],
-    allStocks: [],
-    showStocks: [],
-    totalCost: 0,
-    route: 'home',
-    profitAndLoss: 0,
-    profit: 0,
-    saleCost:0,
-    saleIsOpen: false,
-    saleStatus:'all'
+  inputData: [],
+  unSaleStocks: [],
+  saleStocks: [],
+  allStocks: [],
+  showStocks: [],
+  totalCost: 0,
+  route: 'home',
+  profitAndLoss: 0,
+  profit: 0,
+  saleCost: 0,
+  saleIsOpen: false,
+  saleStatus: 'all'
 };
 
 export default class App extends Component {
@@ -36,134 +36,124 @@ export default class App extends Component {
     this.updateAllData();
   }
 
-  updateAllData = () =>{
-    api.getAllData().then((stockData) =>{
-      this.setState({
-        saleStatus: 'all',
-        showStocks:stockData.showStocks,
-        allStocks:stockData.allStocks,
-        saleStocks:stockData.saleStocks,
-        unSaleStocks: stockData.unSaleStocks,
-        totalCost: stockData.totalCost,
-        profitAndLoss:stockData.profitAndLoss,
-        saleCost: stockData.saleCost,
-        profit:(stockData.profitAndLoss/stockData.saleCost*100).toFixed(2)})}
+  updateAllData = () => {
+    api.getAllData().then((stockData) => {
+        this.setState({
+          saleStatus: 'all',
+          showStocks: stockData.showStocks,
+          allStocks: stockData.allStocks,
+          saleStocks: stockData.saleStocks,
+          unSaleStocks: stockData.unSaleStocks,
+          totalCost: stockData.totalCost,
+          profitAndLoss: stockData.profitAndLoss,
+          saleCost: stockData.saleCost,
+          profit: (stockData.profitAndLoss / stockData.saleCost * 100).toFixed(2)
+        })
+      }
     );
   };
 
-  inputData = data =>{
+  inputData = data => {
     let self = this;
-    api.insertNewData(data).then(()=>{
+    api.insertNewData(data).then(() => {
       self.updateAllData()
     });
   };
 
   deleteStock = (timestamp) => {
-    api.deleteStock(timestamp).then(()=>
-      this.updateAllData()
-    )
-  };
-  saleStock = (salePrice, saleSheet, stock) =>{
-    api.updateStock(salePrice, saleSheet, stock).then(()=>
+    api.deleteStock(timestamp).then(() =>
       this.updateAllData()
     )
   };
 
-  changeRoute = (route) =>{
-   this.setState({route:route})
+  saleStock = (salePrice, saleSheet, stock) => {
+    console.log(salePrice, saleSheet, stock);
+    api.updateStock(salePrice, saleSheet, stock).then(() => {
+        // const stockInfo ={'price':salePrice, 'sheet':salePrice};
+        // api.updateAccountRecord(stockInfo, false);
+        //     this.updateAllData()
+        // }
+        this.updateAllData()
+      }
+    )
   };
 
-  getFormatDate = date => {
-    const year = date.getFullYear();
-    const month = utils.toDualDigit(date.getMonth() + 1);
-    const day = utils.toDualDigit(date.getDate());
+  changeRoute = (route) => this.setState({route: route});
 
-    return year + '-' + month + '-' + day
-  };
 
-  updateQueryData = (stockInfo) =>{
-    const {allStocks ,unSaleStocks,saleStocks}= this.state;
+  updateQueryData = (stockInfo) => {
+    const {allStocks, unSaleStocks, saleStocks} = this.state;
     const startRegion = stockInfo.dateRegion1;
     const endRegion = stockInfo.dateRegion2;
-    let total = 0;
+
     let profit = 0;
     let saleCost = 0;
     let profitAndLoss = 0;
-    this.setState({saleStatus:stockInfo.saleStatus});
-    if(stockInfo.stockStatus === 'individual'){
-      switch(stockInfo.saleStatus){
+    let result = '';
+
+    this.setState({saleStatus: stockInfo.saleStatus});
+    if (stockInfo.stockStatus === 'individual') {
+      switch (stockInfo.saleStatus) {
         case 'all':
-          let all = allStocks.filter(a => (startRegion <= a.date && a.date <= endRegion));
-          for (let item in all) {
-            total += all[item].cost;
-            profitAndLoss += all[item].income;
-            saleCost += all[item].sale_cost;
-          }
-          for (let item in all) {
-            profit = (profitAndLoss/saleCost*100).toFixed(2)
-          }
-          this.setState({showStocks:all, profit:profit, saleCost:saleCost, profitAndLoss:profitAndLoss});
+          result = allStocks.filter(a => (startRegion <= a.date && a.date <= endRegion));
           break;
         case 'sale':
-          let sale = saleStocks.filter(a => startRegion <= a.sale_date && a.sale_date <= endRegion );
-          for (let item in sale) {
-            total += sale[item].cost;
-            profitAndLoss += sale[item].income;
-            saleCost += sale[item].sale_cost;
-          }
-          for (let item in sale) {
-            profit = (profitAndLoss/saleCost*100).toFixed(2)
-          }
-          this.setState({showStocks: sale, profit:profit, saleCost:saleCost, profitAndLoss:profitAndLoss});
+          result = saleStocks.filter(a => startRegion <= a.sale_date && a.sale_date <= endRegion);
           break;
         case 'unsale':
-          let unSale = unSaleStocks.filter(a => startRegion <= a.date && a.date <= endRegion );
-          for (let item in unSale) {
-            total += unSale[item].cost;
-            profitAndLoss += unSale[item].income;
-            saleCost += unSale[item].sale_cost;
-          }
-          for (let item in unSale) {
-            profit = (profitAndLoss/saleCost*100).toFixed(2)
-          }
-          this.setState({showStocks:unSale, profit:profit, saleCost:saleCost, profitAndLoss:profitAndLoss});
+          result = unSaleStocks.filter(a => startRegion <= a.date && a.date <= endRegion);
           break;
         default:
           break;
       }
-    }
-    else if (stockInfo.stockStatus === 'mutual'){
-
+      for (let item in result) {
+        profitAndLoss += result[item].income;
+        saleCost += result[item].sale_cost;
+      }
+      profit = (profitAndLoss / saleCost * 100).toFixed(2)
+      this.setState({showStocks: result, profit: profit, saleCost: saleCost, profitAndLoss: profitAndLoss});
+    } else if (stockInfo.stockStatus === 'mutual') {
     }
   };
   reset = () => this.updateAllData();
 
-  saleIsOpen = () => this.setState({saleIsOpen:!this.state.saleIsOpen});
+  saleIsOpen = () => this.setState({saleIsOpen: !this.state.saleIsOpen});
 
-  getSaleIsStatus = () =>{
-    if(!browserUtils.isMobile()){
+  getSaleIsStatus = () => {
+    if (!browserUtils.isMobile()) {
       return true
-    }else{
+    } else {
       return this.state.saleIsOpen;
     }
   };
 
-    render() {
+  render() {
     const inputData = this.state.inputData;
     const unSaleStocks = this.state.unSaleStocks;
     const showStocks = this.state.showStocks;
+
     return (
       <div className="App" style={{
         height: window.innerHeight,
         margin: '0 auto',
       }}>
-        <Navbar totalCost={this.state.totalCost} profitAndLoss={this.state.profitAndLoss} route={this.state.route} changeRoute={this.changeRoute} profit={this.state.profit} saleCost={this.state.saleCost}/>
-        { browserUtils.isMobile() && !this.state.saleIsOpen && this.state.route === 'home' && <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit"  onClick={() => this.saleIsOpen(true)}>買入</button>}
-        { browserUtils.isMobile() && this.state.saleIsOpen && this.state.route === 'home' && <button className="btn btn-secondary from-group col-md-2 input-sale-frame" type="submit"  onClick={() => this.saleIsOpen(false)}>隱藏</button>}
-        { this.getSaleIsStatus() && this.state.route === 'home' && <Input callback={this.inputData} />}
-        {this.state.route === 'home' && <Stocks hideFiled={false} inputData={inputData} allStocks={unSaleStocks} deleteCallback={this.deleteStock} saleStockCallback={this.saleStock}/>}
-        {this.state.route === 'summary' && <Stocks hideFiled={true} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={showStocks} deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={this.state.route}
-                                                   queryDataCallback={this.updateQueryData} resetCallBack={this.reset}/>}
+        <Navbar totalCost={this.state.totalCost} profitAndLoss={this.state.profitAndLoss} route={this.state.route}
+                changeRoute={this.changeRoute} profit={this.state.profit} saleCost={this.state.saleCost}/>
+        {browserUtils.isMobile() && !this.state.saleIsOpen && this.state.route === 'home' &&
+        <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit"
+                onClick={() => this.saleIsOpen(true)}>買入</button>}
+        {browserUtils.isMobile() && this.state.saleIsOpen && this.state.route === 'home' &&
+        <button className="btn btn-secondary from-group col-md-2 input-sale-frame" type="submit"
+                onClick={() => this.saleIsOpen(false)}>隱藏</button>}
+        {this.getSaleIsStatus() && this.state.route === 'home' && <Input callback={this.inputData}/>}
+        {this.state.route === 'home' &&
+        <Stocks hideFiled={false} inputData={inputData} allStocks={unSaleStocks} deleteCallback={this.deleteStock}
+                saleStockCallback={this.saleStock}/>}
+        {this.state.route === 'summary' &&
+        <Stocks hideFiled={true} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={showStocks}
+                deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={this.state.route}
+                queryDataCallback={this.updateQueryData} resetCallBack={this.reset}/>}
+        {this.state.route === 'account' && <Account/>}
       </div>
     )
   }

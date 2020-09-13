@@ -11,9 +11,10 @@ export default class Stock extends Component {
 
   componentDidMount() {
   }
+
   updateStockStatus = () => {
     const {stock} = this.props;
-    const salePrice = this.price.value;
+    const salePrice = parseInt(this.price.value);
     if((stock.sheet < this.sheet.value) || isNaN(salePrice) || !salePrice )
       alert('賣出張數錯誤');
     else{
@@ -22,13 +23,14 @@ export default class Stock extends Component {
       this.sheet.value = '';
     }
   };
+
   deleteStock = () => {
     const {stock} = this.props;
     this.props.delete(stock.timestamp);
   };
 
   render() {
-    const {stock, index} = this.props;
+    const {stock, saleStatus, index} = this.props;
     const averagePrice = (stock.price*1.001425).toFixed(3);
     const handlingFee = stock.price*1000*stock.sheet*0.001424 < 20 ? 20 : Math.round(stock.price*1000*stock.sheet*0.001424);
 
@@ -66,7 +68,7 @@ export default class Stock extends Component {
               </div>
             </div>
           </td>}
-          {this.props.saleStatus !== 'sale' ? <td>{stock.date}</td> :  <td>{stock.sale_date}</td>}
+          { saleStatus !== 'sale' ? <td>{stock.date}</td> :  <td>{stock.sale_date}</td>}
           <td>{stock.name}</td>
           <td>{stock.number}</td>
           <td>{averagePrice}</td>
