@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import utils from "../../utils/dateFormat";
+import browserUtils from "../../utils/browserUtils";
 import api from "../../api/api";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -42,12 +42,16 @@ export default class Stocks extends Component {
     }
   };
 
-  getFormatDate = date => {
-    const year = date.getFullYear();
-    const month = utils.toDualDigit(date.getMonth() + 1);
-    const day = utils.toDualDigit(date.getDate());
-
-    return year + '-' + month + '-' + day
+  getStyleOfButton = () =>{
+    if(browserUtils.isMobile()){
+      return {
+        margin: '4px  0px'
+      }
+    }else{
+      return {
+        margin: '0px  0px'
+      }
+    }
   };
 
   handleChange = (price) => {
@@ -70,7 +74,7 @@ export default class Stocks extends Component {
                    onChange={(c) => this.inputSource(c.target.value)} value={this.state.source}/>
           </div>
           <div className="btn-group btn-group-toggle from-group col-md-2" data-toggle="buttons"
-               style={{margin: '0px 10px', zIndex: 0}}>
+               style={{...this.getStyleOfButton()}}>
             <label className="btn btn-warning active" onClick={this.getTransferOptions}>
               <input type="radio" name="stockOption" id="individual" value='transferIn' autoComplete="off"/> 轉入
             </label>
@@ -78,7 +82,7 @@ export default class Stocks extends Component {
               <input type="radio" name="stockOption" id="mutual" value='transferOut' autoComplete="off"/> 轉出
             </label>
           </div>
-          <button className="btn btn-primary from-group col-md-2 input-sale-frame" type="submit"
+          <button style={{borderRadius: '5px', margin: 'auto 5px'}} className="btn btn-primary from-group col-md-2 input-sale-frame" type="submit"
                   onClick={this.submitTrade}>確認送出
           </button>
         </div>

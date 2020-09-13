@@ -39,7 +39,7 @@ export default class Stock extends Component {
     const {acTime, acMoney, acStock, acSummary, records} = this.state;
 
     return (
-      <div style={{ margin:'auto 10%' }}>
+      <div>
         <AccountTransfer callback={this.updateAccount}/>
       <div className="container">
         <table className="table table-striped">
