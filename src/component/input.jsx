@@ -60,7 +60,6 @@ export default class Stocks extends Component {
       api.updateAccountRecord(stockInfo, true);
       this.props && this.props.callback(stockInfo);
       this.setState({
-        'date': '',
         'name': '',
         'number': '',
         'price': '',
@@ -72,7 +71,7 @@ export default class Stocks extends Component {
   };
 
   handleChange = (date) => {
-    this.setState({date: utils.dateFormat(date), datePickerDate: utils.dateFormat(date)})
+    this.setState({date: date, datePickerDate: date})
   };
 
   render() {

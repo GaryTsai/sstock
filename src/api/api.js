@@ -27,8 +27,7 @@ var getAccountRef = firebase.database().ref(`/account` );
 var getAccountRecordRef = firebase.database().ref(`/accountRecord` );
 
 var stockData;
-// unique key
-var timestamp = Math.floor(Date.now() / 1000);
+
 const api = {
   async getAllData(){
     await getDataRef.once('value').then((snapshot) => {
@@ -73,6 +72,7 @@ const api = {
     return stockData;
   },
   async insertNewData(data){
+    let timestamp = Math.floor(Date.now() / 1000);
     let cost = Math.round(data.price * 1000 * data.sheet * 1.001425);
 
     await getDataRef.child(timestamp.toString()).set({
@@ -142,6 +142,7 @@ const api = {
     let accountData = [];
     let transfer_price = 0;
     let date = d.dateFormat(new Date());
+    let timestamp = Math.floor(Date.now() / 1000);
 
     await getAccountRef.once('value').then((snapshot) => {
         accountData = snapshot.val();
@@ -177,6 +178,7 @@ const api = {
 
   },
   async updateAccountRecord(stockInfo, sale){
+    let timestamp = Math.floor(Date.now() / 1000);
     let accountData = [];
 
     await getAccountRef.once('value').then((snapshot) => {
