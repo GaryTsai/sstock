@@ -90,12 +90,14 @@ export default class App extends Component {
     let saleCost = 0;
     let profitAndLoss = 0;
     let result = '';
+    console.log(allStocks);
 
     this.setState({saleStatus: stockInfo.saleStatus});
     if (stockInfo.stockStatus === 'individual') {
       switch (stockInfo.saleStatus) {
         case 'all':
           result = allStocks.filter(a => (startRegion <= a.date && a.date <= endRegion));
+          result = result.concat(allStocks.filter(a => (startRegion <= a.sale_date && a.sale_date <= endRegion)));
           break;
         case 'sale':
           result = saleStocks.filter(a => startRegion <= a.sale_date && a.sale_date <= endRegion);
@@ -147,8 +149,8 @@ export default class App extends Component {
                 onClick={() => this.saleIsOpen(false)}>隱藏</button>}
         {this.getSaleIsStatus() && this.state.route === 'home' && <Input callback={this.inputData}/>}
         {this.state.route === 'home' &&
-        <Stocks hideFiled={false} inputData={inputData} allStocks={unSaleStocks} deleteCallback={this.deleteStock}
-                saleStockCallback={this.saleStock}/>}
+        <Stocks hideFiled={false} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={unSaleStocks} deleteCallback={this.deleteStock}
+                saleStockCallback={this.saleStock} route={this.state.route}/>}
         {this.state.route === 'summary' &&
         <Stocks hideFiled={true} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={showStocks}
                 deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={this.state.route}

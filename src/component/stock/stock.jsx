@@ -30,10 +30,10 @@ export default class Stock extends Component {
   };
 
   render() {
-    const {stock, saleStatus, index} = this.props;
+    const {stock, saleStatus, index, route} = this.props;
     const averagePrice = (stock.price*1.001425).toFixed(3);
     const handlingFee = stock.price*1000*stock.sheet*0.001424 < 20 ? 20 : Math.round(stock.price*1000*stock.sheet*0.001424);
-
+    console.log(stock.status);
     return (
         <tr>
           <th scope="row">{index}</th>
@@ -68,7 +68,10 @@ export default class Stock extends Component {
               </div>
             </div>
           </td>}
-          { saleStatus !== 'sale' ? <td>{stock.date}</td> :  <td>{stock.sale_date}</td>}
+          {  saleStatus === 'sale' && <td>{stock.sale_date}</td>}
+          {  saleStatus === 'unsale' && <td>{stock.date}</td>}
+          { route !=='home' && saleStatus === 'all' && (stock.status === 'sale' ? <td>{stock.sale_date}</td> : <td></td>)}
+          { route !=='home' && saleStatus === 'all' && (stock.status === 'unsale' ? <td>{stock.date}</td>: <td></td>)}
           <td>{stock.name}</td>
           <td>{stock.number}</td>
           <td>{averagePrice}</td>

@@ -38,7 +38,7 @@ export default class Stocks extends Component {
     const {allStocks, deleteCallback, queryDataCallback, saleStockCallback, resetCallBack, hideFiled, saleStatus, route}= this.props;
     const {isQueryOpen}= this.state;
     const isMobile = browserUtils.isMobile();
-
+    console.log((saleStatus === 'sale' && saleStatus !== 'all'));
     return (
       <div>
         {route === 'summary' && !isQueryOpen && isMobile && <button className="btn btn-warning from-group col-md-2" type="submit" onClick={() => this.isQueryOpen(true)}>查詢時區</button>}
@@ -50,7 +50,9 @@ export default class Stocks extends Component {
           <tr>
             <th scope="col">#</th>
             {!hideFiled && <th scope="col">賣出</th>}
-            {saleStatus === 'sale' ? <th scope="col">賣出日期</th> :  <th scope="col">購買日期</th> }
+            { saleStatus !== 'all' &&((saleStatus === 'sale') ? <th scope="col">賣出日期</th> : <th scope="col">購買日期</th> )}
+            {(saleStatus === 'all' && route !== 'home') && <th scope="col">賣出日期</th>}
+            { saleStatus === 'all'  && <th scope="col">購買日期</th>}
             <th scope="col">股票名稱</th>
             <th scope="col">編號</th>
             <th scope="col">平均單價</th>
@@ -66,7 +68,7 @@ export default class Stocks extends Component {
           <tbody>
           {
             (allStocks.length !== 0) && allStocks.map((stock, index) => (
-            <Stock hideFiled={hideFiled} saleStatus={saleStatus} key={stock.number+index} stock={stock} index={index+1} stockSaleCallback = {saleStockCallback}delete={index => deleteCallback(index)}/>
+            <Stock hideFiled={hideFiled} saleStatus={saleStatus} key={stock.number+index} stock={stock} index={index+1} route={route} stockSaleCallback = {saleStockCallback}delete={index => deleteCallback(index)}/>
             ))
           }
           </tbody>
