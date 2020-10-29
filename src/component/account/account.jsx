@@ -68,10 +68,8 @@ export default class Stock extends Component {
               <th scope="col">#</th>
               <th scope="col">帳戶金額</th>
               <th scope="col">股票金額</th>
-              <th scope="col">轉出金額</th>
-              <th scope="col">轉出時間</th>
-              <th scope="col">轉入金額</th>
-              <th scope="col">轉入時間</th>
+              <th scope="col">金額</th>
+              <th scope="col">時間</th>
               <th scope="col">來源</th>
             </tr>
             </thead>
