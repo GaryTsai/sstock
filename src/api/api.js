@@ -179,6 +179,7 @@ const api = {
   },
   async updateAccountRecord(stockInfo, sale){
     let timestamp = Math.floor(Date.now() / 1000);
+    let transfer_date = d.dateFormat(new Date())
     let accountData = [];
 
     await getAccountRef.once('value').then((snapshot) => {
@@ -189,13 +190,12 @@ const api = {
     let stock = 0;
     let cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet * 1.001425);
     let salePrice = Math.round(stockInfo.price * 1000 * stockInfo.sheet - stockInfo.price * 1000 * stockInfo.sheet * 0.004425);
-
     if(sale) {
-       money = parseInt(accountData.accountMoney) - cost;
-       stock = parseInt(accountData.accountStock) + cost;
+      money = parseInt(accountData.accountMoney) - cost;
+      stock = parseInt(accountData.accountStock) + cost;
     }else{
        money = parseInt(accountData.accountMoney) + salePrice;
-       stock = parseInt(accountData.accountStock) - salePrice;
+       stock = parseInt(accountData.accountStock) - stockInfo.cost;
     }
 
     await getAccountRef.update({
@@ -209,10 +209,8 @@ const api = {
       account_record_Money: money,
       account_record_Stock: stock,
       source: '股票',
-      transferIn: '',
-      transferInTime: '',
-      transferOut: '',
-      transferOutTime: '',
+      transfer: 0,
+      transferTime: transfer_date,
     });
 
     return ;

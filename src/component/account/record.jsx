@@ -19,10 +19,8 @@ export default class Stock extends Component {
         <th scope="row">{index}</th>
         <td>{record.account_record_Money}</td>
         <td>{record.account_record_Stock}</td>
-        <td>{record.transferOut}</td>
-        <td>{record.transferOutTime}</td>
-        <td>{record.transferIn}</td>
-        <td>{record.transferInTime}</td>
+        <td>{record.transfer}</td>
+        <td>{record.transferTime}</td>
         <td>{record.source}</td>
       </tr>
     )

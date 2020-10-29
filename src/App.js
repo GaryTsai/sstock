@@ -69,10 +69,8 @@ export default class App extends Component {
   saleStock = (salePrice, saleSheet, stock) => {
     console.log(salePrice, saleSheet, stock);
     api.updateStock(salePrice, saleSheet, stock).then(() => {
-        // const stockInfo ={'price':salePrice, 'sheet':salePrice};
-        // api.updateAccountRecord(stockInfo, false);
-        //     this.updateAllData()
-        // }
+        const stockInfo ={'price':salePrice, 'sheet':saleSheet, 'cost': stock.cost};
+        api.updateAccountRecord(stockInfo, false);
         this.updateAllData()
       }
     )
