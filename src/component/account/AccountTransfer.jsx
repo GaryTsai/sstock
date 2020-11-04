@@ -76,7 +76,7 @@ export default class Stocks extends Component {
           <div className="btn-group btn-group-toggle from-group col-md-2" data-toggle="buttons"
                style={{...this.getStyleOfButton()}}>
             <label className="btn btn-warning active" onClick={this.getTransferOptions}>
-              <input type="radio" name="stockOption" id="individual" value='transferIn' autoComplete="off"/> 轉入
+              <input type="radio" name="stockOption" id="individual" value='transferIn' autoComplete="off"/> 存入
             </label>
             <label className="btn btn-warning" onClick={this.getTransferOptions}>
               <input type="radio" name="stockOption" id="mutual" value='transferOut' autoComplete="off"/> 轉出

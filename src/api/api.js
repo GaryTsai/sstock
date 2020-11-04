@@ -143,7 +143,6 @@ const api = {
     let transfer_price = 0;
     let date = d.dateFormat(new Date());
     let timestamp = Math.floor(Date.now() / 1000);
-
     await getAccountRef.once('value').then((snapshot) => {
         accountData = snapshot.val();
     });
@@ -163,16 +162,14 @@ const api = {
       accountStock: stock,
       summary: summary
     });
-
     await getAccountRecordRef.child(timestamp.toString()).set({
       timestamp: timestamp,
       account_record_Money: money,
       account_record_Stock: stock,
       source: transferInfo.source,
-      transferIn: transferInfo.transferStatus === "transferIn" ? transferInfo.price : '',
-      transferInTime: transferInfo.transferStatus === "transferIn" ? date : '',
-      transferOut: transferInfo.transferStatus === "transferOut" ? transferInfo.price : '',
-      transferOutTime: transferInfo.transferStatus === "transferOut" ? date : '',
+      transfer: transferInfo.price,
+      transferStatus: transferInfo.transferStatus === "transferIn" ? '存入': '轉出',
+      transferTime: date,
     })
     return ;
 
@@ -188,11 +185,11 @@ const api = {
 
     let money = 0;
     let stock = 0;
-    let cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet * 1.001425);
+    // let cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet * 0.001425);
     let salePrice = Math.round(stockInfo.price * 1000 * stockInfo.sheet - stockInfo.price * 1000 * stockInfo.sheet * 0.004425);
     if(sale) {
-      money = parseInt(accountData.accountMoney) - cost;
-      stock = parseInt(accountData.accountStock) + cost;
+      money = parseInt(accountData.accountMoney) + salePrice;
+      stock = parseInt(accountData.accountStock) - stockInfo.cost;
     }else{
        money = parseInt(accountData.accountMoney) + salePrice;
        stock = parseInt(accountData.accountStock) - stockInfo.cost;
@@ -209,8 +206,9 @@ const api = {
       account_record_Money: money,
       account_record_Stock: stock,
       source: '股票',
-      transfer: 0,
+      transfer: salePrice,
       transferTime: transfer_date,
+      transferStatus: sale ? '存入' : '轉出'
     });
 
     return ;
