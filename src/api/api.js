@@ -185,11 +185,12 @@ const api = {
 
     let money = 0;
     let stock = 0;
-    // let cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet * 0.001425);
+    let cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet * 1.001425);
     let salePrice = Math.round(stockInfo.price * 1000 * stockInfo.sheet - stockInfo.price * 1000 * stockInfo.sheet * 0.004425);
+
     if(sale) {
-      money = parseInt(accountData.accountMoney) + salePrice;
-      stock = parseInt(accountData.accountStock) - stockInfo.cost;
+      money = parseInt(accountData.accountMoney) - salePrice;
+      stock = parseInt(accountData.accountStock) + cost;
     }else{
        money = parseInt(accountData.accountMoney) + salePrice;
        stock = parseInt(accountData.accountStock) - stockInfo.cost;

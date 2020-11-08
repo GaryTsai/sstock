@@ -71,7 +71,7 @@ export default class Navbar extends Component {
           <div>總損益: {profitAndLoss}元</div>
           <div>投殖利率: {profit}%</div>
           </div>}
-          {route === 'home' && <div>總成本: {totalCost}元</div>}
+          {route === 'home' && <div>目前投入總成本: {totalCost}元</div>}
           </div>
         </nav>
       </div>

@@ -95,7 +95,7 @@ export default class App extends Component {
       switch (stockInfo.saleStatus) {
         case 'all':
           result = allStocks.filter(a => (startRegion <= a.date && a.date <= endRegion));
-          result = result.concat(allStocks.filter(a => (startRegion <= a.sale_date && a.sale_date <= endRegion)));
+          // result = result.concat(allStocks.filter(a => (startRegion <= a.sale_date && a.sale_date <= endRegion)));
           break;
         case 'sale':
           result = saleStocks.filter(a => startRegion <= a.sale_date && a.sale_date <= endRegion);
@@ -106,7 +106,8 @@ export default class App extends Component {
         default:
           break;
       }
-      for (let item in result) {
+        for (let item in result) {
+        console.log(result[item].income);
         profitAndLoss += result[item].income;
         saleCost += result[item].sale_cost;
       }
