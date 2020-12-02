@@ -73,7 +73,7 @@ const api = {
   },
   async insertNewData(data){
     let timestamp = Math.floor(Date.now() / 1000);
-    let cost = Math.round(data.price * 1000 * data.sheet * 1.001425);
+    let cost = Math.floor(data.price * 1000 * data.sheet * 1.001425);
 
     await getDataRef.child(timestamp.toString()).set({
       timestamp: timestamp,
@@ -106,8 +106,8 @@ const api = {
   },
 
   async updateStock(salePrice, saleSheet, stock){
-    let income = Math.round(salePrice * 1000 * saleSheet - salePrice * 1000 * saleSheet * 0.004425 -  stock.cost);
-    let sale_cost = Math.round(salePrice * 1000 * saleSheet - salePrice * 1000 * saleSheet * 0.004425);
+    let income = Math.floor(salePrice * 1000 * saleSheet - salePrice * 1000 * saleSheet * 0.004425 -  stock.cost);
+    let sale_cost = Math.floor(salePrice * 1000 * saleSheet - salePrice * 1000 * saleSheet * 0.004425);
     let sale_date = d.dateFormat(new Date())
 
     await getDataRef.child(stock.timestamp).update({
@@ -185,15 +185,15 @@ const api = {
 
     let money = 0;
     let stock = 0;
-    let cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet * 1.001425);
-    let salePrice = Math.round(stockInfo.price * 1000 * stockInfo.sheet - stockInfo.price * 1000 * stockInfo.sheet * 0.004425);
-
+    let cost = Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 1.001425);
+    let salePrice = Math.floor(stockInfo.price * 1000 * stockInfo.sheet - stockInfo.price * 1000 * stockInfo.sheet * 0.004425);
+    
     if(sale) {
-      money = parseInt(accountData.accountMoney) - salePrice;
+      money = parseInt(accountData.accountMoney) - cost;
       stock = parseInt(accountData.accountStock) + cost;
     }else{
-       money = parseInt(accountData.accountMoney) + salePrice;
-       stock = parseInt(accountData.accountStock) - stockInfo.cost;
+       money = parseInt(accountData.accountMoney) + cost;
+       stock = parseInt(accountData.accountStock) - cost;
     }
 
     await getAccountRef.update({
@@ -207,7 +207,7 @@ const api = {
       account_record_Money: money,
       account_record_Stock: stock,
       source: '股票',
-      transfer: salePrice,
+      transfer: cost,
       transferTime: transfer_date,
       transferStatus: sale ? '存入' : '轉出'
     });
