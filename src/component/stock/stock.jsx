@@ -52,11 +52,11 @@ export default class Stock extends Component {
                     </div>
                     <div className="modal-body">
                       <div className="form-group">
-                        <label key={'price' + index} htmlFor={`price-name-${index}`} className="col-form-label">賣出單價:</label>
+                        <h5 style={{ color: 'black', textAlign: 'left'}} key={'price' + index} htmlFor={`price-name-${index}`} className="col-form-label">賣出單價:</h5>
                         <input type="text" className="form-control"  id={`price-name-${index}`} ref={(input) => { this.price = input; }} />
                       </div>
                       <div className="form-group">
-                        <label key={'sheet' + index} htmlFor={`sheet-name-${index}`} className="col-form-label">賣出張數:</label>
+                        <h5 style={{ color: 'black', textAlign: 'left'}} key={'sheet' + index} htmlFor={`sheet-name-${index}`} className="col-form-label">賣出張數:</h5>
                         <input type="text" className="form-control" id={`sheet-name-${index}`}  ref={(input) => { this.sheet = input; }}/>
                       </div>
                     </div>
