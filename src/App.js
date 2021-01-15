@@ -107,9 +107,8 @@ export default class App extends Component {
           break;
       }
         for (let item in result) {
-        console.log(result[item].income);
         profitAndLoss += result[item].income;
-        saleCost += result[item].sale_cost;
+        saleCost += result[item].cost;
       }
       profit = (profitAndLoss / saleCost * 100).toFixed(2)
       this.setState({showStocks: result, profit: profit, saleCost: saleCost, profitAndLoss: profitAndLoss});
@@ -132,7 +131,7 @@ export default class App extends Component {
     const inputData = this.state.inputData;
     const unSaleStocks = this.state.unSaleStocks;
     const showStocks = this.state.showStocks;
-
+    console.log('137');
     return (
       <div className="App" style={{
         height: window.innerHeight,
