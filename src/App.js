@@ -47,7 +47,7 @@ export default class App extends Component {
           totalCost: stockData.totalCost,
           profitAndLoss: stockData.profitAndLoss,
           saleCost: stockData.saleCost,
-          profit: (stockData.profitAndLoss / stockData.saleCost * 100).toFixed(2)
+          profit: Math.floor(stockData.profitAndLoss / stockData.saleCost * 100)
         })
       }
     );
@@ -110,7 +110,7 @@ export default class App extends Component {
         profitAndLoss += result[item].income;
         saleCost += result[item].cost;
       }
-      profit = (profitAndLoss / saleCost * 100).toFixed(2)
+      profit = Math.floor(profitAndLoss / saleCost * 100);
       this.setState({showStocks: result, profit: profit, saleCost: saleCost, profitAndLoss: profitAndLoss});
     } else if (stockInfo.stockStatus === 'mutual') {
     }

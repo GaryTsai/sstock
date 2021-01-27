@@ -31,7 +31,7 @@ export default class Stock extends Component {
 
   render() {
     const {stock, saleStatus, index, route} = this.props;
-    const averagePrice = (stock.price*1.001425).toFixed(3);
+    const averagePrice = stock.price*1.001425.toFixed(2);
     const handlingFee = stock.price*1000*stock.sheet*0.001424 < 20 ? 20 : Math.round(stock.price*1000*stock.sheet*0.001424);
     // console.log(route,saleStatus, stock.status);
     return (
@@ -76,11 +76,11 @@ export default class Stock extends Component {
           <td>{stock.number}</td>
           <td>{averagePrice}</td>
           <td>{stock.sheet}</td>
-          <td>{handlingFee.toFixed(0)}</td>
-          <td>{stock.cost.toFixed(0)}</td>
+          <td>{Math.floor(handlingFee)}</td>
+          <td>{Math.floor(stock.cost)}</td>
           <td>{stock.status === "unsale" ? '未賣出' : '已賣出'}</td>
-          <td>{stock.sale_cost.toFixed(2)}</td>
-          <td style={{ 'color': stock.income < 0 ? '#30ff30' : 'rgb(255 19 19)'}}>{stock.income.toFixed(2)}</td>
+          <td>{Math.floor(stock.sale_cost)}</td>
+          <td style={{ 'color': stock.income < 0 ? '#30ff30' : 'rgb(255 19 19)'}}>{Math.floor(stock.income)}</td>
           <td>
             <button type="button" className="btn btn-danger" onClick={this.deleteStock}>刪除</button>
           </td>

@@ -68,7 +68,7 @@ export default class Stocks extends Component {
           <tbody>
           {
             (allStocks.length !== 0) && allStocks.map((stock, index) => (
-            <Stock hideFiled={hideFiled} saleStatus={saleStatus} key={stock.number+index} stock={stock} index={index+1} route={route} stockSaleCallback = {saleStockCallback}delete={index => deleteCallback(index)}/>
+            <Stock hideFiled={hideFiled} saleStatus={saleStatus} key={stock.number+index} stock={stock} index={index+1} route={route} stockSaleCallback = {saleStockCallback} delete={index => deleteCallback(index)}/>
             ))
           }
           </tbody>

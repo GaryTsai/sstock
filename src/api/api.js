@@ -65,7 +65,7 @@ const api = {
           totalCost: total,
           profitAndLoss: profitAndLoss,
           saleCost: saleCost,
-          profit: (profitAndLoss / saleCost * 100).toFixed(2)
+          profit: Math.floor(profitAndLoss / saleCost * 100)
         }
       }
     });
@@ -106,10 +106,9 @@ const api = {
   },
 
   async updateStock(salePrice, saleSheet, stock){
-    let income = Math.floor(salePrice * 1000 * saleSheet - salePrice * 1000 * saleSheet * 0.004425 -  stock.cost);
-    let sale_cost = Math.floor(salePrice * 1000 * saleSheet - salePrice * 1000 * saleSheet * 0.004425);
-    let sale_date = d.dateFormat(new Date())
-
+    let income = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.004425) - stock.cost;
+    let sale_cost = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.004425);
+    let sale_date = d.dateFormat(new Date());
     await getDataRef.child(stock.timestamp).update({
       income: income,
       sale_cost: sale_cost,
@@ -152,16 +151,18 @@ const api = {
     }else{
       transfer_price = parseInt(transferInfo.price);
     }
-
+    console.log(accountData.accountMoney, accountData.accountStock);
     let money = parseInt(accountData.accountMoney) + transfer_price;
     let stock = parseInt(accountData.accountStock);
     let summary = money + stock;
+    console.log(money, stock , summary);
 
     await getAccountRef.update({
       accountMoney: money,
       accountStock: stock,
       summary: summary
     });
+
     await getAccountRecordRef.child(timestamp.toString()).set({
       timestamp: timestamp,
       account_record_Money: money,
@@ -185,9 +186,9 @@ const api = {
 
     let money = 0;
     let stock = 0;
-    let cost = Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 1.001425);
+    let cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.004425);
     let salePrice = Math.floor(stockInfo.price * 1000 * stockInfo.sheet - stockInfo.price * 1000 * stockInfo.sheet * 0.004425);
-    
+
     if(sale) {
       money = parseInt(accountData.accountMoney) - cost;
       stock = parseInt(accountData.accountStock) + cost;
@@ -195,7 +196,7 @@ const api = {
        money = parseInt(accountData.accountMoney) + cost;
        stock = parseInt(accountData.accountStock) - cost;
     }
-
+    console.log(money, stock);
     await getAccountRef.update({
       accountMoney: money,
       accountStock: stock,
