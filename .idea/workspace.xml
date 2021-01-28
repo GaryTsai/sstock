@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="8d947a1e-29b2-427a-ad9a-bcafc36e3549" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/api/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/stock/stock.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/stock/stock.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/stock/stocks.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/stock/stocks.jsx" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -100,8 +97,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/api/api.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="173">
-              <caret line="183" column="35" selection-start-line="183" selection-start-column="35" selection-end-line="183" selection-end-column="35" />
+            <state relative-caret-position="2">
+              <caret line="95" column="35" lean-forward="true" selection-start-line="95" selection-start-column="35" selection-end-line="95" selection-end-column="35" />
               <folding>
                 <element signature="e#313#336#0" expanded="true" />
               </folding>
@@ -133,8 +130,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>購買日期</find>
-      <find>d.</find>
       <find>transferStatus</find>
       <find>股票金額</find>
       <find>stockInfo</find>
@@ -163,6 +158,8 @@
       <find>平均單價</find>
       <find>saleStockCallback</find>
       <find>averagePrice</find>
+      <find>004425</find>
+      <find>0.44</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -335,12 +332,12 @@
       <workItem from="1608447710296" duration="594000" />
       <workItem from="1610549888787" duration="1872000" />
       <workItem from="1610783339350" duration="593000" />
-      <workItem from="1611756839142" duration="4377000" />
+      <workItem from="1611756839142" duration="5133000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="146560000" />
+    <option name="totallyTimeSpent" value="147316000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -353,6 +350,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.8329412" visible="true" weight="0.23844121" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -369,7 +367,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="TypeScript" order="9" weight="0.3286119" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50264204" side_tool="true" weight="0.25637394" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.497358" visible="true" weight="0.6175637" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.497358" visible="true" weight="0.1898017" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -654,8 +652,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/api/api.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="183" column="35" selection-start-line="183" selection-start-column="35" selection-end-line="183" selection-end-column="35" />
+        <state relative-caret-position="2">
+          <caret line="95" column="35" lean-forward="true" selection-start-line="95" selection-start-column="35" selection-end-line="95" selection-end-column="35" />
           <folding>
             <element signature="e#313#336#0" expanded="true" />
           </folding>

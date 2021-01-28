@@ -106,8 +106,8 @@ const api = {
   },
 
   async updateStock(salePrice, saleSheet, stock){
-    let income = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.004425) - stock.cost;
-    let sale_cost = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.004425);
+    let income = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.001425) - Math.floor(salePrice * 1000 * saleSheet * 0.003) - stock.cost;
+    let sale_cost = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.001425) - Math.floor(salePrice * 1000 * saleSheet * 0.003);
     let sale_date = d.dateFormat(new Date());
     await getDataRef.child(stock.timestamp).update({
       income: income,
@@ -186,8 +186,8 @@ const api = {
 
     let money = 0;
     let stock = 0;
-    let cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.004425);
-    let salePrice = Math.floor(stockInfo.price * 1000 * stockInfo.sheet - stockInfo.price * 1000 * stockInfo.sheet * 0.004425);
+    let cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet)  - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.003);
+    let salePrice = Math.floor(stockInfo.price * 1000 * stockInfo.sheet) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425)- Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.003);
 
     if(sale) {
       money = parseInt(accountData.accountMoney) - cost;
