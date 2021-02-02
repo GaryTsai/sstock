@@ -68,7 +68,7 @@ export default class Stock extends Component {
               <th scope="col">#</th>
               <th scope="col">帳戶金額</th>
               <th scope="col">股票金額</th>
-              <th scope="col">金額</th>
+              <th scope="col">金額(含損益)</th>
               <th scope="col">狀態</th>
               <th scope="col">時間</th>
               <th scope="col">來源</th>

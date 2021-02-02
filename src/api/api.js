@@ -183,7 +183,7 @@ const api = {
     await getAccountRef.once('value').then((snapshot) => {
       accountData = snapshot.val();
     });
-
+    console.log(stockInfo, sale);
     let money = 0;
     let stock = 0;
     let cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet)  - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.003);
@@ -194,7 +194,7 @@ const api = {
       stock = parseInt(accountData.accountStock) + cost;
     }else{
        money = parseInt(accountData.accountMoney) + cost;
-       stock = parseInt(accountData.accountStock) - cost;
+       stock = parseInt(accountData.accountStock) - stockInfo.cost;
     }
     console.log(money, stock);
     await getAccountRef.update({
