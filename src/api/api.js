@@ -183,20 +183,20 @@ const api = {
     await getAccountRef.once('value').then((snapshot) => {
       accountData = snapshot.val();
     });
-    console.log(stockInfo, sale);
+
     let money = 0;
     let stock = 0;
     let cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet)  - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.003);
-    let salePrice = Math.floor(stockInfo.price * 1000 * stockInfo.sheet) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425)- Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.003);
+    let salePrice = Math.floor(stockInfo.price * 1000 * stockInfo.sheet) + Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425);
 
     if(sale) {
-      money = parseInt(accountData.accountMoney) - cost;
-      stock = parseInt(accountData.accountStock) + cost;
+      money = parseInt(accountData.accountMoney) - salePrice;
+      stock = parseInt(accountData.accountStock) + salePrice;
     }else{
        money = parseInt(accountData.accountMoney) + cost;
        stock = parseInt(accountData.accountStock) - stockInfo.cost;
     }
-    console.log(money, stock);
+
     await getAccountRef.update({
       accountMoney: money,
       accountStock: stock,
@@ -208,7 +208,7 @@ const api = {
       account_record_Money: money,
       account_record_Stock: stock,
       source: '股票',
-      transfer: cost,
+      transfer: sale ? salePrice : cost,
       transferTime: transfer_date,
       transferStatus: sale ? '存入' : '轉出'
     });
