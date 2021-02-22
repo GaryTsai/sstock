@@ -11,18 +11,18 @@ export default class Navbar extends Component {
   }
 
   getActiveStyle = () =>{
-    if(browserUtils.isMobile() && this.props.route === 'summary'){
+    if(browserUtils.isMobile()){
       return {
         marginTop: '5px',
         background:'rgb(232 232 232)',
       }
-    }
-    if(this.props.route === 'summary')
+    } else {
       return {
         cursor: 'pointer',
-        background:'rgb(232 232 232)',
+        background: 'rgb(232 232 232)',
         borderRadius: '10px'
       }
+    }
   };
 
   getComputeStyleForMobile = () =>{
@@ -57,10 +57,10 @@ export default class Navbar extends Component {
           </button>
           <div className="collapse navbar-collapse" id="navbarCollapse">
             <ul className="navbar-nav mr-auto">
-              <li className={`nav-item`} style={{...this.getActiveStyle()}}>
+              <li className={`nav-item`} style={route === 'summary' ? this.getActiveStyle() : {}}>
                 <a className="nav-link"  onClick={e => changeRoute('summary')}>歷史紀錄 <span className="sr-only"></span></a>
               </li>
-              <li className="nav-item">
+              <li className="nav-item"  style={route === 'account' ? this.getActiveStyle() : {}} >
                 <a className="nav-link"　onClick={e => changeRoute('account')} >我的帳戶</a>
               </li>
             </ul>
