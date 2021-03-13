@@ -1,0 +1,8 @@
+.nav-item.nav-link.active{
+    color: #495057;
+    background-color: #ff4845;
+    border-color: #dee2e6 #dee2e6 #fff;
+}
+table td, .table th {
+    padding: 0.0rem;
+}

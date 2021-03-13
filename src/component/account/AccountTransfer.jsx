@@ -10,7 +10,7 @@ const initialState = {
   source: ''
 };
 
-export default class Stocks extends Component {
+export default class AccountTransfer extends Component {
   constructor(props) {
     super(props);
     this.state = initialState;
@@ -27,11 +27,12 @@ export default class Stocks extends Component {
 
   submitTrade = () => {
     const {price, transferStatus, source} = this.state;
+    const {whichAccount} = this.props;
     if (transferStatus && source && !isNaN(price)) {
       let self = this.props;
       const transferInfo = {price: price, transferStatus: transferStatus, source: source};
-      api.tradeForAccount(transferInfo).then(() => {
-        self.callback();
+      api.tradeForAccount(transferInfo, whichAccount).then(() => {
+        self.callback(whichAccount);
       });
       this.setState({
         'price': '',

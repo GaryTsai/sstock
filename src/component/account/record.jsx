@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 const initialState = {
 };
 
-export default class Stock extends Component {
+export default class Record extends Component {
   constructor(props) {
     super(props);
     this.state = initialState;
@@ -14,7 +14,6 @@ export default class Stock extends Component {
 
   render() {
     const {record, index} = this.props;
-    console.log(record.transferStatus);
     return (
       <tr>
         <th scope="row">{index}</th>

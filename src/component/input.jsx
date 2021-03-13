@@ -7,12 +7,13 @@ const initialState = {
   'date': new Date(),
   'name': '',
   'number': '',
+  'code_name':'',
   'price': '',
   'sheet': '',
   'datePickerDate': new Date()
 };
 
-export default class Stocks extends Component {
+export default class Input extends Component {
   constructor(props) {
     super(props);
     this.state = initialState;
@@ -52,12 +53,11 @@ export default class Stocks extends Component {
     })
   };
 
-  submitStock = () => {
+  submitStock = route => {
     const {date, name, number, price, sheet} = this.state;
-
     if (date && name && number && !isNaN(price) && !isNaN(sheet)) {
       const stockInfo = {'date': date, 'name': name, 'number': number, 'price': price, 'sheet': sheet};
-      api.updateAccountRecord(stockInfo, true);
+      api.updateAccountRecord(stockInfo, true, route);
       this.props && this.props.callback(stockInfo);
       this.setState({
         'name': '',
@@ -76,6 +76,7 @@ export default class Stocks extends Component {
 
   render() {
     const {datePickerDate} = this.state;
+    const {route} = this.props;
     return (
       <div style={{margin: '5px 5px'}}>
         <div className="form-row">
@@ -88,7 +89,7 @@ export default class Stocks extends Component {
                    onChange={(c) => this.inputName(c.target.value)} value={this.state.name}/>
           </div>
           <div className="from-group col-md-2 input-sale-frame">
-            <input type="text" className="form-control" placeholder="編號"
+            <input type="text" className="form-control" placeholder={route === 'US_account' ?  "美股代號" : "編號" }
                    onChange={(c) => this.inputNumber(c.target.value)} value={this.state.number}/>
           </div>
           <div className="from-group col-md-2 input-sale-frame">
@@ -96,11 +97,11 @@ export default class Stocks extends Component {
                    onChange={(c) => this.inputPrice(c.target.value)} value={this.state.price}/>
           </div>
           <div className="from-group col-md-2 input-sale-frame">
-            <input type="text" className="form-control" placeholder="張數"
+            <input type="text" className="form-control" placeholder={route === 'US_account' ?  "股數" : "張數" }
                    onChange={(c) => this.inputSheet(c.target.value)} value={this.state.sheet}/>
           </div>
           <button className="btn btn-primary from-group col-md-2 input-sale-frame" type="submit"
-                  onClick={this.submitStock}>確認送出
+                  onClick={() => this.submitStock(route)}>確認買入
           </button>
         </div>
       </div>

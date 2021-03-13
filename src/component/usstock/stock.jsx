@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 const initialState = {
 };
 
-export default class Stock extends Component {
+export default class Usstock extends Component {
   constructor(props) {
     super(props);
     this.state = initialState;
@@ -14,7 +14,7 @@ export default class Stock extends Component {
 
   updateStockStatus = () => {
     const {stock} = this.props;
-    const salePrice = parseInt(this.price.value);
+    const salePrice = parseFloat(this.price.value);
     if((stock.sheet < this.sheet.value) || isNaN(salePrice) || !salePrice )
       alert('賣出張數錯誤');
     else{
@@ -30,10 +30,8 @@ export default class Stock extends Component {
   };
 
   render() {
-    const {stock, saleStatus, index, route} = this.props;
-    const averagePrice = stock.price*1.001425.toFixed(2);
-    const handlingFee = stock.price*1000*stock.sheet*0.001424 < 20 ? 20 : Math.round(stock.price*1000*stock.sheet*0.001424);
-
+    const {stock, saleStatus, index} = this.props;
+    const averagePrice = stock.price;
     return (
         <tr>
           <th scope="row">{index}</th>
@@ -68,19 +66,16 @@ export default class Stock extends Component {
               </div>
             </div>
           </td>}
-          {  (route ==='home'  && stock.status === 'sale') && <td>{stock.sale_date}</td>}
-          {  (route ==='home'  && stock.status === 'unsale')  && <td>{stock.date}</td>}
-          { route !=='home' && (saleStatus === 'all' || saleStatus === 'sale') && (stock.status === 'sale' ? <td>{stock.sale_date}</td> : <td></td>)}
-          { route !=='home' && (saleStatus === 'all' || saleStatus === 'unsale') && (stock.status === 'unsale' ? <td>{stock.date}</td>: <td>{stock.date}</td>)}
+          { (saleStatus === 'US_all') && (stock.status === 'sale' ? <td>{stock.sale_date}</td> : <td></td>)}
+          { (saleStatus === 'US_all') && (stock.status === 'unsale' ? <td>{stock.date}</td>: <td>{stock.date}</td>)}
           <td>{stock.name}</td>
           <td>{stock.number}</td>
           <td>{averagePrice}</td>
           <td>{stock.sheet}</td>
-          <td>{Math.floor(handlingFee)}</td>
-          <td>{Math.floor(stock.cost)}</td>
+          <td>{stock.cost}</td>
           <td>{stock.status === "unsale" ? '未賣出' : '已賣出'}</td>
-          <td>{Math.floor(stock.sale_cost)}</td>
-          <td style={{ 'color': stock.income < 0 ? '#30ff30' : 'rgb(255 19 19)'}}>{Math.floor(stock.income)}</td>
+          <td>{stock.sale_cost}</td>
+          <td style={{ 'color': stock.income < 0 ? '#30ff30' : 'rgb(255 19 19)'}}>{stock.income}</td>
           <td>
             <button type="button" className="btn btn-danger" onClick={this.deleteStock}>刪除</button>
           </td>
