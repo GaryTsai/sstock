@@ -48,15 +48,15 @@ export default class Navbar extends Component {
     return (
       <div>
         <nav className="navbar navbar-expand-md navbar-light " style={{backgroundColor: 'rgb(52 149 220)', cursor: 'pointer'}}>
-          <div className="navbar-brand"  style={route === 'home' ? {...this.getActiveStyle(), padding: '5px'} : {}}　onClick={e => changeRoute('home')}>台灣股票</div>
+          <div className="navbar-brand"  style={route === 'Taiwan_account' ? {...this.getActiveStyle(), padding: '5px'} : {}}　onClick={e => changeRoute('Taiwan_account')}>台灣股票</div>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                   aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarCollapse">
             <ul className="navbar-nav mr-auto">
-              <li className={`nav-item`} style={route === 'summary' ? this.getActiveStyle() : {}}>
-                <div className="nav-link"  onClick={e => changeRoute('summary')}>台股歷史紀錄 <span className="sr-only"></span></div>
+              <li className={`nav-item`} style={route === 'Taiwan_history' ? this.getActiveStyle() : {}}>
+                <div className="nav-link"  onClick={e => changeRoute('Taiwan_history')}>台股歷史紀錄 <span className="sr-only"></span></div>
               </li>
               <li className="nav-item"  style={route === 'US_account' ? this.getActiveStyle() : {}} >
                 <div className="nav-link"　style={{color: '#e91e63'}} onClick={e => changeRoute('US_account')} >美股證卷</div>
@@ -67,14 +67,14 @@ export default class Navbar extends Component {
             </ul>
           </div>
           <div style={{display: 'inherit',...this.getComputeStyleForMobile()}}>
-          {(route === 'summary' || route === 'US_account') && <div style={{display: 'flex'}}>
+          {(route === 'Taiwan_history' || route === 'US_account') && <div style={{display: 'flex'}}>
           <div>投入成本:{saleCost}元</div>
           <div>總損益: {profitAndLoss}元</div>
           <div>投殖利率: {profit}%</div>
           </div>}
           </div>
           <div style={{display: 'inherit', padding: '5px 0px',...this.getComputeStyleForMobile()}}>
-            {(route === 'home' || route === 'US_account') && <div>目前投入總成本: {totalCost}元</div>}
+            {(route === 'Taiwan_account' || route === 'US_account') && <div>目前投入總成本: {totalCost}元</div>}
           </div>
         </nav>
       </div>

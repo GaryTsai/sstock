@@ -19,7 +19,7 @@ const initialState = {
   allStocks: [],
   showStocks: [],
   totalCost: 0,
-  route: 'home',
+  route: 'Taiwan_account',
   profitAndLoss: 0,
   profit: 0,
   saleCost: 0,
@@ -135,7 +135,7 @@ export default class App extends Component {
     } else if (stockInfo.stockStatus === 'mutual') {
     }
   };
-  reset = () => this.updateAllData(this.props.route);
+  reset = () => this.updateAllData(this.state.route);
 
   saleIsOpen = () => this.setState({saleIsOpen: !this.state.saleIsOpen});
 
@@ -159,12 +159,12 @@ export default class App extends Component {
         margin: '0 auto',
       }}>
         <Navbar totalCost={this.state.totalCost} profitAndLoss={this.state.profitAndLoss} route={route} changeRoute={this.changeRoute} profit={this.state.profit} saleCost={this.state.saleCost}/>
-        {browserUtils.isMobile() && !this.state.saleIsOpen && (route === 'home' || route === 'US_account' ) && <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit" onClick={() => this.saleIsOpen(true)}>買入</button>}
-        {browserUtils.isMobile() && this.state.saleIsOpen && (route === 'home' || route === 'US_account' ) && <button className="btn btn-secondary from-group col-md-2 input-sale-frame" type="submit" onClick={() => this.saleIsOpen(false)}>隱藏</button>}
-        {this.getSaleIsStatus() && (route === 'home' || route === 'US_account' ) && <Input callback={this.inputData} route={route}/>}
-        {route === 'home' && <Stocks hideFiled={false} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={unSaleStocks} deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={route}/>}
-        {route === 'summary' && <Stocks hideFiled={true} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={showStocks} deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={route} queryDataCallback={this.updateQueryData} resetCallBack={this.reset}/>}
-        {route === 'US_account' && <Usstocks hideFiled={false} saleStatus={'US_all'} UsInfo={'US_home'} route={route} allStocks={showStocks} saleStockCallback={this.saleStock}  deleteCallback={this.deleteStock} queryDataCallback={this.updateQueryData} resetCallBack={this.reset} />}
+        {browserUtils.isMobile() && !this.state.saleIsOpen && (route === 'Taiwan_account' || route === 'US_account' ) && <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit" onClick={() => this.saleIsOpen(true)}>買入</button>}
+        {browserUtils.isMobile() && this.state.saleIsOpen && (route === 'Taiwan_account' || route === 'US_account' ) && <button className="btn btn-secondary from-group col-md-2 input-sale-frame" type="submit" onClick={() => this.saleIsOpen(false)}>隱藏</button>}
+        {this.getSaleIsStatus() && (route === 'Taiwan_account' || route === 'US_account' ) && <Input callback={this.inputData} route={route}/>}
+        {route === 'Taiwan_account' && <Stocks hideFiled={false} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={unSaleStocks} deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={route}/>}
+        {route === 'Taiwan_history' && <Stocks hideFiled={true} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={showStocks} deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={route} queryDataCallback={this.updateQueryData} resetCallBack={this.reset}/>}
+        {route === 'US_account' && <Usstocks hideFiled={false} saleStatus={'US_all'} route={route} allStocks={showStocks} saleStockCallback={this.saleStock}  deleteCallback={this.deleteStock} queryDataCallback={this.updateQueryData} resetCallBack={this.reset} />}
         {route === 'account' && <Account route={route}/>}
 
       </div>

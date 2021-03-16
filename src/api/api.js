@@ -80,7 +80,8 @@ const api = {
     let timestamp = Math.floor(Date.now() / 1000);
     let cost = Math.floor(data.price * 1000 * data.sheet * 1.001425);
     let US_cost = data.price * data.sheet;
-    let getRefOfData = this.route === "US_account" ? getDataRef : getUSDataRef
+    console.log(this.route);
+    let getRefOfData = this.route === "US_account" ? getUSDataRef : getDataRef
       await getRefOfData.child(timestamp.toString()).set({
       timestamp: timestamp,
       date: data.date,
@@ -132,7 +133,7 @@ const api = {
 
   async getAccount(account){
     let accountData = [];
-    const thisDataRef = account === 'us_account' ? getUSAccountRef : getAccountRef;
+    const thisDataRef = account === 'US_account' ? getUSAccountRef : getAccountRef;
 
       await thisDataRef.once('value').then((snapshot) => {
         accountData = snapshot.val();
@@ -142,7 +143,7 @@ const api = {
 
   async getAccountRecord(whichAccount){
     let accountRecord = [];
-    let  getRefOfAccountRecord = whichAccount === 'taiwan_account' ? getAccountRecordRef : getUSAccountRecordRef;
+    let  getRefOfAccountRecord = whichAccount === 'Taiwan_account' ? getAccountRecordRef : getUSAccountRecordRef;
     await getRefOfAccountRecord.once('value').then((snapshot) => {
       snapshot.forEach(element => {
         accountRecord.unshift(element.val());
@@ -156,8 +157,8 @@ const api = {
     let transfer_price = 0;
     let date = d.dateFormat(new Date());
     let timestamp = Math.floor(Date.now() / 1000);
-    let  getRefOfAccount = whichAccount === 'taiwan_account' ? getAccountRef : getUSAccountRef;
-    let  getRefOfAccountRecord = whichAccount === 'taiwan_account' ? getAccountRecordRef : getUSAccountRecordRef;
+    let  getRefOfAccount = whichAccount === 'Taiwan_account' ? getAccountRef : getUSAccountRef;
+    let  getRefOfAccountRecord = whichAccount === 'Taiwan_account' ? getAccountRecordRef : getUSAccountRecordRef;
     await getRefOfAccount.once('value').then((snapshot) => {
         accountData = snapshot.val();
     });
@@ -167,8 +168,8 @@ const api = {
       transfer_price = parseInt(transferInfo.price);
     }
 
-    let money = (whichAccount === 'taiwan_account' ? parseInt(accountData.accountMoney) : accountData.accountMoney) + transfer_price;
-    let stock = (whichAccount === 'taiwan_account' ? parseInt(accountData.accountStock) : accountData.accountStock);
+    let money = (whichAccount === 'Taiwan_account' ? parseInt(accountData.accountMoney) : accountData.accountMoney) + transfer_price;
+    let stock = (whichAccount === 'Taiwan_account' ? parseInt(accountData.accountStock) : accountData.accountStock);
     let summary = money + stock;
     await getRefOfAccount.update({
       accountMoney: money,

@@ -38,11 +38,12 @@ export default class Stocks extends Component {
     const {allStocks, deleteCallback, queryDataCallback, saleStockCallback, resetCallBack, hideFiled, saleStatus, route}= this.props;
     const {isQueryOpen}= this.state;
     const isMobile = browserUtils.isMobile();
+    const isShowQueryOption = route === 'Taiwan_history';
     return (
       <div>
-        {route === 'summary' && !isQueryOpen && isMobile && <button style={{borderRadius: '0px'}} className="btn btn-success from-group col-md-2" type="submit" onClick={() => this.isQueryOpen(true)}>查詢時區</button>}
-        {route === 'summary' && isQueryOpen && isMobile && <button style={{borderRadius: '0px'}} className="btn btn-secondary from-group col-md-2" type="submit" onClick={() => this.isQueryOpen(false)}>隱藏</button>}
-        {route === 'summary' && this.getQueryStatus() && <InputRegion callback={queryDataCallback} resetCallBack={resetCallBack}/>}
+        {isShowQueryOption && !isQueryOpen && isMobile && <button style={{borderRadius: '0px'}} className="btn btn-success from-group col-md-2" type="submit" onClick={() => this.isQueryOpen(true)}>查詢時區</button>}
+        {isShowQueryOption && isQueryOpen && isMobile && <button style={{borderRadius: '0px'}} className="btn btn-secondary from-group col-md-2" type="submit" onClick={() => this.isQueryOpen(false)}>隱藏</button>}
+        {isShowQueryOption && this.getQueryStatus() && <InputRegion callback={queryDataCallback} resetCallBack={resetCallBack}/>}
         <div style={{overflowY: browserUtils.isMobile() ? 'scroll' : 'unset'}}>
         <table className="table table-dark">
           <thead>

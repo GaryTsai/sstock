@@ -12,7 +12,7 @@ const initialState = {
   acSummary: '',
   records:[],
   usRecords:[],
-  whichAccount: 'taiwan_account',
+  whichAccount: 'Taiwan_account',
   isAssetTransfer: false
 };
 
@@ -27,9 +27,9 @@ export default class Account extends Component {
     this.updateAccount(whichAccount);
   }
 
-  updateAccount = (whichAccount = 'taiwan_account') =>{
+  updateAccount = (whichAccount = 'Taiwan_account') =>{
     api.getAccount(whichAccount).then((data)=> {
-      if(whichAccount === 'taiwan_account') {
+      if(whichAccount === 'Taiwan_account') {
         this.setState({
           acTime: data.accountTime,
           acMoney: data.accountMoney,
@@ -68,9 +68,9 @@ export default class Account extends Component {
         <nav>
           <div className="nav nav-tabs" id="nav-tab" role="tablist">
             <a className="nav-item nav-link active" style={{width: '50%'}} id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
-               aria-controls="nav-home" aria-selected="true" onClick={() => this.selectAccount('taiwan_account')}>台股資產</a>
+               aria-controls="nav-home" aria-selected="true" onClick={() => this.selectAccount('Taiwan_account')}>台股資產</a>
             <a className="nav-item nav-link"  style={{width: '50%'}} id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
-               aria-controls="nav-profile" aria-selected="false" onClick={() => this.selectAccount('us_account')}>美股資產</a>
+               aria-controls="nav-profile" aria-selected="false" onClick={() => this.selectAccount('US_account')}>美股資產</a>
           </div>
         </nav>
         <div className="tab-content" id="nav-tabContent">
