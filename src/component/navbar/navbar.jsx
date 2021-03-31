@@ -43,8 +43,7 @@ export default class Navbar extends Component {
   };
 
   render() {
-    const {saleCost, profitAndLoss, profit, totalCost ,route, changeRoute} = this.props;
-
+    const {saleCost, profitAndLoss, profit, totalCost ,route, changeRoute, lastYearROI} = this.props;
     return (
       <div>
         <nav className="navbar navbar-expand-md navbar-light " style={{backgroundColor: 'rgb(52 149 220)', cursor: 'pointer'}}>
@@ -68,13 +67,14 @@ export default class Navbar extends Component {
           </div>
           <div style={{display: 'inherit',...this.getComputeStyleForMobile()}}>
           {(route === 'Taiwan_history' || route === 'US_account') && <div style={{display: 'flex'}}>
-          <div>投入成本:{saleCost}元</div>
-          <div>總損益: {profitAndLoss}元</div>
-          <div>投殖利率: {profit}%</div>
+          <div>投入成本:{saleCost.toFixed(2)}元</div>
+          <div>總損益: {profitAndLoss.toFixed(2)}元</div>
+          <div>投報率: {profit.toFixed(2)}%</div>
+          <div>去年投報率: {lastYearROI}%</div>
           </div>}
           </div>
           <div style={{display: 'inherit', padding: '5px 0px',...this.getComputeStyleForMobile()}}>
-            {(route === 'Taiwan_account' || route === 'US_account') && <div>目前投入總成本: {totalCost}元</div>}
+            {(route === 'Taiwan_account' || route === 'US_account') && <div>目前投入總成本: {totalCost.toFixed(2)}元</div>}
           </div>
         </nav>
       </div>

@@ -31,56 +31,57 @@ var getUSAccountRef = firebase.database().ref(`/us_account` );
 var stockData;
 
 const api = {
-  async getAllData(route){
+  async getAllData(route) {
     this.route = route;
-    let getRefOfData =  route === "US_account" ? getUSDataRef : getDataRef
-    await getRefOfData.once('value').then((snapshot) => {
-        let items = [];
-        snapshot.forEach(element => {
-          items.unshift(element.val());
-        });
-        let stocks = items.sort(function (a, b) {
-          return a.date < b.date ? 1 : -1
-        });
-        let unSaleStocks = stocks.filter(a => a.status !== 'sale').sort(function (a, b) {
-          return a.date < b.date ? 1 : -1
-        });
-        let saleStocks = stocks.filter(a => a.status === 'sale').sort(function (a, b) {
-          return a.sale_date < b.sale_date ? 1 : -1
-        });
-
-        if (!!items) {
-          let total = 0;
-          let profitAndLoss = 0;
-          let saleCost = 0;
-          for (let item in items) {
-            total += items[item].status === "unsale" ? items[item].cost : 0;
-          }
-          for (let item in items) {
-            profitAndLoss += items[item].status === "sale" ? items[item].income : 0;
-            saleCost += items[item].status === "sale" ? items[item].cost : 0;
-
-          }
-          stockData = {
-            showStocks: items,
-            allStocks: items,
-            saleStocks: saleStocks,
-            unSaleStocks: unSaleStocks,
-            totalCost: total,
-            profitAndLoss: profitAndLoss,
-            saleCost: saleCost,
-            profit: Math.floor(profitAndLoss / saleCost * 100)
-          }
-        }
+    let getRefOfData = route === "US_account" ? getUSDataRef : getDataRef
+    await getRefOfData.once('value').then(async (snapshot) => {
+      let items = [];
+      snapshot.forEach(element => {
+        items.unshift(element.val());
       });
-      return stockData;
+      let stocks = items.sort(function (a, b) {
+        return a.date < b.date ? 1 : -1
+      });
+      let unSaleStocks = stocks.filter(a => a.status !== 'sale').sort(function (a, b) {
+        return a.date > b.date ? 1 : -1
+      });
+      let saleStocks = stocks.filter(a => a.status === 'sale').sort(function (a, b) {
+        return a.sale_date > b.sale_date ? 1 : -1
+      });
+
+      if (!!items) {
+        let total = 0;
+        let profitAndLoss = 0;
+        let saleCost = 0;
+        for (let item in items) {
+          total += items[item].status === "unsale" ? items[item].cost : 0;
+        }
+        for (let item in items) {
+          profitAndLoss += items[item].status === "sale" ? items[item].income : 0;
+          saleCost += items[item].status === "sale" ? items[item].cost : 0;
+        }
+        let lastYearROI = await this.getLastYearROI(items, route);
+        stockData = {
+          lastYearROI: lastYearROI,
+          showStocks: items,
+          allStocks: items,
+          saleStocks: saleStocks,
+          unSaleStocks: unSaleStocks,
+          totalCost: total,
+          profitAndLoss: profitAndLoss,
+          saleCost: saleCost,
+          profit: Math.floor(profitAndLoss / saleCost * 100)
+        }
+      }
+    });
+    return stockData;
   },
 
   async insertNewData(data){
     let timestamp = Math.floor(Date.now() / 1000);
     let cost = Math.floor(data.price * 1000 * data.sheet * 1.001425);
     let US_cost = data.price * data.sheet;
-    console.log(this.route);
+
     let getRefOfData = this.route === "US_account" ? getUSDataRef : getDataRef
       await getRefOfData.child(timestamp.toString()).set({
       timestamp: timestamp,
@@ -143,7 +144,7 @@ const api = {
 
   async getAccountRecord(whichAccount){
     let accountRecord = [];
-    let  getRefOfAccountRecord = whichAccount === 'Taiwan_account' ? getAccountRecordRef : getUSAccountRecordRef;
+    let  getRefOfAccountRecord = whichAccount === 'US_account' ? getUSAccountRecordRef : getAccountRecordRef;
     await getRefOfAccountRecord.once('value').then((snapshot) => {
       snapshot.forEach(element => {
         accountRecord.unshift(element.val());
@@ -246,6 +247,33 @@ const api = {
     });
 
     return ;
+  },
+
+  async getLastYearROI(items, route){
+    let accountInfo  = await this.getAccount();
+    let summary = parseInt(accountInfo.summary);
+    let lastYearStartDate = d.dateFormat(new Date(new Date().getFullYear() - 1,0,1));
+    let lastYearEndDate = d.dateFormat(new Date(new Date().getFullYear() - 1,11,31));
+    let thisYearStartDate = d.dateFormat(new Date(new Date().getFullYear(),0,1));
+    let thisYearEndDate = d.dateFormat(new Date(new Date().getFullYear(),11,31));
+    let lastYearItems = items.filter(a => (lastYearStartDate <= a.sale_date && a.sale_date <= lastYearEndDate));
+    let thisYearItems = items.filter(a => (thisYearStartDate <= a.sale_date && a.sale_date <= thisYearEndDate));
+    let incomeOfLastYear = 0;
+    let incomeOfThisYear = 0;
+    let inAccountOfThisYear = 0;
+    for (let item in lastYearItems) {
+      incomeOfLastYear += lastYearItems[item].income;
+    }
+    for (let item in thisYearItems) {
+      incomeOfThisYear += thisYearItems[item].income;
+    }
+    let accountRecords  = await this.getAccountRecord(route);
+    let thisYearAccountRecords = accountRecords.filter(a => (thisYearStartDate <= a.transferTime && a.transferTime <= thisYearEndDate));
+    for (let record in thisYearAccountRecords) {
+      inAccountOfThisYear += thisYearAccountRecords[record].source !== '股票' ? parseInt(thisYearAccountRecords[record].transfer) : 0;
+    }
+    let ROI = (incomeOfLastYear/(summary - incomeOfThisYear - inAccountOfThisYear));
+    return ROI.toFixed(4)
   }
 };
 

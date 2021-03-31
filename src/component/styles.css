@@ -14,3 +14,36 @@
 .react-datepicker__input-container input{
     width: 100%;
 }
+.btn-group-vertical{
+    flex-direction: unset;
+    align-items: center;
+    font-size: 13px;
+}
+.btn-outline-primary:focus {
+     border: 2px solid red;
+     box-sizing: border-box;
+     color:red;
+     box-shadow: 0 0 0 0.2rem rgb(241 183 179);
+ }
+.btn-outline-primary{
+     color: unset;
+     border-color: unset;
+ }
+.btn-outline-primary:not(:disabled):not(.disabled).active, .btn-outline-primary:not(:disabled):not(.disabled):active, .show>.btn-outline-primary.dropdown-toggle {
+     color: unset;
+     background-color: unset;
+     border-color: unset;
+}
+.btn-outline-primary:not(:disabled):not(.disabled).active:focus, .btn-outline-primary:not(:disabled):not(.disabled):active:focus, .show>.btn-outline-primary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgb(255 255 255);
+}
+.btn-outline-primary:hover {
+    background-color: #ffffff;
+    color: red;
+    border: 2px solid #ff7261;
+    box-sizing: border-box;
+    box-shadow: 0 0 0 0.2rem rgb(241 183 179);
+}
+.from-group.col-md-2.input-sale-info-frame{
+    margin: 3px 0px;
+}

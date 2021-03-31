@@ -24,7 +24,8 @@ const initialState = {
   profit: 0,
   saleCost: 0,
   saleIsOpen: false,
-  saleStatus: 'all'
+  saleStatus: 'all',
+  lastYearROI: 0
 };
 
 export default class App extends Component {
@@ -41,6 +42,7 @@ export default class App extends Component {
     if(route === "US_account") {
       api.getAllData(route).then((stockData) => {
           this.setState({
+            lastYearROI: stockData.lastYearROI,
             saleStatus: 'US_all',
             showStocks: stockData.showStocks,
             allStocks: stockData.allStocks,
@@ -56,6 +58,7 @@ export default class App extends Component {
     }else{
       api.getAllData(route).then((stockData) => {
           this.setState({
+            lastYearROI: stockData.lastYearROI,
             saleStatus: 'all',
             showStocks: stockData.showStocks,
             allStocks: stockData.allStocks,
@@ -115,7 +118,7 @@ export default class App extends Component {
     if (stockInfo.stockStatus === 'individual') {
       switch (stockInfo.saleStatus) {
         case 'all':
-          result = allStocks.filter(a => (startRegion <= a.date && a.date <= endRegion));
+          result = allStocks.filter(a => (startRegion <= a.sale_date && a.sale_date <= endRegion));
           break;
         case 'sale':
           result = saleStocks.filter(a => startRegion <= a.sale_date && a.sale_date <= endRegion);
@@ -151,14 +154,13 @@ export default class App extends Component {
     const inputData = this.state.inputData;
     const unSaleStocks = this.state.unSaleStocks;
     const showStocks = this.state.showStocks;
-    const {route} = this.state;
-
+    const {route, lastYearROI} = this.state;
     return (
       <div className="App" style={{
         height: window.innerHeight,
         margin: '0 auto',
       }}>
-        <Navbar totalCost={this.state.totalCost} profitAndLoss={this.state.profitAndLoss} route={route} changeRoute={this.changeRoute} profit={this.state.profit} saleCost={this.state.saleCost}/>
+        <Navbar lastYearROI={lastYearROI} totalCost={this.state.totalCost} profitAndLoss={this.state.profitAndLoss} route={route} changeRoute={this.changeRoute} profit={this.state.profit} saleCost={this.state.saleCost}/>
         {browserUtils.isMobile() && !this.state.saleIsOpen && (route === 'Taiwan_account' || route === 'US_account' ) && <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit" onClick={() => this.saleIsOpen(true)}>買入</button>}
         {browserUtils.isMobile() && this.state.saleIsOpen && (route === 'Taiwan_account' || route === 'US_account' ) && <button className="btn btn-secondary from-group col-md-2 input-sale-frame" type="submit" onClick={() => this.saleIsOpen(false)}>隱藏</button>}
         {this.getSaleIsStatus() && (route === 'Taiwan_account' || route === 'US_account' ) && <Input callback={this.inputData} route={route}/>}

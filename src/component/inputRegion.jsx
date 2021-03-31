@@ -14,7 +14,7 @@ const initialState = {
 
 };
 
-export default class Stocks extends Component {
+export default class InputRegion extends Component {
   constructor(props) {
     super(props);
     this.state = initialState;
@@ -24,21 +24,56 @@ export default class Stocks extends Component {
     this.setState({date: utils.dateFormat(new Date()),dateRegion1: utils.dateFormat(new Date()),dateRegion2: utils.dateFormat(new Date()), startStandardDate: utils.dateFormat(new Date()), endStandardDate: utils.dateFormat(new Date())})
   }
 
-  queryRegion = () =>{
+  queryRegion = (region = false) => {
     const {dateRegion1, dateRegion2, saleStatus, stockStatus} = this.state;
-
-    if(dateRegion1 && dateRegion2 && saleStatus && stockStatus){
-      const stockInfo ={'dateRegion1':dateRegion1, 'dateRegion2':dateRegion2, 'saleStatus':saleStatus, 'stockStatus':stockStatus};
-      this.props && this.props.callback(stockInfo);
-      this.setState({  'date':'',
-              'name':'',
-              'number': '',
-              'price': '',
-              'sheet':''
-            })
-    }
-    else{
-      return alert('不許有任何一個為空');
+    let stockInfo = {};
+    let date = new Date();
+    if (region) {
+      if (region === 'yearAgo') {
+        const yearAgo = new Date().getFullYear() - 1
+        stockInfo = {
+          'dateRegion1': utils.dateFormat(new Date(yearAgo, 0, 1)),
+          'dateRegion2': utils.dateFormat(new Date(yearAgo, 11, 31)),
+          'saleStatus': saleStatus,
+          'stockStatus': stockStatus
+        };
+      } else if (region === 'thisYear') {
+        const yearAgo = new Date().getFullYear()
+        stockInfo = {
+          'dateRegion1': utils.dateFormat(new Date(yearAgo, 0, 1)),
+          'dateRegion2': utils.dateFormat(new Date(yearAgo, 11, 31)),
+          'saleStatus': saleStatus,
+          'stockStatus': stockStatus
+        };
+      } else {
+        date.setDate(date.getDate() - region);
+        stockInfo = {
+          'dateRegion1': utils.dateFormat(date),
+          'dateRegion2': utils.dateFormat(new Date()),
+          'saleStatus': saleStatus,
+          'stockStatus': stockStatus
+        };
+      }
+      return this.props && this.props.callback(stockInfo);
+    } else {
+      if (dateRegion1 && dateRegion2 && saleStatus && stockStatus) {
+        stockInfo = {
+          'dateRegion1': dateRegion1,
+          'dateRegion2': dateRegion2,
+          'saleStatus': saleStatus,
+          'stockStatus': stockStatus
+        };
+        this.props && this.props.callback(stockInfo);
+        this.setState({
+          'date': '',
+          'name': '',
+          'number': '',
+          'price': '',
+          'sheet': ''
+        })
+      } else {
+        return alert('不許有任何一個為空');
+      }
     }
   };
 
@@ -50,9 +85,19 @@ export default class Stocks extends Component {
 
   getStockOptions = (e) => this.setState({stockStatus: e.target.value});
 
-  getMobileStyleOfButton = () =>{
-    return {
-      margin: '3px 0px'
+  getStyleOfButton = () =>{
+    if(browserUtils.isMobile()) {
+      return {
+        margin: '3px 0px',
+        paddingRight: '0px',
+        paddingLeft: '0px'
+      }
+    }else{
+      return {
+        margin: '3px 5px',
+        paddingRight: '0px',
+        paddingLeft: '0px'
+      }
     }
   };
 
@@ -62,23 +107,10 @@ export default class Stocks extends Component {
     return (
       <div>
           <div className="form-row" style={{margin:'5px', overflowY: isMobile ? 'scroll' : 'unset'}}>
-            <button type="button" className="btn btn-info from-group col-md-2" style={{margin: '3px 5px'}}  onClick={this.props.resetCallBack}>顯示全部 Stock </button>
-            {
-              <div style={{margin:'5px', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
-                <div>起始區間:</div>
-                <div className="col">
-                  <input type="date" className="form-control" placeholder="日期" onChange={(c) => this.handleStartDateChange(c.target.value)} value={startStandardDate}/>
-                </div>
-            </div>}
-            {
-            <div style={{margin:'5px', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
-                <div>結束區間:</div>
-                <div className="col">
-                  <input type="date" className="form-control" placeholder="日期" onChange={(c) => this.handleEndDateChange(c.target.value)} value={endStandardDate}/>
-                </div>
-              </div>
-            }
-            <div className={"btn-group btn-group-toggle" + (isMobile ? ' from-group col-md-6' : ' from-group col-md-2')} data-toggle="buttons" style={{margin: '0px 10px', zIndex: 0, ...this.getMobileStyleOfButton()}}>
+            <div style={{width:'100%', textAlign: 'left'}}>
+            <button type="button" className="btn btn-info from-group col-md-2" onClick={this.props.resetCallBack}>顯示全部 Stock </button>
+            <button type="button"  className={"btn btn-group btn-group-toggle" + (isMobile ? ' from-group col-md-6' : ' from-group' +
+              ' col-md-2')} data-toggle="buttons" style={{margin: '0px 10px', zIndex: 0, ...this.getStyleOfButton()}}>
               <label className="btn btn-secondary active" onClick={this.getSaleOptions}>
                 <input type="radio" name="saleOption" id="saleOption1" value='all' autoComplete="off" /> 全部
               </label>
@@ -88,8 +120,30 @@ export default class Stocks extends Component {
               <label className="btn btn-secondary" onClick={this.getSaleOptions}>
                 <input type="radio" name="saleOption" id="saleOption3" value='unsale'  autoComplete="off" /> 未賣出
               </label>
+            </button>
+            <div className="btn-group" role="group" aria-label="Basic outlined example" style={{width : isMobile ? 'inherit' :'unset'}}>
+              <button type="button" className="btn btn-outline-primary" onClick={()=>this.queryRegion(0)} >Today</button>
+              <button type="button" className="btn btn-outline-primary"onClick={()=>this.queryRegion(7)}>前 7 日</button>
+              <button type="button" className="btn btn-outline-primary"onClick={()=>this.queryRegion(30)}>前 30 日</button>
+              <button type="button" className="btn btn-outline-primary"onClick={()=>this.queryRegion(120)}>前三月</button>
+              <button type="button" className="btn btn-outline-primary"onClick={()=>this.queryRegion('yearAgo')}>去年</button>
+              <button type="button" className="btn btn-outline-primary"onClick={()=>this.queryRegion('thisYear')}>今年</button>
             </div>
-            <div className="btn-group btn-group-toggle from-group col-md-2" data-toggle="buttons" style={{margin: '0px 10px', zIndex: 0, ...this.getMobileStyleOfButton()}}>
+          </div>
+            <div style={{width:'100%', textAlign: 'initial'}}>
+            <div style={{margin:'5px', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
+                <div>起始區間:</div>
+                <div className="col">
+                  <input type="date" className="form-control" placeholder="日期" onChange={(c) => this.handleStartDateChange(c.target.value)} value={startStandardDate}/>
+                </div>
+            </div>
+            <div style={{margin:'5px', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
+                <div>結束區間:</div>
+                <div className="col">
+                  <input type="date" className="form-control" placeholder="日期" onChange={(c) => this.handleEndDateChange(c.target.value)} value={endStandardDate}/>
+                </div>
+              </div>
+            <div className="btn-group btn-group-toggle from-group col-md-3" data-toggle="buttons" style={{margin: '0px 10px', zIndex: 0, ...this.getStyleOfButton()}}>
               <label className="btn btn-warning active" onClick={this.getStockOptions} >
                 <input type="radio" name="stockOption" id="individual" value='individual' autoComplete="off" /> 個別股
               </label>
@@ -97,7 +151,8 @@ export default class Stocks extends Component {
               {/*  <input type="radio" name="stockOption" id="mutual" value='mutual' autoComplete="off" /> 共同股*/}
               {/*</label>*/}
             </div>
-            <button className={"btn btn-primary "+ (isMobile ? ' from-group col-md-2' : ' from-group col-md-1') } type="submit" style={{margin: '3px 5px'}} onClick={this.queryRegion}>查詢送出</button>
+            <div className={"btn btn-primary "+ (isMobile ? ' from-group col-md-3' : ' from-group col-md-1') } type="submit" style={{margin: '0px 0px'}} onClick={()=>this.queryRegion('')}>查詢送出</div>
+          </div>
           </div>
       </div>
     )
