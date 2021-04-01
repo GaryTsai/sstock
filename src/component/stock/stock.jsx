@@ -68,10 +68,10 @@ export default class Stock extends Component {
               </div>
             </div>
           </td>}
-          {  (route ==='home'  && stock.status === 'sale') && <td>{stock.sale_date}</td>}
-          {  (route ==='home'  && stock.status === 'unsale')  && <td>{stock.date}</td>}
-          { route !=='home' && (saleStatus === 'all' || saleStatus === 'sale') && (stock.status === 'sale' ? <td>{stock.sale_date}</td> : <td></td>)}
-          { route !=='home' && (saleStatus === 'all' || saleStatus === 'unsale') && (stock.status === 'unsale' ? <td>{stock.date}</td>: <td>{stock.date}</td>)}
+          {  (route ==='Taiwan_account'  && stock.status === 'sale') && <td>{stock.sale_date}</td>}
+          {  (route ==='Taiwan_account'  && stock.status === 'unsale')  && <td>{stock.date}</td>}
+          { route !=='Taiwan_account' && (saleStatus === 'all' || saleStatus === 'sale') && (stock.status === 'sale' ? <td>{stock.sale_date}</td> : <td></td>)}
+          { route !=='Taiwan_account' && (saleStatus === 'all' || saleStatus === 'unsale') && (stock.status === 'unsale' ? <td>{stock.date}</td>: <td>{stock.date}</td>)}
           <td>{stock.name}</td>
           <td>{stock.number}</td>
           <td>{averagePrice}</td>
