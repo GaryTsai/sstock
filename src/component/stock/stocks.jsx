@@ -51,7 +51,7 @@ export default class Stocks extends Component {
             <th scope="col">#</th>
             {!hideFiled && <th scope="col">賣出</th>}
             { saleStatus !== 'all' &&((saleStatus === 'sale') ? <th scope="col">賣出日期</th> : <th scope="col">購買日期</th> )}
-            {(saleStatus === 'all' && route !== 'home') && <th scope="col">賣出日期</th>}
+            {(saleStatus === 'all' && route !== 'Taiwan_account') && <th scope="col">賣出日期</th>}
             { saleStatus === 'all'  && <th scope="col">購買日期</th>}
             <th scope="col">股票名稱</th>
             <th scope="col">編號</th>
