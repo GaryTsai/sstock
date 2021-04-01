@@ -43,7 +43,7 @@ const api = {
         return a.date < b.date ? 1 : -1
       });
       let unSaleStocks = stocks.filter(a => a.status !== 'sale').sort(function (a, b) {
-        return a.date > b.date ? 1 : -1
+        return a.date < b.date ? 1 : -1
       });
       let saleStocks = stocks.filter(a => a.status === 'sale').sort(function (a, b) {
         return a.sale_date > b.sale_date ? 1 : -1
