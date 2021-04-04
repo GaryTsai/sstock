@@ -29,7 +29,8 @@ const initialState = {
   saleIsOpen: false,
   saleStatus: 'all',
   lastYearROI: 0,
-  logInStatus: false
+  logInStatus: false,
+  loading: false
 };
 
 export default class App extends Component {
@@ -61,7 +62,8 @@ export default class App extends Component {
             totalCost: stockData.totalCost,
             profitAndLoss: stockData.profitAndLoss,
             saleCost: stockData.saleCost,
-            profit: Math.floor(stockData.profitAndLoss / stockData.saleCost * 100)
+            profit: Math.floor(stockData.profitAndLoss / stockData.saleCost * 100),
+            loading: false
           })
         }
       );
@@ -78,7 +80,8 @@ export default class App extends Component {
             totalCost: stockData.totalCost,
             profitAndLoss: stockData.profitAndLoss,
             saleCost: stockData.saleCost,
-            profit: Math.floor(stockData.profitAndLoss / stockData.saleCost * 100)
+            profit: Math.floor(stockData.profitAndLoss / stockData.saleCost * 100),
+            loading: false
           })
         }
       );
@@ -184,13 +187,13 @@ export default class App extends Component {
     }
   };
 
-  closeLoginPage = () => this.setState({logInStatus: true});
+  closeLoginPage = () => this.setState({logInStatus: true, loading: true});
 
   render() {
     const inputData = this.state.inputData;
     const unSaleStocks = this.state.unSaleStocks;
     const showStocks = this.state.showStocks;
-    const {route, logInStatus, lastYearROI} = this.state;
+    const {route, logInStatus, lastYearROI, loading} = this.state;
     if(!logInStatus){
       return (
         <div>
@@ -203,6 +206,21 @@ export default class App extends Component {
           height: window.innerHeight,
           margin: '0 auto',
         }}>
+          {loading === true &&<div style={{position: 'absolute',
+            top: 0,
+            left: 0,
+            height: '100%',
+            width: '100%',
+            display: 'block',
+            zIndex: 7,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)'}}><img  alt="" style={{display:'flex',
+            width: '128px',
+            height: '128px',
+            position: 'relative',
+            margin: '0px auto',
+            backgroundSize: '100%',
+            top: 'calc(50% - 50px)'
+          }} src={require('./assets/img/loading.gif')}/></div>}
           <Navbar lastYearROI={lastYearROI} totalCost={this.state.totalCost} profitAndLoss={this.state.profitAndLoss}
                   route={route} changeRoute={this.changeRoute} profit={this.state.profit} logOutCallBack={this.logOut}
                   saleCost={this.state.saleCost}/>

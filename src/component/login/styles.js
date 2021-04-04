@@ -83,7 +83,7 @@ export default {
     display: 'inline-block',
     fontSize: '16px',
     margin: '5px',
-    width: '90%',
+    width: '93%',
     border: '2px solid #f6f6f6',
   },
   submit:{
