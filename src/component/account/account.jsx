@@ -4,6 +4,7 @@ import AccountTransfer from './AccountTransfer'
 import './account.css'
 import api from '../../api/api'
 import browserUtils from "../../utils/browserUtils";
+import settings from "../settings/settings";
 
 const initialState = {
   acTime: '',
@@ -28,7 +29,7 @@ export default class Account extends Component {
   }
 
   updateAccount = (whichAccount = 'Taiwan_account') =>{
-    api.getAccount(whichAccount).then((data)=> {
+    api.getAccount().then((data)=> {
       if(whichAccount === 'Taiwan_account') {
         this.setState({
           acTime: data.accountTime,
@@ -36,7 +37,7 @@ export default class Account extends Component {
           acStock: data.accountStock,
           acSummary: data.summary,
         });
-        api.getAccountRecord(whichAccount).then((data)=>{
+        api.getAccountRecord().then((data)=>{
           this.setState({records:data})
         });
       }else{
@@ -47,12 +48,18 @@ export default class Account extends Component {
           acSummary: data.summary,
         });
       }
-      api.getAccountRecord(whichAccount).then((data)=>{
+      api.getAccountRecord().then((data)=>{
+        console.log(data);
         this.setState({usRecords:data})
       });
       });
   };
   selectAccount = account => {
+    if(account === 'Taiwan_account')
+      settings.country = 'tw';
+    else {
+      settings.country = 'us';
+    }
     this.setState({whichAccount: account, records:[], usRecords:[]})
     this.updateAccount(account)
   };
@@ -62,7 +69,6 @@ export default class Account extends Component {
   render() {
     const {acTime, acMoney, acStock, acSummary, records, usRecords, whichAccount, isAssetTransfer} = this.state;
     const {route} = this.props;
-
     return (
       <div>
         <nav>
@@ -75,9 +81,10 @@ export default class Account extends Component {
         </nav>
         <div className="tab-content" id="nav-tabContent">
           <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-            {browserUtils.isMobile() && !this.state.isAssetTransfer && <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit" onClick={() => this.isAssetTransfer(true)}>資產轉移</button>}
-            {browserUtils.isMobile() && this.state.isAssetTransfer  && <button className="btn btn-secondary from-group col-md-2 input-sale-frame" type="submit" onClick={() => this.isAssetTransfer(false)}>隱藏</button>}
+            {browserUtils.isMobile() && !isAssetTransfer && <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit" onClick={() => this.isAssetTransfer(true)}>資產轉移</button>}
+            {browserUtils.isMobile() && !isAssetTransfer  && <button className="btn btn-secondary from-group col-md-2 input-sale-frame" type="submit" onClick={() => this.isAssetTransfer(false)}>隱藏</button>}
             {isAssetTransfer && <AccountTransfer whichAccount={whichAccount} callback={this.updateAccount}/>}
+            {!browserUtils.isMobile() && <AccountTransfer whichAccount={whichAccount} callback={this.updateAccount}/>}
             <div className="container">
               <table className="table table-striped">
                 <thead>
@@ -125,6 +132,7 @@ export default class Account extends Component {
             {browserUtils.isMobile() && !this.state.isAssetTransfer && <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit" onClick={() => this.isAssetTransfer(true)}>資產轉移</button>}
             {browserUtils.isMobile() && this.state.isAssetTransfer  && <button className="btn btn-secondary from-group col-md-2 input-sale-frame" type="submit" onClick={() => this.isAssetTransfer(false)}>隱藏</button>}
             {isAssetTransfer && <AccountTransfer whichAccount={whichAccount} callback={this.updateAccount}/>}
+            {!browserUtils.isMobile() && <AccountTransfer whichAccount={whichAccount} callback={this.updateAccount}/>}
             <div className="container">
               <table className="table table-striped">
                 <thead>

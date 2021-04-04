@@ -7,6 +7,7 @@ import "firebase/database";
 import "firebase/auth";
 import "firebase/firestore";
 import d from "../utils/dateFormat";
+import settings from './../component/settings/settings'
 
 const fireBaseConfig= {
   apiKey: process.env.REACT_APP_APP_KEY,
@@ -22,19 +23,20 @@ const fireBaseConfig= {
 firebase.initializeApp(fireBaseConfig);
 firebase.analytics();
 // get database refer
-var getDataRef = firebase.database().ref(`/stockInfo` );
-var getUSDataRef = firebase.database().ref(`/us_stockInfo` );
-var getAccountRef = firebase.database().ref(`/account` );
-var getAccountRecordRef = firebase.database().ref(`/accountRecord` );
-var getUSAccountRecordRef = firebase.database().ref(`/us_accountRecord` );
-var getUSAccountRef = firebase.database().ref(`/us_account` );
+// var getDataRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stockInfo` );
+// var getUSDataRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stockInfo` );
+//
+// var getAccountRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/account_record` );
+// var getAccountRecordRef = firebase.database().ref(`/accountRecord` );
+// var getUSAccountRecordRef = firebase.database().ref(`/us_accountRecord` );
+// var getUSAccountRef = firebase.database().ref(`/us_account` );
 var stockData;
 
 const api = {
-  async getAllData(route) {
-    this.route = route;
-    let getRefOfData = route === "US_account" ? getUSDataRef : getDataRef
-    await getRefOfData.once('value').then(async (snapshot) => {
+  async getAllData() {
+    let  getDataRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stock_info` );
+    await getDataRef.once('value').then(async (snapshot) => {
+
       let items = [];
       snapshot.forEach(element => {
         items.unshift(element.val());
@@ -60,7 +62,7 @@ const api = {
           profitAndLoss += items[item].status === "sale" ? items[item].income : 0;
           saleCost += items[item].status === "sale" ? items[item].cost : 0;
         }
-        let lastYearROI = await this.getLastYearROI(items, route);
+        let lastYearROI = await this.getLastYearROI(items);
         stockData = {
           lastYearROI: lastYearROI,
           showStocks: items,
@@ -81,9 +83,8 @@ const api = {
     let timestamp = Math.floor(Date.now() / 1000);
     let cost = Math.floor(data.price * 1000 * data.sheet * 1.001425);
     let US_cost = data.price * data.sheet;
-
-    let getRefOfData = this.route === "US_account" ? getUSDataRef : getDataRef
-      await getRefOfData.child(timestamp.toString()).set({
+    let  getDataRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stock_info` );
+      await getDataRef.child(timestamp.toString()).set({
       timestamp: timestamp,
       date: data.date,
       name: data.name,
@@ -106,8 +107,8 @@ const api = {
   },
 
   async deleteStock(timestamp){
-    let thisDataRef = this.route === 'US_account' ? getUSDataRef : getDataRef;
-    thisDataRef.child(`${timestamp}`).remove().then(function () {
+    let  getDataRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stock_info` );
+    getDataRef.child(`${timestamp}`).remove().then(function () {
       console.log("刪除成功");
     }).catch(function (err) {
       console.error("刪除錯誤：", err);
@@ -120,9 +121,9 @@ const api = {
       let US_income = salePrice * saleSheet - stock.cost;
       let US_sale_cost = salePrice * saleSheet;
       let sale_date = d.dateFormat(new Date());
-      let getRefOfData =  route === "US_account" ? getUSDataRef : getDataRef
+      let  getDataRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stock_info` );
 
-      await getRefOfData.child(stock.timestamp).update({
+      await getDataRef.child(stock.timestamp).update({
         income: route === 'US_account' ? US_income : income,
         sale_cost: route === 'US_account' ? US_sale_cost　:　sale_cost,
         sale_date: sale_date,
@@ -132,24 +133,24 @@ const api = {
       });
   },
 
-  async getAccount(account){
+  async getAccount(){
     let accountData = [];
-    const thisDataRef = account === 'US_account' ? getUSAccountRef : getAccountRef;
-
-      await thisDataRef.once('value').then((snapshot) => {
+    let getAccountRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/account_summary` );
+      await getAccountRef.once('value').then((snapshot) => {
         accountData = snapshot.val();
     });
     return accountData;
   },
 
-  async getAccountRecord(whichAccount){
+  async getAccountRecord(){
     let accountRecord = [];
-    let  getRefOfAccountRecord = whichAccount === 'US_account' ? getUSAccountRecordRef : getAccountRecordRef;
-    await getRefOfAccountRecord.once('value').then((snapshot) => {
+    let getAccountRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/account_record` );
+    await getAccountRef.once('value').then((snapshot) => {
       snapshot.forEach(element => {
         accountRecord.unshift(element.val());
       });
     });
+
     return accountRecord;
   },
 
@@ -158,8 +159,9 @@ const api = {
     let transfer_price = 0;
     let date = d.dateFormat(new Date());
     let timestamp = Math.floor(Date.now() / 1000);
-    let  getRefOfAccount = whichAccount === 'Taiwan_account' ? getAccountRef : getUSAccountRef;
-    let  getRefOfAccountRecord = whichAccount === 'Taiwan_account' ? getAccountRecordRef : getUSAccountRecordRef;
+    let getRefOfAccount = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/account_summary` );
+    let getRefOfAccountRecord = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/account_record` );
+
     await getRefOfAccount.once('value').then((snapshot) => {
         accountData = snapshot.val();
     });
@@ -194,7 +196,7 @@ const api = {
     let timestamp = Math.floor(Date.now() / 1000);
     let transfer_date = d.dateFormat(new Date())
     let accountData = [];
-    let getRefOfAccount = (route === "US_account") ? getUSAccountRef :  getAccountRef;
+    let getRefOfAccount = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/account_summary` );
     await getRefOfAccount.once('value').then((snapshot) => {
       accountData = snapshot.val();
     });
@@ -234,8 +236,7 @@ const api = {
       summary: (money + stock).toFixed(2)
     });
 
-    let getRefOfAccountRecord =  route === "US_account" ? getUSAccountRecordRef : getAccountRecordRef;
-
+    let getRefOfAccountRecord = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/account_record` );
     await getRefOfAccountRecord.child(timestamp.toString()).set({
       timestamp: timestamp,
       account_record_Money: money,
@@ -249,7 +250,7 @@ const api = {
     return ;
   },
 
-  async getLastYearROI(items, route){
+  async getLastYearROI(items){
     let accountInfo  = await this.getAccount();
     let summary = parseInt(accountInfo.summary);
     let lastYearStartDate = d.dateFormat(new Date(new Date().getFullYear() - 1,0,1));
@@ -267,7 +268,7 @@ const api = {
     for (let item in thisYearItems) {
       incomeOfThisYear += thisYearItems[item].income;
     }
-    let accountRecords  = await this.getAccountRecord(route);
+    let accountRecords  = await this.getAccountRecord();
     let thisYearAccountRecords = accountRecords.filter(a => (thisYearStartDate <= a.transferTime && a.transferTime <= thisYearEndDate));
     for (let record in thisYearAccountRecords) {
       inAccountOfThisYear += thisYearAccountRecords[record].source !== '股票' ? parseInt(thisYearAccountRecords[record].transfer) : 0;

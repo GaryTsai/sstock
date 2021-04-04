@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import browserUtils from '../../utils/browserUtils';
-
+import styles from './style';
 export default class Navbar extends Component {
   componentDidMount() {
   }
@@ -43,7 +43,7 @@ export default class Navbar extends Component {
   };
 
   render() {
-    const {saleCost, profitAndLoss, profit, totalCost ,route, changeRoute, lastYearROI} = this.props;
+    const {saleCost, profitAndLoss, profit, totalCost ,route, changeRoute, logOutCallBack, lastYearROI} = this.props;
     return (
       <div>
         <nav className="navbar navbar-expand-md navbar-light " style={{backgroundColor: 'rgb(52 149 220)', cursor: 'pointer'}}>
@@ -66,7 +66,7 @@ export default class Navbar extends Component {
             </ul>
           </div>
           <div style={{display: 'inherit',...this.getComputeStyleForMobile()}}>
-          {(route === 'Taiwan_history' || route === 'US_account') && <div style={{display: 'flex'}}>
+          {(route === 'Taiwan_history' || route === 'US_account') && <div style={{display: 'flex', alignItems: 'center'}}>
           <div>投入成本:{saleCost.toFixed(2)}元</div>
           <div>總損益: {profitAndLoss.toFixed(2)}元</div>
           <div>投報率: {profit.toFixed(2)}%</div>
@@ -76,6 +76,7 @@ export default class Navbar extends Component {
           <div style={{display: 'inherit', padding: '5px 0px',...this.getComputeStyleForMobile()}}>
             {(route === 'Taiwan_account' || route === 'US_account') && <div>目前投入總成本: {totalCost.toFixed(2)}元</div>}
           </div>
+          <div style={styles.logOutButton} onClick={() => logOutCallBack()}>登出</div>
         </nav>
       </div>
     )
