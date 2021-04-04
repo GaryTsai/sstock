@@ -72,8 +72,8 @@ export default {
     display: 'inline-block',
     fontSize: '16px',
     margin: '5px',
-    width: '90%',
-    padding: '10px 32px'
+    width: '93%',
+    padding: '10px 20px'
   },
   input:{
     backgroundColor: '#f6f6f6',
@@ -83,7 +83,7 @@ export default {
     display: 'inline-block',
     fontSize: '16px',
     margin: '5px',
-    width: '85%',
+    width: '90%',
     border: '2px solid #f6f6f6',
   },
   submit:{

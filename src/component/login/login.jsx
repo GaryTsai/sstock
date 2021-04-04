@@ -9,6 +9,7 @@ import "firebase/database";
 import styles from './styles'
 import settings from './../settings/settings'
 import utils from './../../utils/dateFormat'
+import browserUtils from "./../../utils/browserUtils";
 const initialState = {
   email:'',
   resetEmail:'',
@@ -157,10 +158,11 @@ class Login extends Component {
 
   render() {
     const {isLogIn, isOpenForgetPWD} = this.state;
+    const isMobile = browserUtils.isMobile();
 
     return (
         <div style={styles.wrapper} >
-          <div className="fadeInDown"  style={{ width: '40%', display: 'flex', position: 'fixed', top: '5%'}}>
+          <div className="fadeInDown"  style={{ width: isMobile ? '80%' : '40%', display: 'flex', position: 'fixed', top: '5%'}}>
             <div key='logIn' style={{...styles.logIn, border: isLogIn ? '3px solid white' : ''}} onClick={() => this.logInSelect(true)}>登入</div>
             <div key='register' style={{...styles.register, border: isLogIn ? '' : '3px solid white' }} onClick={() => this.logInSelect(false)}>註冊</div>
           </div>
@@ -183,9 +185,9 @@ class Login extends Component {
           {isOpenForgetPWD &&
           <div style={{...styles.inputContent}}>
             <input type="text" style={styles.input} id="email"  onChange={(c) => this.setResetEmail(c.target.value)} className="fadeIn second" name="login" placeholder="email"/>
-            <input key={'backToLogIn'} style={{...styles.back, margin: '5px', width: '40%'}}  onClick={this.closeForgetPWD} type="button" className="fadeIn fourth"
+            <input key={'backToLogIn'} style={{...styles.back, margin: '5px', width: '45%'}}  onClick={this.closeForgetPWD} type="button" className="fadeIn fourth"
                    value={'back'}/>
-            <input style={{...styles.submit, width: '40%'}}  type="submit" className="fadeIn fourth"
+            <input style={{...styles.submit, margin: '5px',  width: '45%'}}  type="submit" className="fadeIn fourth"
                    value={'submit to mail'} onClick={this.resetPWD}/>
           </div>}
         </div>
