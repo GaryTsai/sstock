@@ -112,7 +112,7 @@ export default class App extends Component {
   };
 
   loginRecord = () =>{
-    const account = localStorage.getItem('account');
+    const account = localStorage.getItem('account-stock');
     if(!!account) {
       settings.user_id = account;
       this.closeLoginPage();
@@ -122,7 +122,7 @@ export default class App extends Component {
   };
 
   logOut = () =>{
-    localStorage.removeItem('account');
+    localStorage.removeItem('account-sstock');
     this.setState({logInStatus: false})
   };
 

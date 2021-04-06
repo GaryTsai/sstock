@@ -68,7 +68,7 @@ class Login extends Component {
         var user = firebase.auth().currentUser;
 
         if(user){
-          localStorage.setItem('account', user.uid);
+          localStorage.setItem('account-stock', user.uid);
           console.log('log in successfully');
           settings.user_id = user.uid;
           logInCallBack&&logInCallBack(user.uid);
@@ -120,7 +120,7 @@ class Login extends Component {
           }
         }).then(() => {
           // 儲存成功後顯示訊息
-          localStorage.setItem('account', u.user.uid);
+          localStorage.setItem('account-sstock', u.user.uid);
           console.log('register successfully');
           logInCallBack&&logInCallBack(u.user.uid);
           homePageCallBack&&homePageCallBack();
