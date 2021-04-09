@@ -69,7 +69,7 @@ export default class Navbar extends Component {
           {(route === 'Taiwan_history' || route === 'US_account') && <div style={{display: 'flex', alignItems: 'center'}}>
           <div>投入成本:{saleCost.toFixed(2)}元</div>
           <div>總損益: {profitAndLoss.toFixed(2)}元</div>
-          <div>投報率: {profit.toFixed(2)}%</div>
+          <div>投報率: {profit}%</div>
           <div>去年投報率: {lastYearROI}%</div>
           </div>}
           </div>

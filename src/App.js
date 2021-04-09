@@ -62,7 +62,7 @@ export default class App extends Component {
             totalCost: stockData.totalCost,
             profitAndLoss: stockData.profitAndLoss,
             saleCost: stockData.saleCost,
-            profit: Math.floor(stockData.profitAndLoss / stockData.saleCost * 100),
+            profit: (stockData.profitAndLoss / stockData.saleCost * 100).toFixed(2),
             loading: false
           })
         }
@@ -80,7 +80,7 @@ export default class App extends Component {
             totalCost: stockData.totalCost,
             profitAndLoss: stockData.profitAndLoss,
             saleCost: stockData.saleCost,
-            profit: Math.floor(stockData.profitAndLoss / stockData.saleCost * 100),
+            profit: (stockData.profitAndLoss / stockData.saleCost * 100).toFixed(2),
             loading: false
           })
         }
@@ -137,8 +137,7 @@ export default class App extends Component {
         settings.country = 'us';
         break;
     }
-    this.setState({route: route});
-    this.updateAllData();
+    this.setState({route: route, showStocks: []}, ()=>this.updateAllData());
   };
 
   updateQueryData = (stockInfo) => {
@@ -170,7 +169,7 @@ export default class App extends Component {
         profitAndLoss += result[item].income;
         saleCost += result[item].cost;
       }
-      profit = Math.floor(profitAndLoss / saleCost * 100);
+      profit = (profitAndLoss / saleCost * 100).toFixed(2);
       this.setState({showStocks: result, profit: profit, saleCost: saleCost, profitAndLoss: profitAndLoss});
     } else if (stockInfo.stockStatus === 'mutual') {
     }

@@ -4,7 +4,10 @@
     <list default="true" id="8d947a1e-29b2-427a-ad9a-bcafc36e3549" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/login/login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/login/login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/account/AccountTransfer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/account/AccountTransfer.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/account/account.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/account/account.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/navbar/navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/navbar/navbar.jsx" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -20,11 +23,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/App.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="214">
-              <caret line="212" column="26" lean-forward="true" selection-start-line="212" selection-start-column="26" selection-end-line="212" selection-end-column="26" />
+              <caret line="57" column="45" lean-forward="true" selection-start-line="57" selection-start-column="45" selection-end-line="57" selection-end-column="45" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -33,10 +36,32 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/component/usstock/stocks.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="191">
+              <caret line="68" column="189" selection-start-line="68" selection-start-column="172" selection-end-line="68" selection-end-column="189" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+                <element signature="e#114#166#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/component/usstock/stock.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="339">
+              <caret line="20" column="34" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/api/api.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2990">
-              <caret line="134" selection-start-line="134" selection-end-line="134" />
+            <state relative-caret-position="226">
+              <caret line="185" column="27" lean-forward="true" selection-start-line="185" selection-start-column="27" selection-end-line="185" selection-end-column="27" />
               <folding>
                 <element signature="e#313#336#0" expanded="true" />
               </folding>
@@ -45,25 +70,34 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../../Downloads/stock-f7053-export (5).json">
+        <entry file="file://$PROJECT_DIR$/src/component/account/AccountTransfer.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="69">
-              <caret line="12" selection-start-line="12" selection-end-line="1652" selection-end-column="5" />
+            <state relative-caret-position="354">
+              <caret line="35" column="22" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
               <folding>
-                <element signature="n#!!block;n#account_Info#0;n#!!top" />
-                <element signature="n#!!block;n#njaFDGpWCwVNDSrbYv4CWQmHtUf2#0;n#!!block;n#account_Info#0;n#!!top" />
-                <element signature="n#!!block;n#oeSPUmB3mjUAe56nLSAKXZALMu43#0;n#!!block;n#account_Info#0;n#!!top" />
-                <element signature="n#!!block;n#account_record#0;n#!!block;n#tw#0;n#!!block;n#oeSPUmB3mjUAe56nLSAKXZALMu43#0;n#!!block;n#account_data#0;n#!!top" />
+                <element signature="e#0#39#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/component/account/account.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-165">
+              <caret line="50" column="43" selection-start-line="50" selection-start-column="43" selection-end-line="50" selection-end-column="43" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/component/login/login.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="50">
-              <caret line="64" column="5" lean-forward="true" selection-start-line="64" selection-start-column="5" selection-end-line="64" selection-end-column="5" />
+            <state relative-caret-position="119">
+              <caret line="67" column="47" lean-forward="true" selection-start-line="67" selection-start-column="47" selection-end-line="67" selection-end-column="47" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
                 <element signature="e#382#411#0" expanded="true" />
@@ -73,39 +107,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/utils/dateFormat.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="506">
-              <caret line="22" column="21" selection-start-line="22" selection-start-column="21" selection-end-line="22" selection-end-column="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/setupTests.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/component/login/styles.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1886">
-              <caret line="82" column="28" selection-start-line="82" selection-start-column="28" selection-end-line="82" selection-end-column="28" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/component/navbar/navbar.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1748">
-              <caret line="78" column="73" selection-start-line="78" selection-start-column="73" selection-end-line="78" selection-end-column="73" />
+            <state relative-caret-position="213">
+              <caret line="57" column="68" selection-start-line="57" selection-start-column="57" selection-end-line="57" selection-end-column="68" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -143,12 +148,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>updateAllData</find>
-      <find>settings</find>
-      <find>getAllData</find>
-      <find>getAccountRecord</find>
-      <find>美股證卷</find>
-      <find>Taiwan_account</find>
       <find>getRefOfAccount</find>
       <find>getAccount</find>
       <find>getDataRef</find>
@@ -173,6 +172,12 @@
       <find>false</find>
       <find>loading</find>
       <find>localS</find>
+      <find>profit</find>
+      <find>showStocks</find>
+      <find>updateAllData</find>
+      <find>saleStockCallback</find>
+      <find>submitTrade</find>
+      <find>美股資產</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -202,7 +207,6 @@
         <option value="$PROJECT_DIR$/src/component/navbar.jsx" />
         <option value="$PROJECT_DIR$/src/component/account/record.jsx" />
         <option value="$PROJECT_DIR$/build/static/css/2.2f73783b.chunk.css" />
-        <option value="$PROJECT_DIR$/src/component/account/AccountTransfer.jsx" />
         <option value="$PROJECT_DIR$/src/component/usstock/stock.jsx" />
         <option value="$PROJECT_DIR$/src/component/account/account.css" />
         <option value="$PROJECT_DIR$/src/settings/index.js" />
@@ -223,17 +227,18 @@
         <option value="D:/MISC/stock data/stock-f7053-export.json" />
         <option value="$PROJECT_DIR$/src/component/settings/settings.js" />
         <option value="$PROJECT_DIR$/../../../Downloads/stock-f7053-export (5).json" />
-        <option value="$PROJECT_DIR$/src/component/account/account.jsx" />
         <option value="$PROJECT_DIR$/src/component/navbar/style.js" />
-        <option value="$PROJECT_DIR$/src/component/navbar/navbar.jsx" />
-        <option value="$PROJECT_DIR$/src/api/api.js" />
         <option value="$PROJECT_DIR$/src/component/login/styles.js" />
         <option value="$PROJECT_DIR$/src/component/login/login.jsx" />
+        <option value="$PROJECT_DIR$/src/component/navbar/navbar.jsx" />
+        <option value="$PROJECT_DIR$/src/component/account/AccountTransfer.jsx" />
+        <option value="$PROJECT_DIR$/src/api/api.js" />
+        <option value="$PROJECT_DIR$/src/component/account/account.jsx" />
         <option value="$PROJECT_DIR$/src/App.js" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-10" />
     <option name="y" value="1" />
     <option name="width" value="1935" />
@@ -273,6 +278,13 @@
               <item name="sstock" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="component" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="sstock" type="b2602c69:ProjectViewProjectNode" />
+              <item name="sstock" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="component" type="462c0819:PsiDirectoryNode" />
+              <item name="account" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="sstock" type="b2602c69:ProjectViewProjectNode" />
@@ -369,12 +381,12 @@
       <workItem from="1613961468283" duration="32329000" />
       <workItem from="1615479012856" duration="11707000" />
       <workItem from="1615818091366" duration="31461000" />
-      <workItem from="1617720762314" duration="878000" />
+      <workItem from="1617720762314" duration="6002000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="260218000" />
+    <option name="totallyTimeSpent" value="265342000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -387,7 +399,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.8329412" visible="true" weight="0.120871864" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -404,7 +415,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="TypeScript" order="9" weight="0.3286119" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5006605" side_tool="true" weight="0.3286119" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.4966975" visible="true" weight="0.26912183" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.4966975" visible="true" weight="0.16147308" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -514,13 +525,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/component/usstock/stock.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="20" column="34" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/build/static/js/main.12c33409.chunk.js.map" />
     <entry file="file://$PROJECT_DIR$/src/component/account/account.css">
       <provider selected="true" editor-type-id="text-editor">
@@ -530,17 +534,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/settings/index.js" />
-    <entry file="file://$PROJECT_DIR$/src/component/usstock/stocks.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="43" column="9" selection-start-line="43" selection-start-column="9" selection-end-line="43" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-            <element signature="e#114#166#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.env">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -680,64 +673,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/component/account/AccountTransfer.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1345">
-          <caret line="12" column="21" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/component/account/account.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="134" column="118" selection-start-line="134" selection-start-column="118" selection-end-line="134" selection-end-column="118" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="212" column="26" lean-forward="true" selection-start-line="212" selection-start-column="26" selection-end-line="212" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/api.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2990">
-          <caret line="134" selection-start-line="134" selection-end-line="134" />
-          <folding>
-            <element signature="e#313#336#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../Downloads/stock-f7053-export (5).json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="69">
-          <caret line="12" selection-start-line="12" selection-end-line="1652" selection-end-column="5" />
-          <folding>
-            <element signature="n#!!block;n#account_Info#0;n#!!top" />
-            <element signature="n#!!block;n#njaFDGpWCwVNDSrbYv4CWQmHtUf2#0;n#!!block;n#account_Info#0;n#!!top" />
-            <element signature="n#!!block;n#oeSPUmB3mjUAe56nLSAKXZALMu43#0;n#!!block;n#account_Info#0;n#!!top" />
-            <element signature="n#!!block;n#accountInfo#0;n#!!block;n#tw#0;n#!!block;n#oeSPUmB3mjUAe56nLSAKXZALMu43#0;n#!!block;n#account_data#0;n#!!top" />
-            <element signature="n#!!block;n#account_record#0;n#!!block;n#tw#0;n#!!block;n#oeSPUmB3mjUAe56nLSAKXZALMu43#0;n#!!block;n#account_data#0;n#!!top" />
-            <element signature="n#!!block;n#stockInfo#0;n#!!block;n#tw#0;n#!!block;n#oeSPUmB3mjUAe56nLSAKXZALMu43#0;n#!!block;n#account_data#0;n#!!top" />
-            <element signature="n#!!block;n#accountInfo#0;n#!!block;n#us#0;n#!!block;n#oeSPUmB3mjUAe56nLSAKXZALMu43#0;n#!!block;n#account_data#0;n#!!top" />
-            <element signature="n#!!block;n#accountRecord#0;n#!!block;n#us#0;n#!!block;n#oeSPUmB3mjUAe56nLSAKXZALMu43#0;n#!!block;n#account_data#0;n#!!top" />
-            <element signature="n#!!block;n#stockInfo#0;n#!!block;n#us#0;n#!!block;n#oeSPUmB3mjUAe56nLSAKXZALMu43#0;n#!!block;n#account_data#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/utils/dateFormat.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="506">
@@ -761,16 +696,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/component/navbar/navbar.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1748">
-          <caret line="78" column="73" selection-start-line="78" selection-start-column="73" selection-end-line="78" selection-end-column="73" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/component/navbar/style.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="138">
@@ -787,11 +712,92 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/component/login/login.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="64" column="5" lean-forward="true" selection-start-line="64" selection-start-column="5" selection-end-line="64" selection-end-column="5" />
+        <state relative-caret-position="119">
+          <caret line="67" column="47" lean-forward="true" selection-start-line="67" selection-start-column="47" selection-end-line="67" selection-end-column="47" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
             <element signature="e#382#411#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../Downloads/stock-f7053-export (5).json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="12" selection-start-line="12" selection-end-line="1652" selection-end-column="5" />
+          <folding>
+            <element signature="n#!!block;n#account_Info#0;n#!!top" />
+            <element signature="n#!!block;n#njaFDGpWCwVNDSrbYv4CWQmHtUf2#0;n#!!block;n#account_Info#0;n#!!top" />
+            <element signature="n#!!block;n#oeSPUmB3mjUAe56nLSAKXZALMu43#0;n#!!block;n#account_Info#0;n#!!top" />
+            <element signature="n#!!block;n#account_record#0;n#!!block;n#tw#0;n#!!block;n#oeSPUmB3mjUAe56nLSAKXZALMu43#0;n#!!block;n#account_data#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/component/navbar/navbar.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="57" column="68" selection-start-line="57" selection-start-column="57" selection-end-line="57" selection-end-column="68" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/component/usstock/stock.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="339">
+          <caret line="20" column="34" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/component/usstock/stocks.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="68" column="189" selection-start-line="68" selection-start-column="172" selection-end-line="68" selection-end-column="189" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+            <element signature="e#114#166#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/component/account/AccountTransfer.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="354">
+          <caret line="35" column="22" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/api.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="185" column="27" lean-forward="true" selection-start-line="185" selection-start-column="27" selection-end-line="185" selection-end-column="27" />
+          <folding>
+            <element signature="e#313#336#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/component/account/account.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-165">
+          <caret line="50" column="43" selection-start-line="50" selection-start-column="43" selection-end-line="50" selection-end-column="43" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="57" column="45" lean-forward="true" selection-start-line="57" selection-start-column="45" selection-end-line="57" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
           </folding>
         </state>
       </provider>

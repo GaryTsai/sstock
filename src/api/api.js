@@ -166,24 +166,24 @@ const api = {
         accountData = snapshot.val();
     });
     if(transferInfo.transferStatus === "transferOut"){
-      transfer_price = parseInt(transferInfo.price) * -1;
+      transfer_price = whichAccount === 'Taiwan_account' ? parseInt(transferInfo.price) * -1 : parseFloat(transferInfo.price) * -1;
     }else{
-      transfer_price = parseInt(transferInfo.price);
+      transfer_price = whichAccount === 'Taiwan_account' ? parseInt(transferInfo.price) : parseFloat(transferInfo.price);
     }
-
-    let money = (whichAccount === 'Taiwan_account' ? parseInt(accountData.accountMoney) : accountData.accountMoney) + transfer_price;
-    let stock = (whichAccount === 'Taiwan_account' ? parseInt(accountData.accountStock) : accountData.accountStock);
+    let money = ((whichAccount === 'Taiwan_account' ? parseInt(accountData.accountMoney) : parseFloat(accountData.accountMoney)) + transfer_price);
+    let stock = (whichAccount === 'Taiwan_account' ? parseInt(accountData.accountStock) : parseFloat(accountData.accountStock));
     let summary = money + stock;
+
     await getRefOfAccount.update({
-      accountMoney: money,
-      accountStock: stock,
-      summary: summary
+      accountMoney: money.toFixed(2),
+      accountStock: stock.toFixed(2),
+      summary: summary.toFixed(2)
     });
 
     await getRefOfAccountRecord.child(timestamp.toString()).set({
       timestamp: timestamp,
-      account_record_Money: money,
-      account_record_Stock: stock,
+      account_record_Money: money.toFixed(2),
+      account_record_Stock: stock.toFixed(2),
       source: transferInfo.source,
       transfer: transferInfo.price,
       transferStatus: transferInfo.transferStatus === "transferIn" ? '存入': '轉出',
@@ -216,7 +216,7 @@ const api = {
         stock = parseInt(accountData.accountStock) - stockInfo.cost;
       }
     }else{
-      cost = stockInfo.price * stockInfo.sheet;
+      cost = stockInfo.cost;
       salePrice = stockInfo.price * stockInfo.sheet;
       cost = parseFloat(cost);
       salePrice = parseFloat(salePrice);
@@ -224,7 +224,7 @@ const api = {
         money = parseFloat(accountData.accountMoney) - parseFloat(salePrice);
         stock = parseFloat(accountData.accountStock) + parseFloat(salePrice);
       } else {
-        money = parseFloat(accountData.accountMoney) + cost;
+        money = parseFloat(accountData.accountMoney) + salePrice;
         stock =  parseFloat(accountData.accountStock) - stockInfo.cost;
       }
     }
