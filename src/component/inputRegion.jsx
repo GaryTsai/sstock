@@ -122,7 +122,7 @@ export default class InputRegion extends Component {
               </label>
             </button>
             <div className="btn-group" role="group" aria-label="Basic outlined example" style={{width : isMobile ? 'inherit' :'unset'}}>
-              <button type="button" className="btn btn-outline-primary" onClick={()=>this.queryRegion(0)} >Today</button>
+              <button type="button" className="btn btn-outline-primary" onClick={()=>this.queryRegion(1)} >Today</button>
               <button type="button" className="btn btn-outline-primary"onClick={()=>this.queryRegion(7)}>前 7 日</button>
               <button type="button" className="btn btn-outline-primary"onClick={()=>this.queryRegion(30)}>前 30 日</button>
               <button type="button" className="btn btn-outline-primary"onClick={()=>this.queryRegion(120)}>前三月</button>
