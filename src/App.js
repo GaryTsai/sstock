@@ -90,7 +90,8 @@ export default class App extends Component {
 
   inputData = data => {
     let self = this;
-    api.insertNewData(data).then(() => {
+    const route = this.state.route
+    api.insertNewData(data, route).then(() => {
       self.updateAllData()
     });
   };

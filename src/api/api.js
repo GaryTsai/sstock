@@ -79,7 +79,7 @@ const api = {
     return stockData;
   },
 
-  async insertNewData(data){
+  async insertNewData(data, route){
     let timestamp = Math.floor(Date.now() / 1000);
     let cost = Math.floor(data.price * 1000 * data.sheet * 1.001425);
     let US_cost = data.price * data.sheet;
@@ -91,7 +91,7 @@ const api = {
       number: data.number,
       price: data.price,
       sheet: data.sheet,
-      cost: this.route === "US_account" ?　US_cost : cost,
+      cost: route === "US_account" ?　US_cost : cost,
       income:0,
       sale_cost:0,
       sale_date:0,
@@ -204,6 +204,7 @@ const api = {
     let stock = 0;
     let cost = 0;
     let salePrice = 0;
+    console.log(route);
     if(route !== "US_account") {
       cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.003);
       salePrice = Math.floor(stockInfo.price * 1000 * stockInfo.sheet) + Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425);
@@ -216,6 +217,7 @@ const api = {
         stock = parseInt(accountData.accountStock) - stockInfo.cost;
       }
     }else{
+      console.log(cost,stockInfo)
       cost = stockInfo.cost;
       salePrice = stockInfo.price * stockInfo.sheet;
       cost = parseFloat(cost);

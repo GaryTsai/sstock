@@ -27,7 +27,9 @@ export default class InputRegion extends Component {
   queryRegion = (region = false) => {
     const {dateRegion1, dateRegion2, saleStatus, stockStatus} = this.state;
     let stockInfo = {};
-    let date = new Date();
+    let startDate = new Date();
+    let endDate = new Date();
+
     if (region) {
       if (region === 'yearAgo') {
         const yearAgo = new Date().getFullYear() - 1
@@ -46,10 +48,11 @@ export default class InputRegion extends Component {
           'stockStatus': stockStatus
         };
       } else {
-        date.setDate(date.getDate() - region);
+        startDate.setDate(startDate.getDate() - region);
+        endDate.setDate(endDate.getDate() + 1);
         stockInfo = {
-          'dateRegion1': utils.dateFormat(date),
-          'dateRegion2': utils.dateFormat(new Date()),
+          'dateRegion1': utils.dateFormat(startDate),
+          'dateRegion2': utils.dateFormat(endDate),
           'saleStatus': saleStatus,
           'stockStatus': stockStatus
         };
@@ -122,7 +125,7 @@ export default class InputRegion extends Component {
               </label>
             </button>
             <div className="btn-group" role="group" aria-label="Basic outlined example" style={{width : isMobile ? 'inherit' :'unset'}}>
-              <button type="button" className="btn btn-outline-primary" onClick={()=>this.queryRegion(1)} >Today</button>
+              <button type="button" className="btn btn-outline-primary" onClick={()=>this.queryRegion(0)} >Today</button>
               <button type="button" className="btn btn-outline-primary"onClick={()=>this.queryRegion(7)}>前 7 日</button>
               <button type="button" className="btn btn-outline-primary"onClick={()=>this.queryRegion(30)}>前 30 日</button>
               <button type="button" className="btn btn-outline-primary"onClick={()=>this.queryRegion(120)}>前三月</button>
