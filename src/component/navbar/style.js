@@ -10,6 +10,16 @@ export default {
       backgroundColor: '#ef0f0f',
     }
   },
+  logOutButtonMobile:{
+    backgroundColor: '#ef5959',
+    color: '#ffffff',
+    borderRadius: '5px',
+    padding: '5px 10px',
+    fontSize: '18px',
+    ':hover': {
+      backgroundColor: '#ef0f0f',
+    }
+  },
   report: {
     display: 'flex',
     alignItems: 'center'
@@ -18,7 +28,7 @@ export default {
     width: '100%'
   },
   reportFormat: {
-
+    display: 'flex',
   },
   reportFormatMobile: {
     display: 'flex',

@@ -65,9 +65,9 @@ export default class Navbar extends Component {
               <li className="nav-item"  style={route === 'account' ? this.getActiveStyle() : {}} >
                 <div className="nav-link"　onClick={e => changeRoute('account')} >我的帳戶</div>
               </li>
-              <li className="nav-item"  style={route === 'account' ? this.getActiveStyle() : {}} >
-                <div className="nav-link"　style={styles.logOutButton} onClick={() => logOutCallBack()} >登出</div>
-              </li>
+              {isMobile &&<li className="nav-item" style={{marginTop: '5px'}}>
+                <div className="nav-link"　style={styles.logOutButtonMobile} onClick={() => logOutCallBack()} >登出</div>
+              </li>}
             </ul>
           </div>
           <div style={{display: 'inherit',...this.getComputeStyleForMobile()}}>
