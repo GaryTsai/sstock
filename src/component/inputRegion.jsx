@@ -91,15 +91,17 @@ export default class InputRegion extends Component {
   getStyleOfButton = () =>{
     if(browserUtils.isMobile()) {
       return {
-        margin: '3px 0px',
+        margin: '0px 0px',
         paddingRight: '0px',
-        paddingLeft: '0px'
+        paddingLeft: '0px',
+        whiteSpace: 'nowrap'
       }
     }else{
       return {
         margin: '3px 5px',
         paddingRight: '0px',
-        paddingLeft: '0px'
+        paddingLeft: '0px',
+        whiteSpace: 'nowrap'
       }
     }
   };
@@ -110,8 +112,7 @@ export default class InputRegion extends Component {
     return (
       <div>
           <div className="form-row" style={{margin:'5px', overflowY: isMobile ? 'scroll' : 'unset'}}>
-            <div style={{width:'100%', textAlign: 'left'}}>
-            <button type="button" className="btn btn-info from-group col-md-2" onClick={this.props.resetCallBack}>顯示全部 Stock </button>
+            <button type="button" className={"btn btn-info from-group col-md-2" + (isMobile ? ' show-all-stock-mobile' : ' show-all-stock')}  onClick={this.props.resetCallBack}>顯示全部 Stock </button>
             <button type="button"  className={"btn btn-group btn-group-toggle" + (isMobile ? ' from-group col-md-6' : ' from-group' +
               ' col-md-2')} data-toggle="buttons" style={{margin: '0px 10px', zIndex: 0, ...this.getStyleOfButton()}}>
               <label className="btn btn-secondary active" onClick={this.getSaleOptions}>
@@ -124,7 +125,7 @@ export default class InputRegion extends Component {
                 <input type="radio" name="saleOption" id="saleOption3" value='unsale'  autoComplete="off" /> 未賣出
               </label>
             </button>
-            <div className="btn-group" role="group" aria-label="Basic outlined example" style={{width : isMobile ? 'inherit' :'unset'}}>
+            <div className={"btn-group" + (isMobile ? " query-region-group-mobile": " query-region-group")}  role="group" aria-label="Basic outlined example" style={{width : isMobile ? 'inherit' :'unset'}}>
               <button type="button" className="btn btn-outline-primary" onClick={()=>this.queryRegion(0)} >Today</button>
               <button type="button" className="btn btn-outline-primary"onClick={()=>this.queryRegion(7)}>前 7 日</button>
               <button type="button" className="btn btn-outline-primary"onClick={()=>this.queryRegion(30)}>前 30 日</button>
@@ -132,8 +133,6 @@ export default class InputRegion extends Component {
               <button type="button" className="btn btn-outline-primary"onClick={()=>this.queryRegion('yearAgo')}>去年</button>
               <button type="button" className="btn btn-outline-primary"onClick={()=>this.queryRegion('thisYear')}>今年</button>
             </div>
-          </div>
-            <div style={{width:'100%', textAlign: 'initial'}}>
             <div style={{margin:'5px', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
                 <div>起始區間:</div>
                 <div className="col">
@@ -154,8 +153,8 @@ export default class InputRegion extends Component {
               {/*  <input type="radio" name="stockOption" id="mutual" value='mutual' autoComplete="off" /> 共同股*/}
               {/*</label>*/}
             </div>
-            <div className={"btn btn-primary "+ (isMobile ? ' from-group col-md-3' : ' from-group col-md-1') } type="submit" style={{margin: '0px 0px'}} onClick={()=>this.queryRegion('')}>查詢送出</div>
-          </div>
+            <button className={"btn btn-primary query-region-submit "+ (isMobile ? ' from-group col-md-3' : ' from-group col-md-1' +
+              ' query-region-submit') } onClick={()=>this.queryRegion('')}>查詢送出</button>
           </div>
       </div>
     )

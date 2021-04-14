@@ -44,6 +44,27 @@
     box-sizing: border-box;
     box-shadow: 0 0 0 0.2rem rgb(241 183 179);
 }
-.from-group.col-md-2.input-sale-info-frame{
+.from-group.col-md-2. input-sale-info-frame{
     margin: 3px 0px;
+}
+.show-all-stock {
+    margin: 9px 0px;
+}
+.show-all-stock-mobile {
+    margin: 0px 0px;
+}
+.query-region-group {
+     margin: 10px 0px;
+ }
+.query-region-group-mobile {
+    margin: 0px 0px;
+}
+.query-region-submit {
+    margin: 3px 0px;
+}
+.stock-status {
+    margin: 3px 0px;
+}
+.stock-status-mobile {
+    margin: 0px 0px;
 }

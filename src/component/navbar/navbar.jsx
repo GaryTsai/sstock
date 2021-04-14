@@ -44,6 +44,8 @@ export default class Navbar extends Component {
 
   render() {
     const {saleCost, profitAndLoss, profit, totalCost ,route, changeRoute, logOutCallBack, lastYearROI} = this.props;
+    const isMobile = browserUtils.isMobile();
+
     return (
       <div>
         <nav className="navbar navbar-expand-md navbar-light " style={{backgroundColor: 'rgb(52 149 220)', cursor: 'pointer'}}>
@@ -63,20 +65,23 @@ export default class Navbar extends Component {
               <li className="nav-item"  style={route === 'account' ? this.getActiveStyle() : {}} >
                 <div className="nav-link"　onClick={e => changeRoute('account')} >我的帳戶</div>
               </li>
+              <li className="nav-item"  style={route === 'account' ? this.getActiveStyle() : {}} >
+                <div className="nav-link"　style={styles.logOutButton} onClick={() => logOutCallBack()} >登出</div>
+              </li>
             </ul>
           </div>
           <div style={{display: 'inherit',...this.getComputeStyleForMobile()}}>
-          {(route === 'Taiwan_history' || route === 'US_account') && <div style={{display: 'flex', alignItems: 'center'}}>
-          <div>投入成本:{saleCost.toFixed(2)}元</div>
-          <div>總損益: {profitAndLoss.toFixed(2)}元</div>
-          <div>投報率: {profit}%</div>
-          <div>去年投報率: {lastYearROI}%</div>
+          {(route === 'Taiwan_history' || route === 'US_account') && <div style={isMobile ?　styles.reportMobile : styles.report}>
+          <div style={isMobile ?　styles.reportFormatMobile : styles.reportFormat}><div>投入成本:</div><div>{saleCost.toFixed(2)}元</div></div>
+          <div style={isMobile ?　styles.reportFormatMobile : styles.reportFormat}><div>總損益:</div> <div>{profitAndLoss.toFixed(2)}元</div></div>
+          <div style={isMobile ?　styles.reportFormatMobile : styles.reportFormat}><div>投報率:</div> <div>{profit}%</div></div>
+          <div style={isMobile ?　styles.reportFormatMobile : styles.reportFormat}><div>去年投報率:</div> <div>{lastYearROI}%</div></div>
           </div>}
           </div>
-          <div style={{display: 'inherit', padding: '5px 0px',...this.getComputeStyleForMobile()}}>
-            {(route === 'Taiwan_account' || route === 'US_account') && <div>目前投入總成本: {totalCost.toFixed(2)}元</div>}
+          <div style={{ padding: '5px 0px',...this.getComputeStyleForMobile()}}>
+            {(route === 'Taiwan_account' || route === 'US_account') && <div style={isMobile ?　styles.reportFormatMobile : styles.reportFormat}><div>目前投入總成本:</div><div> {totalCost.toFixed(2)}元</div></div>}
           </div>
-          <div style={styles.logOutButton} onClick={() => logOutCallBack()}>登出</div>
+          {!isMobile && <div style={styles.logOutButton} onClick={() => logOutCallBack()}>登出</div>}
         </nav>
       </div>
     )
