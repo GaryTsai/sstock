@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import browserUtils from '../../utils/browserUtils';
 import styles from './style';
 export default class Navbar extends Component {
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   getActiveStyle = () =>{
     if(browserUtils.isMobile()){
@@ -56,16 +55,16 @@ export default class Navbar extends Component {
           </button>
           <div className="collapse navbar-collapse" id="navbarCollapse">
             <ul className="navbar-nav mr-auto">
-              <li className={`nav-item`} style={route === 'Taiwan_history' ? this.getActiveStyle() : {}}>
+              <li className={`nav-item`} data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'Taiwan_history' ? this.getActiveStyle() : {}}>
                 <div className="nav-link"  onClick={e => changeRoute('Taiwan_history')}>台股歷史紀錄 <span className="sr-only"></span></div>
               </li>
-              <li className="nav-item"  style={route === 'US_account' ? this.getActiveStyle() : {}} >
+              <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'US_account' ? this.getActiveStyle() : {}} >
                 <div className="nav-link"　style={{color: '#e91e63'}} onClick={e => changeRoute('US_account')} >美股證卷</div>
               </li>
-              <li className="nav-item"  style={route === 'account' ? this.getActiveStyle() : {}} >
+              <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'account' ? this.getActiveStyle() : {}} >
                 <div className="nav-link"　onClick={e => changeRoute('account')} >我的帳戶</div>
               </li>
-              {isMobile &&<li className="nav-item" style={{marginTop: '5px'}}>
+              {isMobile &&<li className="nav-item"  data-toggle="collapse" data-target=".navbar-collapse.show" style={{marginTop: '5px'}}>
                 <div className="nav-link"　style={styles.logOutButtonMobile} onClick={() => logOutCallBack()} >登出</div>
               </li>}
             </ul>

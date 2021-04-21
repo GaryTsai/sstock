@@ -66,7 +66,6 @@ export default class Account extends Component {
 
   render() {
     const {acTime, acMoney, acStock, acSummary, records, usRecords, whichAccount, isAssetTransfer} = this.state;
-    const {route} = this.props;
     return (
       <div>
         <nav>

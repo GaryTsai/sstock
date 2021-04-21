@@ -45,7 +45,7 @@ export default class Stocks extends Component {
         {isShowQueryOption && isQueryOpen && isMobile && <button style={{borderRadius: '0px'}} className="btn btn-secondary from-group col-md-2" type="submit" onClick={() => this.isQueryOpen(false)}>隱藏</button>}
         {isShowQueryOption && this.getQueryStatus() && <InputRegion callback={queryDataCallback} resetCallBack={resetCallBack}/>}
         <div style={{overflowY: browserUtils.isMobile() ? 'scroll' : 'unset'}}>
-        <table className="table table-dark">
+        <table className="table table-dark" style={{whiteSpace: 'nowrap'}}>
           <thead>
           <tr>
             <th scope="col">#</th>
