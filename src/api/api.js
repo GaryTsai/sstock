@@ -116,8 +116,9 @@ const api = {
   },
 
   async updateStock(salePrice, saleSheet, stock, route){
-      let income = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.001425) - Math.floor(salePrice * 1000 * saleSheet * 0.003) - stock.cost;
-      let sale_cost = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.001425) - Math.floor(salePrice * 1000 * saleSheet * 0.003);
+      const isDayTrading = stock.date == d.dateFormat(new Date());
+      let income = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.001425) - Math.floor(salePrice * 1000 * saleSheet * 0.003 * (isDayTrading ? 0.5 : 1)) - stock.cost;
+      let sale_cost = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.001425) - Math.floor(salePrice * 1000 * saleSheet * 0.003 * (isDayTrading ? 0.5 : 1));
       let US_income = salePrice * saleSheet - stock.cost;
       let US_sale_cost = salePrice * saleSheet;
       let sale_date = d.dateFormat(new Date());
@@ -186,7 +187,7 @@ const api = {
       account_record_Stock: stock.toFixed(2),
       source: transferInfo.source,
       transfer: transferInfo.price,
-      transferStatus: transferInfo.transferStatus === "transferIn" ? '存入': '轉出',
+      transferStatus: transferInfo.transferStatus === "transferIn" ? '轉出': '存入',
       transferTime: date,
     })
     return ;
@@ -246,7 +247,7 @@ const api = {
       source: '股票',
       transfer: sale ? salePrice : cost,
       transferTime: transfer_date,
-      transferStatus: sale ? '存入' : '轉出'
+      transferStatus: sale ? '轉出' : '存入'
     });
 
     return ;
