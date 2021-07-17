@@ -32,7 +32,6 @@ export default class AccountTransfer extends Component {
       let self = this.props;
 
       const transferInfo = {price: price, transferStatus: transferStatus, source: source};
-      console.log(transferInfo, whichAccount);
       api.tradeForAccount(transferInfo, whichAccount).then(() => {
         self.callback(whichAccount);
       });

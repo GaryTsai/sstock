@@ -99,19 +99,19 @@ const api = {
       sale_sheet:0,
       status:"unsale"
     }).then(function () {
-      console.log("新增Post成功");
+      console.log("insert new stock successfully");
       // self.updateAllData();
     }).catch(function (err) {
-      console.error("新增Post錯誤：", err);
+      console.error("insert new stock failed：", err);
     });
   },
 
   async deleteStock(timestamp){
     let  getDataRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stock_info` );
     getDataRef.child(`${timestamp}`).remove().then(function () {
-      console.log("刪除成功");
+      console.log("delete stock successfully");
     }).catch(function (err) {
-      console.error("刪除錯誤：", err);
+      console.error("delete failed：", err);
     });
   },
 
@@ -205,30 +205,27 @@ const api = {
     let stock = 0;
     let cost = 0;
     let salePrice = 0;
-    console.log(route);
+    const isDayTrading = stockInfo.date == d.dateFormat(new Date());
     if(route !== "US_account") {
-      cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.003);
-      salePrice = Math.floor(stockInfo.price * 1000 * stockInfo.sheet) + Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425);
-
       if (sale) {
-        money = parseInt(accountData.accountMoney) - salePrice;
-        stock = parseInt(accountData.accountStock) + salePrice;
-      } else {
-        money = parseInt(accountData.accountMoney) + cost;
+        salePrice = Math.round(stockInfo.price * 1000 * stockInfo.sheet) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * (isDayTrading ? 0.5 : 1) * 0.003);
+        money = parseInt(accountData.accountMoney) + salePrice;
         stock = parseInt(accountData.accountStock) - stockInfo.cost;
+      } else {
+        cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet) + Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425);
+        money = parseInt(accountData.accountMoney) - cost;
+        stock = parseInt(accountData.accountStock) + cost;
       }
     }else{
-      console.log(cost,stockInfo)
-      cost = stockInfo.cost;
-      salePrice = stockInfo.price * stockInfo.sheet;
-      cost = parseFloat(cost);
-      salePrice = parseFloat(salePrice);
       if (sale) {
-        money = parseFloat(accountData.accountMoney) - parseFloat(salePrice);
-        stock = parseFloat(accountData.accountStock) + parseFloat(salePrice);
-      } else {
-        money = parseFloat(accountData.accountMoney) + salePrice;
-        stock =  parseFloat(accountData.accountStock) - stockInfo.cost;
+        salePrice =  parseFloat(stockInfo.price) * parseFloat(stockInfo.sheet);
+        cost = parseFloat(stockInfo.cost);
+        money = parseFloat(accountData.accountMoney) + parseFloat(salePrice);
+        stock = parseFloat(accountData.accountStock) - cost;
+      } else{
+        cost = parseFloat(stockInfo.price) * parseFloat(stockInfo.sheet);
+        money = parseFloat(accountData.accountMoney) - cost;
+        stock =  parseFloat(accountData.accountStock) + cost;
       }
     }
     money = parseFloat(money.toFixed(2));

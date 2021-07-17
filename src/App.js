@@ -105,9 +105,9 @@ export default class App extends Component {
   saleStock = (salePrice, saleSheet, stock) => {
     const {route} = this.state;
     api.updateStock(salePrice, saleSheet, stock, route).then(() => {
-        const stockInfo ={'price':salePrice, 'sheet':saleSheet, 'cost': stock.cost};
-        api.updateAccountRecord(stockInfo, false, route);
-        this.updateAllData()
+      const stockInfo = {'price': salePrice, 'sheet': saleSheet, 'cost': stock.cost, 'date': stock.date};
+      api.updateAccountRecord(stockInfo, true, route);
+      this.updateAllData()
       }
     )
   };

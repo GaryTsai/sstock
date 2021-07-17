@@ -58,7 +58,7 @@ export default class Input extends Component {
     const {date, name, number, price, sheet} = this.state;
     if (date && name && number && !isNaN(price) && !isNaN(sheet)) {
       const stockInfo = {'date': date, 'name': name, 'number': number, 'price': price, 'sheet': sheet};
-      api.updateAccountRecord(stockInfo, true, route);
+      api.updateAccountRecord(stockInfo, false, route);
       this.props && this.props.callback(stockInfo);
       this.setState({
         'name': '',
@@ -82,7 +82,7 @@ export default class Input extends Component {
     return (
       <div style={{margin: isMobile ?  '5px 5px 0px 5px' : '5px'}}>
         <div className="form-row">
-          <div className="col">
+          <div className="col-md-2">
             <input type="date" className="form-control" placeholder="日期"
                    onChange={(c) => this.handleChange(c.target.value)} value={datePickerDate}/>
           </div>
