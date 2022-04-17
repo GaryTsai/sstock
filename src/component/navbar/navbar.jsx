@@ -64,6 +64,9 @@ export default class Navbar extends Component {
               <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'account' ? this.getActiveStyle() : {}} >
                 <div className="nav-link"　onClick={e => changeRoute('account')} >我的帳戶</div>
               </li>
+              <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'twChart' ? this.getActiveStyle() : {}} >
+                <div className="nav-link"　onClick={e => changeRoute('twChart')} >損益圖表</div>
+              </li>
               {isMobile &&<li className="nav-item"  data-toggle="collapse" data-target=".navbar-collapse.show" style={{marginTop: '5px'}}>
                 <div className="nav-link"　style={styles.logOutButtonMobile} onClick={() => logOutCallBack()} >登出</div>
               </li>}

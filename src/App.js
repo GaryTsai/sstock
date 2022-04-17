@@ -12,7 +12,7 @@ import Usstocks from './component/usstock/stocks';
 import browserUtils from "./utils/browserUtils";
 import Login from './component/login/login';
 import settings from './component/settings/settings'
-
+import TwChart from './component/twChart'
 import api from './api/api'
 
 const initialState = {
@@ -129,6 +129,7 @@ export default class App extends Component {
 
   changeRoute = (route) => {
     switch (route) {
+      case 'twChart':
       case 'Taiwan_history':
       case 'Taiwan_account':
         settings.country = 'tw';
@@ -235,6 +236,7 @@ export default class App extends Component {
           {route === 'Taiwan_account' &&
           <Stocks hideFiled={false} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={unSaleStocks}
                   deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={route}/>}
+          {route === 'twChart' &&<TwChart hideFiled={false} allStocks={showStocks} route={route}/>}
           {route === 'Taiwan_history' &&
           <Stocks hideFiled={true} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={showStocks}
                   deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={route}
