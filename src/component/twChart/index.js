@@ -1,18 +1,20 @@
 import React, { Component, useEffect, useState } from 'react'
-import BarChart from '../../custom/BarChart'
 import _ from 'lodash';
 import { styled } from '@mui/material/styles';
+import YearColumnChart from '../../custom/YearColumnChart';
+import DualColumnChart from '../../custom/DulaColumnChart';
+import api from '../../api/api'
+
 const Container = styled('div')`
   display: flex;
 `
 const TwChart = ({
-  allStocks, 
+  allStocks=[], 
   route
 }) => {
-  const [categories, setCategories] = useState([])
-  const [value, setValue] = useState([])
-  const [yearCategories, setYearCategories] = useState([])
-  const [yearValue, setYearValue] = useState([])
+
+  const [chartInfo, setChartInfo] = useState({})
+  const [dividend, setDividend] = useState(null)
 
   const getDate = data => {
     if(data.length === 0) return 
@@ -29,7 +31,8 @@ const TwChart = ({
           dateArray.push(`${year}-${month}`)
       }
     }
-    return dateArray.splice(7)
+    dateArray = dateArray.slice(11);
+    return dateArray
   }
 
   const getYearValue = (categories, data) =>{
@@ -44,7 +47,6 @@ const TwChart = ({
       })
       valueArray.push({y: balance, color: balance > 0 ? "#32a852" : "#ff0000"})
     })
-
     return valueArray
   }
 
@@ -62,44 +64,83 @@ const TwChart = ({
   const getValue = (categories, data) =>{
     if(data.length === 0) return 
     let valueArray = []
+    let ROIArray = []
+    let ROI = 0
     categories.map((date)=>{
       let balance = 0
+      let costSummary = 0
       data.forEach(it => {
         if(it.sale_date === date){
           balance += it.income
+          costSummary += it.cost 
         }
       })
-      valueArray.push({y: balance, color: balance > 0 ? "#32a852" : "#ff0000"})
+      if(balance === 0 || costSummary === 0) ROI = 0
+      else{
+        ROI = Math.round((balance/costSummary) * 100)
+      }
+      valueArray.push({y: balance, date: date, color: balance > 0 ? "#32a852" : "#ff0000"})
+      ROIArray.push({y: ROI, date: date, color: ROI > 0 ? "#0e6124" : "#8E0011"})
     })
-
-    return valueArray.splice(5)
+    return [valueArray, ROIArray]
   }
 
   useEffect(() => {
-    if(!allStocks) return
+    if(allStocks.length === 0) return
     const saledData = allStocks.filter((it)=>it.income !== 0 )
     const handleDateData = saledData.map((it)=>{
       return {...it, sale_date: it.sale_date.substr(0, 7)}
     })
     const categories = getDate(allStocks)
-    const value = getValue(categories, handleDateData)
+    const monthValue = getValue(categories, handleDateData)
     const yearCategories = getYearDate(allStocks)
     const yearValue = getYearValue(yearCategories, handleDateData)
-    
-    setYearCategories(yearCategories || [])
-    setYearValue(yearValue || [])
-    setCategories(categories || [])
-    setValue(value || [])
-    
-
+    setChartInfo({
+      categories,
+      monthValue: monthValue[0],
+      monthRate: monthValue[1],
+      yearCategories,
+      yearValue
+    })
+    return () => {
+      allStocks = []
+  };
   }, [allStocks]);
 
-  return (
-      <Container>
-        <BarChart categories={categories} value={value} type={'month'}/>
-        <BarChart categories={yearCategories} value={yearValue} type={'year'}/>
-      </Container>
+  useEffect(()=>{
+    const dividendInfo = {}
+    const fetchData = async () => {
+      return  await api.getAccountRecord()
+    }
+    
+    const isDividend = record => (/股利/).test(record.source)
+
+    fetchData().then((accountRecord)=>{
+      accountRecord.map(record => {
+      if(!dividendInfo[record.transferTime.substring(0,4)] && isDividend(record)) {
+        dividendInfo[record.transferTime.substr(0,4)] = []
+        dividendInfo[record.transferTime.substr(0,4)].push(record)
+      }else if(isDividend(record)){
+      dividendInfo[record.transferTime.substr(0,4)].push(record)
+      }
+    })
+    setDividend(dividendInfo)
+    })
+  },[])
+
+  if(allStocks.length === 0){
+    return (
+      <>
+      </>
     )
+  }else{
+    return (
+        <Container>
+          <DualColumnChart chartInfo={chartInfo} type={'year'}/>
+          <YearColumnChart chartInfo={chartInfo} type={'year'} dividend={dividend}/>
+        </Container>
+      )
+  }
 }
 
 
