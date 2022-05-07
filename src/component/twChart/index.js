@@ -1,6 +1,7 @@
 import React, { Component, useEffect, useState } from 'react'
 import _ from 'lodash';
 import { styled } from '@mui/material/styles';
+import Grid from '@mui/material/Grid';
 import YearColumnChart from '../../custom/YearColumnChart';
 import DualColumnChart from '../../custom/DulaColumnChart';
 import api from '../../api/api'
@@ -17,7 +18,6 @@ const TwChart = ({
   const [dividend, setDividend] = useState(null)
 
   const getDate = data => {
-    if(data.length === 0) return 
     const firstDateYear = data[data.length-1].date.substring(0 ,4)
     const firstDateMonth = data[data.length-1].date.substring(5 ,7)
     const lastDateYear = new Date().getFullYear()
@@ -36,7 +36,6 @@ const TwChart = ({
   }
 
   const getYearValue = (categories, data) =>{
-    if(data.length === 0) return 
     let valueArray = []
     categories.map((year)=>{
       let balance = 0
@@ -51,7 +50,6 @@ const TwChart = ({
   }
 
   const getYearDate = data => {
-    if(data.length === 0) return 
     const firstDateYear = data[data.length-1].date.substring(0 ,4)
     const lastDateYear = new Date().getFullYear()
     let yearArray = []
@@ -62,7 +60,6 @@ const TwChart = ({
   }
 
   const getValue = (categories, data) =>{
-    if(data.length === 0) return 
     let valueArray = []
     let ROIArray = []
     let ROI = 0
@@ -112,7 +109,7 @@ const TwChart = ({
     const fetchData = async () => {
       return  await api.getAccountRecord()
     }
-    
+
     const isDividend = record => (/股利/).test(record.source)
 
     fetchData().then((accountRecord)=>{
@@ -128,19 +125,18 @@ const TwChart = ({
     })
   },[])
 
-  if(allStocks.length === 0){
-    return (
-      <>
-      </>
-    )
-  }else{
-    return (
-        <Container>
+  return (
+    <Grid container>
+        {/* <Container> */}
+        <Grid item xs={12} md={6}>
           <DualColumnChart chartInfo={chartInfo} type={'year'}/>
+          </Grid>
+          <Grid item xs={12} md={6}>
           <YearColumnChart chartInfo={chartInfo} type={'year'} dividend={dividend}/>
-        </Container>
+          </Grid>
+        {/* </Container> */}
+    </Grid>
       )
-  }
 }
 
 

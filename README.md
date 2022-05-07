@@ -1,68 +1,83 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# sstock
 
-## Available Scripts
+主要紀錄自己股票買賣的紀錄與損益，保存買賣資料。
+### 主要使用 ReactJS + FireBase 實作
 
-In the project directory, you can run:
+### Login 方式 
+  - (1) 使用自己方便的emial(帳號)與密碼登入
 
-### `yarn start`
+### Firebase 資料庫(Realtime DataBase)
+ 
+### 資料格式(JSON):
+- 目前分為兩種表格account與expense:
+```javascripts=
+"account_Info" : {
+    "oeSPUmB3mjUAe56nLSAKXZALMu43" : {
+      "email" : "kest8088@yahoo.com.tw",
+      "signup" : 1617429629939
+    }
+  },
+ ```
+ ```json=
+"ruTFVENv84q6WVJkljeqQjyenmH7" : {
+      "tw" : {
+        "account_record" : {
+          "1617590846" : {
+            "account_record_Money" : -58983,
+            "account_record_Stock" : 58983,
+            "source" : "股票",
+            "timestamp" : 1617590846,
+            "transfer" : 58983,
+            "transferStatus" : "存入",
+            "transferTime" : "2021-04-05"
+          }
+      },
+        "account_summary" : {
+        "accountMoney" : 25000,
+        "accountStock" : 125000,
+        "accountTime" : "2021-04-05",
+        "summary" : "150000"
+      },
+      "stock_info" : {
+          "1617590846" : {
+            "cost" : 58983,
+            "date" : "2021-04-05",
+            "income" : 0,
+            "name" : "台積電",
+            "number" : "2330",
+            "price" : "589",
+            "sale_cost" : 0,
+            "sale_date" : 0,
+            "sale_price" : 0,
+            "sale_sheet" : 0,
+            "sheet" : "0.1",
+            "status" : "unsale",
+            "timestamp" : 1617590846
+          },
+        }
+ ```
+### Pages
+- 0. 登入頁面
+    - 登入
+    - 註冊
+    - 忘記密碼 
+- 1. 記錄頁面
+    - 可輸入買入股票(日期、股票名稱、編號、單價、張數)
+    - 選擇單一股票賣出
+    - 顯示目前投入總成本
+    - 簡易資訊顯示(張數、平均單價、手續費、成本)
+- 2. 台股歷史紀錄
+    - 可查詢時間區段
+    - 可以查詢以下類別
+      - 未賣出
+      - 已買出
+      - 全部
+- 3. 美股證卷記錄
+- 4. 我的帳戶
+    - 可輸入存入與提出金額與它的來源
+    - 帳戶金額(交割戶)
+    - 股票帳戶(証卷戶)
+    - 顯示交易記錄
+    - 
+#### 部屬至GitHub gh-pages
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify

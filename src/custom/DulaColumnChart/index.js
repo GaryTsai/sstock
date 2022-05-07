@@ -128,6 +128,7 @@ const DualColumnChart = ({ chartInfo, type,  dividend }) => {
         softMax: info.value ? Math.max(...info.value.map(item => item.y)) : 0,
         softMin: info.value ? Math.min(...info.value.map(item => item.y)) : 0,
         lineWidth: 1,
+        gridLineWidth: 3,//Set this to zero
         labels: {
           format: "{value} 元",
           style: {
@@ -180,7 +181,7 @@ const DualColumnChart = ({ chartInfo, type,  dividend }) => {
   };
 
   return (
-    <div style={{ height: "900px", width: "50%" }}>
+    <div style={{ height: "100vh"}}>
       <Container>
         <ChartTitle>
           總損益: <ChartValue>{getSummary()}</ChartValue>

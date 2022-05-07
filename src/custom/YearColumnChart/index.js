@@ -75,11 +75,8 @@ const ColumnChart = ({
       }
       ],
     }
-    const getSummary = () => {
-      if(Object.keys(chartInfo).length === 0) return 
-      let result = chartInfo.yearValue.reduce((previousValue, currentValue) => previousValue + currentValue.y, 0)
-      return result
-    }
+    const getSummary = () => Object.keys(chartInfo).length !== 0 && chartInfo.yearValue.reduce((previousValue, currentValue) => previousValue + currentValue.y, 0)
+    
     useEffect(()=>{
       if(JSON.stringify(chartInfo) === '{}') return 
       let _yearDividend = []
@@ -91,9 +88,8 @@ const ColumnChart = ({
       })
       setYearDividend(_yearDividend)
     },[chartInfo])
-    if(JSON.stringify(chartInfo) === '{}') return 
 
-  return (<div style={{ height: '900px', width: "50%" }}>
+  return (<div style={{ height: '100vh' }}>
     <SummaryInfo >
     <ChartTitle>總損益: <ChartValue>{getSummary()}</ChartValue></ChartTitle>
     </SummaryInfo>
