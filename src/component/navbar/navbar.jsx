@@ -58,9 +58,9 @@ export default class Navbar extends Component {
               <li className={`nav-item`} data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'Taiwan_history' ? this.getActiveStyle() : {}}>
                 <div className="nav-link"  onClick={e => changeRoute('Taiwan_history')}>台股歷史紀錄 <span className="sr-only"></span></div>
               </li>
-              <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'US_account' ? this.getActiveStyle() : {}} >
+              {/* <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'US_account' ? this.getActiveStyle() : {}} >
                 <div className="nav-link"　style={{color: '#e91e63'}} onClick={e => changeRoute('US_account')} >美股證卷</div>
-              </li>
+              </li> */}
               <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'account' ? this.getActiveStyle() : {}} >
                 <div className="nav-link"　onClick={e => changeRoute('account')} >我的帳戶</div>
               </li>

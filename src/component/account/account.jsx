@@ -70,10 +70,10 @@ export default class Account extends Component {
       <div>
         <nav>
           <div className="nav nav-tabs" id="nav-tab" role="tablist">
-            <a className="nav-item nav-link active" style={{width: '50%'}} id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+            <a className="nav-item nav-link active" style={{width: '100%'}} id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
                aria-controls="nav-home" aria-selected="true" onClick={() => this.selectAccount('Taiwan_account')}>台股資產</a>
-            <a className="nav-item nav-link"  style={{width: '50%'}} id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
-               aria-controls="nav-profile" aria-selected="false" onClick={() => this.selectAccount('US_account')}>美股資產</a>
+            {/* <a className="nav-item nav-link"  style={{width: '50%'}} id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
+               aria-controls="nav-profile" aria-selected="false" onClick={() => this.selectAccount('US_account')}>美股資產</a> */}
           </div>
         </nav>
         <div className="tab-content" id="nav-tabContent">
@@ -164,11 +164,11 @@ export default class Account extends Component {
                 </tr>
                 </thead>
                 <tbody>
-                {
-                  usRecords&&usRecords.map((record, index) => (
+                {/* {
+                  usRecords && usRecords.map((record, index) => (
                     <Record ket={index} record={record} index={index}/>
                   ))
-                }
+                } */}
                 </tbody>
               </table>
             </div>

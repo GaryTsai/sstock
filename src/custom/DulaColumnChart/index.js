@@ -97,7 +97,7 @@ const DualColumnChart = ({ chartInfo, type,  dividend }) => {
       rate: chartInfo.monthRate,
       date: chartInfo.categories,
     });
-  }, [chartInfo]);
+  }, [chartInfo]);          
 
   const options = {
     chart: {

@@ -49,25 +49,25 @@ export default class App extends Component {
   updateAllData = () => {
     const {route} = this.state;
     settings.route = route;
-    if(route === "US_account") {
-      settings.country = 'us';
-      api.getAllData().then((stockData) => {
-          this.setState({
-            lastYearROI: stockData.lastYearROI,
-            saleStatus: 'US_all',
-            showStocks: stockData.showStocks,
-            allStocks: stockData.allStocks,
-            saleStocks: stockData.saleStocks,
-            unSaleStocks: stockData.unSaleStocks,
-            totalCost: stockData.totalCost,
-            profitAndLoss: stockData.profitAndLoss,
-            saleCost: stockData.saleCost,
-            profit: (stockData.profitAndLoss / stockData.saleCost * 100).toFixed(2),
-            loading: false
-          })
-        }
-      );
-    }else{
+    // if(route === "US_account") {
+    //   settings.country = 'us';
+    //   api.getAllData().then((stockData) => {
+    //       this.setState({
+    //         lastYearROI: stockData.lastYearROI,
+    //         saleStatus: 'US_all',
+    //         showStocks: stockData.showStocks,
+    //         allStocks: stockData.allStocks,
+    //         saleStocks: stockData.saleStocks,
+    //         unSaleStocks: stockData.unSaleStocks,
+    //         totalCost: stockData.totalCost,
+    //         profitAndLoss: stockData.profitAndLoss,
+    //         saleCost: stockData.saleCost,
+    //         profit: (stockData.profitAndLoss / stockData.saleCost * 100).toFixed(2),
+    //         loading: false
+    //       })
+    //     }
+    //   );
+    // }else{
       api.getAllData().then((stockData) => {
         settings.country = 'tw';
           this.setState({
@@ -85,7 +85,7 @@ export default class App extends Component {
           })
         }
       );
-    }
+    // }
   };
 
   inputData = data => {
@@ -134,9 +134,9 @@ export default class App extends Component {
       case 'Taiwan_account':
         settings.country = 'tw';
         break;
-      case 'US_account':
-      case 'US_history':
-        settings.country = 'us';
+      // case 'US_account':
+      // case 'US_history':
+      //   settings.country = 'us';
         break;
     }
     this.setState({route: route, showStocks: []}, ()=>this.updateAllData());
@@ -241,10 +241,10 @@ export default class App extends Component {
           <Stocks hideFiled={true} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={showStocks}
                   deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={route}
                   queryDataCallback={this.updateQueryData} resetCallBack={this.reset}/>}
-          {route === 'US_account' &&
+          {/* {route === 'US_account' &&
           <Usstocks hideFiled={false} saleStatus={'US_all'} route={route} allStocks={showStocks}
                     saleStockCallback={this.saleStock} deleteCallback={this.deleteStock}
-                    queryDataCallback={this.updateQueryData} resetCallBack={this.reset}/>}
+                    queryDataCallback={this.updateQueryData} resetCallBack={this.reset}/>} */}
           {route === 'account' && <Account route={route}/>}
         </div>
       )
