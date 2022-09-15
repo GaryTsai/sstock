@@ -59,7 +59,7 @@ export default class Account extends Component {
     else {
       settings.country = 'us';
     }
-    this.setState({whichAccount: account, records:[], usRecords:[]},()=>this.updateAccount(account))
+    this.setState({whichAccount: account, records:[], usRecords:[]}, () => this.updateAccount(account))
   };
 
   isAssetTransfer = status => this.setState({isAssetTransfer:status});

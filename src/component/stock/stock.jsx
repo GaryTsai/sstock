@@ -30,15 +30,15 @@ export default class Stock extends Component {
   };
 
   render() {
-    const {stock, saleStatus, index, route} = this.props;
+    const {stock, saleStatus, index, route, isMerge} = this.props;
     const averagePrice = stock.price*1.001425.toFixed(2);
     const handlingFee = stock.price*1000*stock.sheet*0.001424 < 20 ? 20 : Math.round(stock.price*1000*stock.sheet*0.001424);
-
+ 
     return (
         <tr>
           <th scope="row">{index}</th>
-          {!this.props.hideFiled && <td key={index}>
-            <button type="button" className="btn btn-info" data-toggle="modal" data-target={`#modal-${index}`}>賣出</button>
+          {isMerge === false && !this.props.hideFiled && <td key={index}>
+            {<button type="button" className="btn btn-info" data-toggle="modal" data-target={`#modal-${index}`}>賣出</button>}
             <div>
               <div className="modal fade" id={`modal-${index}`} tabIndex="-1" role="dialog"
                    aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -68,22 +68,22 @@ export default class Stock extends Component {
               </div>
             </div>
           </td>}
-          {  (route ==='Taiwan_account'  && stock.status === 'sale') && <td>{stock.sale_date}</td>}
-          {  (route ==='Taiwan_account'  && stock.status === 'unsale')  && <td>{stock.date}</td>}
-          { route !=='Taiwan_account' && (saleStatus === 'all' || saleStatus === 'sale') && (stock.status === 'sale' ? <td>{stock.sale_date}</td> : <td></td>)}
-          { route !=='Taiwan_account' && (saleStatus === 'all' || saleStatus === 'unsale') && (stock.status === 'unsale' ? <td>{stock.date}</td>: <td>{stock.date}</td>)}
+          {  (route ==='Taiwan_account'  && isMerge === false && stock.status === 'sale') && <td>{stock.sale_date}</td>}
+          {  (route ==='Taiwan_account'  && isMerge === false && stock.status === 'unsale')  && <td>{stock.date}</td>}
+          { route !=='Taiwan_account' && isMerge === false &&(saleStatus === 'all' || saleStatus === 'sale') && (stock.status === 'sale' ? <td>{stock.sale_date}</td> : <td></td>)}
+          { route !=='Taiwan_account' && isMerge === false &&(saleStatus === 'all' || saleStatus === 'unsale') && (stock.status === 'unsale' ? <td>{stock.date}</td>: <td>{stock.date}</td>)}
           <td>{stock.name}</td>
           <td>{stock.number}</td>
-          <td>{averagePrice}</td>
+          <td>{isMerge ? (averagePrice / (stock.sheet)).toFixed(2) : averagePrice }</td>
           <td>{stock.sheet}</td>
-          <td>{Math.floor(handlingFee)}</td>
+          <td>{isMerge ? stock.cost - averagePrice * 1000 : Math.floor(handlingFee)}</td>
           <td>{Math.floor(stock.cost)}</td>
           <td>{stock.status === "unsale" ? '未賣出' : '已賣出'}</td>
           <td>{Math.floor(stock.sale_cost)}</td>
           <td style={{ 'color': stock.income < 0 ? '#30ff30' : 'rgb(255 19 19)'}}>{Math.floor(stock.income)}</td>
-          <td>
+          { isMerge === false && <td>
             <button type="button" className="btn btn-danger" onClick={this.deleteStock}>刪除</button>
-          </td>
+          </td> }
         </tr>
     )
   }

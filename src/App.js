@@ -14,6 +14,7 @@ import Login from './component/login/login';
 import settings from './component/settings/settings'
 import TwChart from './component/twChart'
 import api from './api/api'
+import _ from 'lodash'
 
 const initialState = {
   inputData: [],
@@ -30,7 +31,9 @@ const initialState = {
   saleStatus: 'all',
   lastYearROI: 0,
   logInStatus: false,
-  loading: false
+  loading: false,
+  isMerge: false
+  
 };
 
 export default class App extends Component {
@@ -141,6 +144,38 @@ export default class App extends Component {
     }
     this.setState({route: route, showStocks: []}, ()=>this.updateAllData());
   };
+  
+  infoMerge = (datas) => {
+    const result = datas.reduce((mergeResult, prev, next) => {
+      const isNotExist = mergeResult && mergeResult.filter((item)=>_.trim(item.number) === _.trim(prev.number)).length === 0
+      if(isNotExist){
+        mergeResult.push({
+          cost: prev.cost,
+          income: 0,
+          name: prev.name,
+          number: prev.number,
+          price: Number(prev.price) * Number(prev.sheet),
+          sale_cost: 0,
+          sale_date: 0,
+          sale_price: 0,
+          sale_sheet: 0,
+          sheet: Number(prev.sheet),
+          status: "unsale"
+        })
+      } else {
+        const index = _.findIndex(mergeResult, (e) => _.trim(e.number) === _.trim(prev.number), 0); 
+        mergeResult[index] = {
+          ...mergeResult[index],
+          cost: Math.round(Number(mergeResult[index].cost) + Number(prev.cost), 2),
+          price: Number(mergeResult[index].price) + (Number(prev.price)*Number(prev.sheet)),
+          sheet: Number(mergeResult[index].sheet) + Number(prev.sheet),
+        }
+      }
+      return mergeResult
+    }, [])
+
+    return result
+  } 
 
   updateQueryData = (stockInfo) => {
     const {allStocks, unSaleStocks, saleStocks} = this.state;
@@ -167,7 +202,7 @@ export default class App extends Component {
         default:
           break;
       }
-        for (let item in result) {
+      for (let item in result) {
         profitAndLoss += result[item].income;
         saleCost += result[item].cost;
       }
@@ -188,13 +223,17 @@ export default class App extends Component {
     }
   };
 
+  handleMerge = () => this.setState({isMerge: !this.state.isMerge})
+
   closeLoginPage = () => this.setState({logInStatus: true, loading: true});
 
   render() {
     const inputData = this.state.inputData;
     const unSaleStocks = this.state.unSaleStocks;
     const showStocks = this.state.showStocks;
-    const {route, logInStatus, lastYearROI, loading} = this.state;
+    const {route, logInStatus, lastYearROI, loading, isMerge} = this.state;
+    const result = isMerge ? this.infoMerge(unSaleStocks) : unSaleStocks
+
     if(!logInStatus){
       return (
         <div>
@@ -224,7 +263,7 @@ export default class App extends Component {
           }} src={require('./assets/img/loading.gif')}/></div>}
           <Navbar lastYearROI={lastYearROI} totalCost={this.state.totalCost} profitAndLoss={this.state.profitAndLoss}
                   route={route} changeRoute={this.changeRoute} profit={this.state.profit} logOutCallBack={this.logOut}
-                  saleCost={this.state.saleCost}/>
+                  saleCost={this.state.saleCost} handleMerge={this.handleMerge} isMerge={isMerge}/>
           {browserUtils.isMobile() && !this.state.saleIsOpen && (route === 'Taiwan_account' || route === 'US_account') &&
           <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit"
                   onClick={() => this.saleIsOpen(true)}>買入</button>}
@@ -234,13 +273,13 @@ export default class App extends Component {
           {this.getSaleIsStatus() && (route === 'Taiwan_account' || route === 'US_account') &&
           <Input callback={this.inputData} route={route}/>}
           {route === 'Taiwan_account' &&
-          <Stocks hideFiled={false} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={unSaleStocks}
-                  deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={route}/>}
+          <Stocks hideFiled={false} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={result}
+                  deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={route} isMerge={isMerge}/>}
           {route === 'twChart' &&<TwChart hideFiled={false} allStocks={showStocks} route={route}/>}
           {route === 'Taiwan_history' &&
           <Stocks hideFiled={true} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={showStocks}
                   deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={route}
-                  queryDataCallback={this.updateQueryData} resetCallBack={this.reset}/>}
+                  queryDataCallback={this.updateQueryData} resetCallBack={this.reset} isMerge={false}/>}
           {/* {route === 'US_account' &&
           <Usstocks hideFiled={false} saleStatus={'US_all'} route={route} allStocks={showStocks}
                     saleStockCallback={this.saleStock} deleteCallback={this.deleteStock}
