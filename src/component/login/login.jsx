@@ -174,7 +174,7 @@ class Login extends Component {
           </div>
           <div style={{...styles.inputContent}}>
             <input type="text" style={styles.input} id="email"  onChange={(c) => this.setEmail(c.target.value)} className="fadeIn second" name="login" placeholder="email"/>
-            <input type="text" style={styles.input} id="password" onChange={(c) => this.setPassword(c.target.value)} className="fadeIn third" name="login" placeholder="password"/>
+            <input type="password" style={styles.input} id="password" onChange={(c) => this.setPassword(c.target.value)} className="fadeIn third" name="login" placeholder="password"/>
           </div>
           <input style={{...styles.submit}}  type="submit" className="fadeIn fourth"
                  value={isLogIn ? 'Log In' : 'Register' } onClick={this.actionForSubmit}/>
