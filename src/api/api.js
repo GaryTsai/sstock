@@ -176,15 +176,15 @@ const api = {
     let summary = money + stock;
 
     await getRefOfAccount.update({
-      accountMoney: money.toFixed(2),
-      accountStock: stock.toFixed(2),
-      summary: summary.toFixed(2)
+      accountMoney: money.toFixed(0),
+      accountStock: stock.toFixed(0),
+      summary: summary.toFixed(0)
     });
 
     await getRefOfAccountRecord.child(timestamp.toString()).set({
       timestamp: timestamp,
-      account_record_Money: money.toFixed(2),
-      account_record_Stock: stock.toFixed(2),
+      account_record_Money: money.toFixed(0),
+      account_record_Stock: stock.toFixed(0),
       source: transferInfo.source,
       transfer: transferInfo.price,
       transferStatus: transferInfo.transferStatus === "transferIn" ? '轉出': '存入',

@@ -29,6 +29,10 @@ export default class Stock extends Component {
     this.props.delete(stock.timestamp);
   };
 
+  isFloat = (n) => {
+    return Number(n) === n && n % 1 !== 0;
+  }
+
   render() {
     const {stock, saleStatus, index, route, isMerge} = this.props;
     const averagePrice = stock.price*1.001425.toFixed(2);
@@ -75,8 +79,8 @@ export default class Stock extends Component {
           <td>{stock.name}</td>
           <td>{stock.number}</td>
           <td>{isMerge ? (averagePrice / (stock.sheet)).toFixed(2) : averagePrice }</td>
-          <td>{stock.sheet}</td>
-          <td>{isMerge ? stock.cost - averagePrice * 1000 : Math.floor(handlingFee)}</td>
+          <td>{this.isFloat(stock.sheet) ? parseFloat(stock.sheet).toFixed(3) : stock.sheet}</td>
+          <td>{isMerge ? parseFloat(stock.cost - averagePrice * 1000).toFixed(0) : Math.floor(handlingFee)}</td>
           <td>{Math.floor(stock.cost)}</td>
           <td>{stock.status === "unsale" ? '未賣出' : '已賣出'}</td>
           <td>{Math.floor(stock.sale_cost)}</td>

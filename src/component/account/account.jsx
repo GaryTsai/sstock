@@ -95,9 +95,9 @@ export default class Account extends Component {
                 <tbody>
                 <tr>
                   <td>{acTime}</td>
-                  <td>{acMoney}</td>
-                  <td>{acStock}</td>
-                  <td>{acSummary}</td>
+                  <td>{parseFloat(acMoney).toFixed(0)}</td>
+                  <td>{parseFloat(acStock).toFixed(0)}</td>
+                  <td>{parseFloat(acSummary).toFixed(0)}</td>
                 </tr>
                 </tbody>
               </table>
