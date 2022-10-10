@@ -2,7 +2,7 @@
 
 name: Deploy to GitHub Pages
 env:
-  MY_SECRET   : ${{secrets.ACCOUNT_GITHUB_ACTION}}
+  MY_SECRET   : ${{secrets.SSTOCK_GITHUB_ACTION}}
   USER_NAME   : garyTsai
   USER_EMAIL  : githubaction@fake.com
   PUBLISH_DIR : ./build
