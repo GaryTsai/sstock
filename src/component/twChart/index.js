@@ -21,7 +21,7 @@ const TwChart = ({
     const firstDateYear = data[data.length-1].date.substring(0 ,4)
     const firstDateMonth = data[data.length-1].date.substring(5 ,7)
     const lastDateYear = new Date().getFullYear()
-    const lastDateMonth = new Date().getMonth()
+    const lastDateMonth = new Date().getMonth() + 1
     let dateArray = []
     for(let year = firstDateYear; year <= lastDateYear; year++ ){
       for(let month = (year === firstDateYear ? firstDateMonth : 1 ); month <= (year === lastDateYear ? lastDateMonth : 12 ); month++ ){

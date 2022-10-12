@@ -111,11 +111,11 @@ const DualColumnChart = ({ chartInfo, type,  dividend }) => {
     xAxis: [
       {
         type: "category",
-        categories: info.categories,
+        categories: info.date,
       },
       {
         type: "category",
-        categories: info.categories,
+        categories: info.date,
         linkedTo: 0,
         labels: {
           enabled: false,
