@@ -265,10 +265,10 @@ export default class App extends Component {
                   route={route} changeRoute={this.changeRoute} profit={this.state.profit} logOutCallBack={this.logOut}
                   saleCost={this.state.saleCost} handleMerge={this.handleMerge} isMerge={isMerge}/>
           {browserUtils.isMobile() && !this.state.saleIsOpen && (route === 'Taiwan_account' || route === 'US_account') &&
-          <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit"
+          <button className="btn btn-warning from-group col-sm-2 col-md-12 input-sale-frame" type="submit"
                   onClick={() => this.saleIsOpen(true)}>買入</button>}
           {browserUtils.isMobile() && this.state.saleIsOpen && (route === 'Taiwan_account' || route === 'US_account') &&
-          <button className="btn btn-secondary from-group col-md-2 input-sale-frame" type="submit"
+          <button className="btn btn-secondary from-group col-sm-2 col-md-12 input-sale-frame" type="submit"
                   onClick={() => this.saleIsOpen(false)}>隱藏</button>}
           {this.getSaleIsStatus() && (route === 'Taiwan_account' || route === 'US_account') &&
           <Input callback={this.inputData} route={route}/>}

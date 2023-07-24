@@ -5,6 +5,7 @@ import './account.css'
 import api from '../../api/api'
 import browserUtils from "../../utils/browserUtils";
 import settings from "../settings/settings";
+import { BiSolidArrowToTop } from "react-icons/bi";
 
 const initialState = {
   acTime: '',
@@ -14,7 +15,8 @@ const initialState = {
   records:[],
   usRecords:[],
   whichAccount: 'Taiwan_account',
-  isAssetTransfer: false
+  isAssetTransfer: false,
+  isTopBtnShow: false
 };
 
 export default class Account extends Component {
@@ -26,6 +28,15 @@ export default class Account extends Component {
   componentDidMount() {
     const {whichAccount} = this.state
     this.updateAccount(whichAccount);
+    window.addEventListener('scroll', () => {
+
+      if(document.documentElement.scrollTop > 0 ){
+        this.setState({isTopBtnShow: true})
+      } else {
+        this.setState({isTopBtnShow: false})
+      }
+
+    })
   }
 
   updateAccount = (whichAccount = 'Taiwan_account') =>{
@@ -65,12 +76,32 @@ export default class Account extends Component {
   isAssetTransfer = status => this.setState({isAssetTransfer:status});
 
   render() {
-    const {acTime, acMoney, acStock, acSummary, records, usRecords, whichAccount, isAssetTransfer} = this.state;
+    const {acTime, acMoney, acStock, acSummary, records, usRecords, whichAccount, isAssetTransfer, isTopBtnShow} = this.state;
     return (
       <div>
+        {
+          isTopBtnShow && 
+          <div style={{position: "absolute"}}>
+            <div style={{
+              position: "fixed",
+              right: "25px",
+              bottom: "25px",
+              width: "50px",
+              height: "50px",
+              fontSize: "40px",
+              backgroundColor: "cornflowerblue",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer"}} onClick={() =>  window.scrollTo({top: 0, behavior: 'smooth'})}>
+                <BiSolidArrowToTop />
+              </div>
+          </div>
+        }
         <nav>
           <div className="nav nav-tabs" id="nav-tab" role="tablist">
-            <a className="nav-item nav-link active" style={{width: '100%'}} id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+            <a className="nav-item nav-link active" style={{width: '100%', border: '0px'}} id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
                aria-controls="nav-home" aria-selected="true" onClick={() => this.selectAccount('Taiwan_account')}>台股資產</a>
             {/* <a className="nav-item nav-link"  style={{width: '50%'}} id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
                aria-controls="nav-profile" aria-selected="false" onClick={() => this.selectAccount('US_account')}>美股資產</a> */}
@@ -78,8 +109,8 @@ export default class Account extends Component {
         </nav>
         <div className="tab-content" id="nav-tabContent">
           <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-            {browserUtils.isMobile() && !isAssetTransfer && <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit" onClick={() => this.isAssetTransfer(true)}>資產轉移</button>}
-            {browserUtils.isMobile() && !isAssetTransfer  && <button className="btn btn-secondary from-group col-md-2 input-sale-frame" type="submit" onClick={() => this.isAssetTransfer(false)}>隱藏</button>}
+            {browserUtils.isMobile() && !isAssetTransfer && <button className="btn btn-warning from-group col-sm-2 col-md-12 input-sale-frame" type="submit" onClick={() => this.isAssetTransfer(true)}>資產轉移</button>}
+            {browserUtils.isMobile() && !isAssetTransfer  && <button className="btn btn-secondary from-group col-sm-2 col-md-12 input-sale-frame" type="submit" onClick={() => this.isAssetTransfer(false)}>隱藏</button>}
             {isAssetTransfer && <AccountTransfer whichAccount={whichAccount} callback={this.updateAccount}/>}
             {!browserUtils.isMobile() && <AccountTransfer whichAccount={whichAccount} callback={this.updateAccount}/>}
             <div className="container">

@@ -82,7 +82,7 @@ export default class Input extends Component {
     return (
       <div style={{margin: isMobile ?  '5px 5px 0px 5px' : '5px'}}>
         <div className="form-row">
-          <div className="col-md-2">
+          <div className="col-md-2 stock-input-fields" >
             <input type="date" className="form-control" placeholder="日期"
                    onChange={(c) => this.handleChange(c.target.value)} value={datePickerDate}/>
           </div>
@@ -102,7 +102,7 @@ export default class Input extends Component {
             <input type="text" className="form-control" placeholder={route === 'US_account' ?  "股數" : "張數" }
                    onChange={(c) => this.inputSheet(c.target.value)} value={this.state.sheet} autoComplete="on"/>
           </div>
-          <button className="btn btn-primary from-group col-md-2 input-sale-frame" type="submit"
+          <button className="btn btn-primary from-group col-sm-2 col-md-12 input-sale-frame" type="submit"
                   onClick={() => this.submitStock(route)}>確認買入
           </button>
         </div>

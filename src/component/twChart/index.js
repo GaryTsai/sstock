@@ -4,10 +4,11 @@ import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import YearColumnChart from '../../custom/YearColumnChart';
 import DualColumnChart from '../../custom/DulaColumnChart';
+import DividendChart from '../../custom/YearDividendChart';
 import api from '../../api/api'
 
 const Container = styled('div')`
-  display: flex;
+  display: block;
 `
 const TwChart = ({
   allStocks=[], 
@@ -16,6 +17,8 @@ const TwChart = ({
 
   const [chartInfo, setChartInfo] = useState({})
   const [dividend, setDividend] = useState(null)
+  const [perDividend, setPerDividend] = useState(null)
+  const [chartTab, setChartTab] = useState("monthIncome")
 
   const getDate = data => {
     const firstDateYear = data[data.length-1].date.substring(0 ,4)
@@ -111,7 +114,7 @@ const TwChart = ({
     }
 
     const isDividend = record => (/股利/).test(record.source)
-
+    // YearDividend
     fetchData().then((accountRecord)=>{
       accountRecord.map(record => {
       if(!dividendInfo[record.transferTime.substring(0,4)] && isDividend(record)) {
@@ -120,21 +123,42 @@ const TwChart = ({
       }else if(isDividend(record)){
       dividendInfo[record.transferTime.substr(0,4)].push(record)
       }
+      })
+      setDividend(dividendInfo)
     })
-    setDividend(dividendInfo)
+    // Dividend
+    let dividendName = [] 
+    fetchData().then((accountRecord)=>{
+      accountRecord.map(record => {
+        if(isDividend(record) && !dividendName.flat().includes(record.source)){
+          dividendName.push([record.source, Number(record.transfer)])
+        }
+        else if(isDividend(record) && dividendName.flat().includes(record.source)){
+          dividendName.forEach(dividend => {
+            if(dividend[0] === record.source) dividend[1] += Number(record.transfer)
+          })
+        }
+      })
+      setPerDividend(dividendName)
     })
   },[])
 
   return (
-    <Grid container>
-        {/* <Container> */}
-        <Grid item xs={12} md={6}>
+    <Grid container style={{justifyContent: "center"}}>
+        <div class="btn-group col-sm-12" role="group" aria-label="Basic example" style={{padding: 0}}>
+          <button type="button" className={`btn btn-info ${chartTab === "monthIncome" && 'active'}`} onClick={()=> setChartTab("monthIncome")}>月損益圖</button>
+          <button type="button" className={`btn btn-info ${chartTab === "yearIncome" && 'active'}`} onClick={()=> setChartTab("yearIncome")}>歷年損益圖</button>
+          <button type="button" className={`btn btn-info ${chartTab === "dividend" && 'active'}`} onClick={()=> setChartTab("dividend")} >股息表</button>
+        </div>
+        {chartTab === "monthIncome" && <Grid item xs={12} md={6}>
           <DualColumnChart chartInfo={chartInfo} type={'year'}/>
-          </Grid>
-          <Grid item xs={12} md={6}>
+        </Grid>}
+        {chartTab === "yearIncome" && <Grid item xs={12} md={6}>
           <YearColumnChart chartInfo={chartInfo} type={'year'} dividend={dividend}/>
-          </Grid>
-        {/* </Container> */}
+        </Grid>}
+        {chartTab === "dividend" && <Grid item xs={12} md={6}>
+          <DividendChart perDividend={perDividend}/>
+        </Grid>}
     </Grid>
       )
 }

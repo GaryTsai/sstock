@@ -9,7 +9,7 @@ const SummaryInfo = styled('div')`
 `
 
 const ChartTitle = styled('div')`
-  margin:0px 5%;
+  margin: 5px;
   width: 50%;
   text-align: left;
   font-size: 20px;
@@ -89,9 +89,9 @@ const ColumnChart = ({
       setYearDividend(_yearDividend)
     },[chartInfo])
 
-  return (<div style={{ height: '100vh' }}>
+  return (<div style={{ height: '60vh' }}>
     <SummaryInfo >
-    <ChartTitle>總損益: <ChartValue>{getSummary()}</ChartValue></ChartTitle>
+    <ChartTitle>總損益:<ChartValue>{getSummary()}</ChartValue></ChartTitle>
     </SummaryInfo>
     <HighchartsReact
         highcharts={Highcharts}

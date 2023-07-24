@@ -2,12 +2,14 @@ import React, {Component} from 'react';
 import Stock from './stock';
 import InputRegion from "../inputRegion";
 import browserUtils from "../../utils/browserUtils";
+import { BiSolidArrowToTop } from "react-icons/bi";
+
 const initialState = {
   allData:[],
   allStocks:"",
-  isQueryOpen: false
+  isQueryOpen: false,
+  isTopBtnShow: false
 };
-
 export default class Stocks extends Component {
   constructor(props) {
     super(props);
@@ -19,6 +21,16 @@ export default class Stocks extends Component {
     if (allStocks) {
       this.setState({allStocks: allStocks})
     }
+
+    window.addEventListener('scroll', () => {
+
+      if(document.documentElement.scrollTop > 0 ){
+        this.setState({isTopBtnShow: true})
+      } else {
+        this.setState({isTopBtnShow: false})
+      }
+
+    })
   }
 
   queryData = (stockInfo) => this.props.queryDataCallback(stockInfo);
@@ -36,14 +48,34 @@ export default class Stocks extends Component {
 
   render() {
     const {allStocks, deleteCallback, queryDataCallback, saleStockCallback, resetCallBack, hideFiled, saleStatus, route, isMerge}= this.props;
-    const {isQueryOpen}= this.state;
+    const {isQueryOpen, isTopBtnShow}= this.state;
     const isMobile = browserUtils.isMobile();
     const isShowQueryOption = route === 'Taiwan_history';
 
     return (
       <div>
-        {isShowQueryOption && !isQueryOpen && isMobile && <button style={{borderRadius: '0px'}} className="btn btn-success from-group col-md-2" type="submit" onClick={() => this.isQueryOpen(true)}>查詢時區</button>}
-        {isShowQueryOption && isQueryOpen && isMobile && <button style={{borderRadius: '0px'}} className="btn btn-secondary from-group col-md-2" type="submit" onClick={() => this.isQueryOpen(false)}>隱藏</button>}
+        {
+          isTopBtnShow && 
+          <div style={{position: "absolute"}}>
+            <div style={{
+              position: "fixed",
+              right: "25px",
+              bottom: "25px",
+              width: "50px",
+              height: "50px",
+              fontSize: "40px",
+              backgroundColor: "cornflowerblue",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer"}} onClick={() =>  window.scrollTo({top: 0, behavior: 'smooth'})}>
+                <BiSolidArrowToTop />
+              </div>
+          </div>
+        }
+        {isShowQueryOption && !isQueryOpen && isMobile && <button style={{borderRadius: '0px'}} className="btn btn-success from-group col-sm-2 col-md-12" type="submit" onClick={() => this.isQueryOpen(true)}>查詢時區</button>}
+        {isShowQueryOption && isQueryOpen && isMobile && <button style={{borderRadius: '0px'}} className="btn btn-secondary from-group col-sm-2 col-md-12" type="submit" onClick={() => this.isQueryOpen(false)}>隱藏</button>}
         {isShowQueryOption && this.getQueryStatus() && <InputRegion callback={queryDataCallback} resetCallBack={resetCallBack}/>}
         <div style={{overflowY: browserUtils.isMobile() ? 'scroll' : 'unset'}}>
         <table className="table table-dark" style={{whiteSpace: 'nowrap'}}>

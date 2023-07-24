@@ -68,10 +68,10 @@ export default class AccountTransfer extends Component {
       <div style={{margin: '5px 5px'}}>
         <div className="form-row">
           <div className="col">
-            <input type="text" className="form-control" placeholder="金額"
+            <input type="text" className="form-control input-sale-info-frame" placeholder="金額"
                    onChange={(c) => this.handleChange(c.target.value)} value={this.state.price}/>
           </div>
-          <div className="from-group col-md-2 input-sale-frame">
+          <div className="from-group col-md-2 input-sale-info-frame">
             <input type="text" className="form-control" placeholder="來源"
                    onChange={(c) => this.inputSource(c.target.value)} value={this.state.source}/>
           </div>

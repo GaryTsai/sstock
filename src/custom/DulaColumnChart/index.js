@@ -4,13 +4,16 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { TextField, MenuItem } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import browserUtils from '../../utils/browserUtils';
+
 const Container = styled("div")`
   display: flex;
+  align-items: center;
+  margin: 5px;
 `;
 const ChartTitle = styled("div")`
   display: flex;
-  flex-basis: 30%;
-  margin: 0px 5%;
+  flex-basis: 25%;;
   text-align: left;
   font-size: 20px;
   color: #6495ed;
@@ -23,7 +26,8 @@ const ChartValue = styled("span")`
 
 const DropDownContainer = styled("div")`
   display: flex;
-  flex-grow: 1;
+  flex-grow: 1;  
+  align-items: center;
 `;
 
 const StyledDiv = styled("div")`
@@ -41,6 +45,7 @@ const DualColumnChart = ({ chartInfo, type,  dividend }) => {
   const [selectList, setSelectList] = useState([{value:'all', label: 'all'}]);
   const [info, setInfo] = useState({ value: [], rate: [], date: [] });
   const chartComponentRef = useRef < HighchartsReact.RefObject > null;
+  const isMobile = browserUtils.isMobile();
 
   const handleChange = (e) => {
     setSelectTimeRange(e.target.value);
@@ -82,13 +87,23 @@ const DualColumnChart = ({ chartInfo, type,  dividend }) => {
   }, []);
 
   useEffect(() => {
+
+    const arrayEquals = (arrOne, arrTwo) => {
+      return Array.isArray(arrOne) &&
+          Array.isArray(arrTwo) &&
+          arrOne.length === arrTwo.length &&
+          arrOne.every((item, index) => item['value'] === arrTwo[index]['value']);
+  }
+  
     if(JSON.stringify(chartInfo) === '{}') return
     let list = chartInfo.yearCategories && chartInfo.yearCategories.map((year) => {
       return { value: year, label: year };
     });
+
     if(!list){
       setSelectList(selectList)
-    }else{
+    }else if( arrayEquals(selectList.slice(1), list)){
+    }else {
       setSelectList(selectList.concat(list))
     }
 
@@ -103,7 +118,7 @@ const DualColumnChart = ({ chartInfo, type,  dividend }) => {
     chart: {
       height: "70%",
       type: "column",
-      alignTicks: true,
+      alignTicks: true
     },
     title: {
       text: "月損益圖表",
@@ -179,12 +194,12 @@ const DualColumnChart = ({ chartInfo, type,  dividend }) => {
       // },
     ]
   };
-
   return (
-    <div style={{ height: "100vh"}}>
+    
+    <div style={{ height: "60vh"}}>
       <Container>
         <ChartTitle>
-          總損益: <ChartValue>{getSummary()}</ChartValue>
+          總損益:<ChartValue>{getSummary()}</ChartValue>
         </ChartTitle>
         <DropDownContainer>
           <StyledDiv>
@@ -196,10 +211,14 @@ const DualColumnChart = ({ chartInfo, type,  dividend }) => {
             value={selectTimeRange}
             onChange={handleChange}
             sx={{
-              height:"30px",
+              height: "30px",
               width: '75%',
               '& .MuiOutlinedInput-root':{
                 height:"30px",
+                margin: "0px 5px"
+              },
+              '& legend':{
+                width: 0,
               }
             }}
           >
