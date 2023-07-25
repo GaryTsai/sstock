@@ -1,50 +1,75 @@
-import React, {Component} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
+import { BiSolidArrowToTop } from "react-icons/bi";
+const Stock = (props) =>{
+  const priceRef = useRef(null);
+  const sheetRef = useRef(null);
+  const [isTopBtnShow, setIsTopBtnShow] = useState(false)
 
-const initialState = {
-};
+  useEffect(() => {
+    window.addEventListener('scroll', () => {
 
-export default class Stock extends Component {
-  constructor(props) {
-    super(props);
-    this.state = initialState;
-  }
+      if(document.documentElement.scrollTop > 0 ){
+        setIsTopBtnShow(true)
+      } else {
+        setIsTopBtnShow(false)
+      }
 
-  componentDidMount() {
-  }
-
-  updateStockStatus = () => {
-    const {stock} = this.props;
-    const salePrice = parseInt(this.price.value);
-    if((stock.sheet < this.sheet.value) || isNaN(salePrice) || !salePrice )
+    })
+  }, [])
+  
+  const updateStockStatus = () => {
+    const {stock} = props;
+    const salePrice = parseInt(priceRef.current.value);
+    if((stock.sheet < sheetRef.current.value) || isNaN(salePrice) || !salePrice )
       alert('賣出張數錯誤');
     else{
-      this.props.stockSaleCallback(this.price.value,this.sheet.value,stock);
-      this.price.value = '';
-      this.sheet.value = '';
+      props.stockSaleCallback(priceRef.current.value,sheetRef.current.value,stock);
+      priceRef.current.value = '';
+      sheetRef.current.value = '';
     }
   };
 
-  deleteStock = () => {
-    const {stock} = this.props;
-    this.props.delete(stock.timestamp);
+  const deleteStock = () => {
+    const { stock } = props;
+    props.delete(stock.timestamp);
   };
 
-  isFloat = (n) => {
+  const isFloat = (n) => {
     return Number(n) === n && n % 1 !== 0;
   }
+  const { stock, saleStatus, index, route, isMerge } = props;
+  const averagePrice = stock.price * 1.001425.toFixed(2);
+  const handlingFee = stock.price * 1000 * stock.sheet * 0.001424 < 20 ? 20 : Math.round(stock.price * 1000 * stock.sheet * 0.001424);
 
-  render() {
-    const {stock, saleStatus, index, route, isMerge} = this.props;
-    const averagePrice = stock.price*1.001425.toFixed(2);
-    const handlingFee = stock.price*1000*stock.sheet*0.001424 < 20 ? 20 : Math.round(stock.price*1000*stock.sheet*0.001424);
- 
-    return (
+  return (
+    <>
+        {
+          isTopBtnShow && 
+          <div style={{position: "absolute"}}>
+            <div style={{
+              position: "fixed",
+              right: "25px",
+              bottom: "25px",
+              width: "50px",
+              height: "50px",
+              fontSize: "40px",
+              backgroundColor: "cornflowerblue",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              color: "black"}} onClick={() =>  window.scrollTo({top: 0, behavior: 'smooth'})}>
+                <BiSolidArrowToTop />
+              </div>
+          </div>
+        }
         <tr>
           <th scope="row">{index}</th>
-          {isMerge === false && !this.props.hideFiled && <td key={index}>
-            {<button type="button" className="btn btn-info" data-toggle="modal" data-target={`#modal-${index}`}>賣出</button>}
+          {isMerge === false && !props.hideFiled && <td key={stock.timestamp}>
+            {<button type="button" className="btn btn-info" data-toggle="modal" data-target={`#modal-${stock.timestamp}`}>賣出</button>}
             <div>
-              <div className="modal fade" id={`modal-${index}`} tabIndex="-1" role="dialog"
+              <div className="modal fade" id={`modal-${stock.timestamp}`} tabIndex="-1" role="dialog"
                    aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog" role="document">
                   <div className="modal-content">
@@ -57,15 +82,15 @@ export default class Stock extends Component {
                     <div className="modal-body">
                       <div className="form-group">
                         <h5 style={{ color: 'black', textAlign: 'left'}} key={'price' + index} htmlFor={`price-name-${index}`} className="col-form-label">賣出單價:</h5>
-                        <input type="text" className="form-control"  id={`price-name-${index}`} ref={(input) => { this.price = input; }} />
+                        <input type="text" className="form-control"  id={`price-name-${index}`} ref={priceRef} />
                       </div>
                       <div className="form-group">
                         <h5 style={{ color: 'black', textAlign: 'left'}} key={'sheet' + index} htmlFor={`sheet-name-${index}`} className="col-form-label">賣出張數:</h5>
-                        <input type="text" className="form-control" id={`sheet-name-${index}`}  ref={(input) => { this.sheet = input; }}/>
+                        <input type="text" className="form-control" id={`sheet-name-${index}`}  ref={sheetRef}/>
                       </div>
                     </div>
                     <div className="modal-footer">
-                      <button type="button" className="btn btn-primary"  data-dismiss="modal" aria-label="Close"onClick={ this.updateStockStatus}>確認{stock.name}</button>
+                      <button type="button" className="btn btn-primary"  data-dismiss="modal" aria-label="Close"onClick={ updateStockStatus}>確認{stock.name}</button>
                     </div>
                   </div>
                 </div>
@@ -79,16 +104,18 @@ export default class Stock extends Component {
           <td>{stock.name}</td>
           <td>{stock.number}</td>
           <td>{isMerge ? (averagePrice / (stock.sheet)).toFixed(2) : averagePrice }</td>
-          <td>{this.isFloat(stock.sheet) ? parseFloat(stock.sheet).toFixed(3) : stock.sheet}</td>
+          <td>{isFloat(stock.sheet) ? parseFloat(stock.sheet).toFixed(3) : stock.sheet}</td>
           <td>{isMerge ? parseFloat(stock.cost - averagePrice * 1000).toFixed(0) : Math.floor(handlingFee)}</td>
           <td>{Math.floor(stock.cost)}</td>
           <td>{stock.status === "unsale" ? '未賣出' : '已賣出'}</td>
           <td>{Math.floor(stock.sale_cost)}</td>
           <td style={{ 'color': stock.income < 0 ? '#30ff30' : 'rgb(255 19 19)'}}>{Math.floor(stock.income)}</td>
           { isMerge === false && <td>
-            <button type="button" className="btn btn-danger" onClick={this.deleteStock}>刪除</button>
+            <button type="button" className="btn btn-danger" onClick={deleteStock}>刪除</button>
           </td> }
         </tr>
-    )
-  }
+  </>
+  )
 }
+
+export default Stock

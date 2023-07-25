@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { useState, useEffect} from 'react';
 import utils from "./../utils/dateFormat";
 import api from './../api/api'
 import "react-datepicker/dist/react-datepicker.css";
@@ -14,99 +14,93 @@ const initialState = {
   'datePickerDate': new Date()
 };
 
-export default class Input extends Component {
-  constructor(props) {
-    super(props);
-    this.state = initialState;
-  }
+const Input = (props) => {
 
-  componentDidMount() {
-    this.setState({date: utils.dateFormat(new Date()), datePickerDate: utils.dateFormat(new Date())})
-  }
+  const [inputInfo, setInputInfo] = useState(initialState)
 
-  inputDate = date => {
-    this.setState({
-      date
+  useEffect(() => {
+    setInputInfo({...inputInfo, date: utils.dateFormat(new Date()), datePickerDate: utils.dateFormat(new Date())})
+  }, [])
+
+  const inputName = name => {
+    setInputInfo({
+      ...inputInfo, name: name
     })
   };
 
-  inputName = name => {
-    this.setState({
-      name
+  const inputNumber = number => {
+    setInputInfo({
+      ...inputInfo, number: number
     })
   };
 
-  inputNumber = number => {
-    this.setState({
-      number
+  const inputPrice = price => {
+    setInputInfo({
+      ...inputInfo, price: price
     })
   };
 
-  inputPrice = price => {
-    this.setState({
-      price
+  const inputSheet = sheet => {
+    setInputInfo({
+      ...inputInfo, sheet: sheet
     })
   };
 
-  inputSheet = sheet => {
-    this.setState({
-      sheet
-    })
-  };
-
-  submitStock = route => {
-    const {date, name, number, price, sheet} = this.state;
+  const submitStock = route => {
+    const {date, name, number, price, sheet} = inputInfo;
     if (date && name && number && !isNaN(price) && !isNaN(sheet)) {
       const stockInfo = {'date': date, 'name': name, 'number': number, 'price': price, 'sheet': sheet};
       api.updateAccountRecord(stockInfo, false, route);
-      this.props && this.props.callback(stockInfo);
-      this.setState({
+      props && props.callback(stockInfo);
+      setInputInfo({
         'name': '',
         'number': '',
         'price': '',
-        'sheet': ''
+        'sheet': '', ...inputInfo
       })
     } else {
       return alert('不許有任何一個為空');
     }
   };
 
-  handleChange = (date) => {
-    this.setState({date: date, datePickerDate: date})
+  const handleChange = (date) => {
+    setInputInfo({...inputInfo, date: date, datePickerDate: date})
   };
 
-  render() {
-    const {datePickerDate} = this.state;
-    const {route} = this.props;
-    const isMobile = browserUtils.isMobile();
-    return (
-      <div style={{margin: isMobile ?  '5px 5px 0px 5px' : '5px'}}>
-        <div className="form-row">
-          <div className="col-md-2 stock-input-fields" >
-            <input type="date" className="form-control" placeholder="日期"
-                   onChange={(c) => this.handleChange(c.target.value)} value={datePickerDate}/>
-          </div>
-          <div className="from-group col-md-2 input-sale-info-frame">
-            <input type="text" className="form-control" placeholder="股票名稱"
-                   onChange={(c) => this.inputName(c.target.value)} value={this.state.name} autoComplete="on"/>
-          </div>
-          <div className="from-group col-md-2 input-sale-info-frame">
-            <input type="text" className="form-control" placeholder={route === 'US_account' ?  "美股代號" : "編號" }
-                   onChange={(c) => this.inputNumber(c.target.value)} value={this.state.number} autoComplete="on"/>
-          </div>
-          <div className="from-group col-md-2 input-sale-info-frame">
-            <input type="text" className="form-control" placeholder="單價"
-                   onChange={(c) => this.inputPrice(c.target.value)} value={this.state.price} autoComplete="on"/>
-          </div>
-          <div className="from-group col-md-2 input-sale-info-frame">
-            <input type="text" className="form-control" placeholder={route === 'US_account' ?  "股數" : "張數" }
-                   onChange={(c) => this.inputSheet(c.target.value)} value={this.state.sheet} autoComplete="on"/>
-          </div>
-          <button className="btn btn-primary from-group col-sm-2 col-md-12 input-sale-frame" type="submit"
-                  onClick={() => this.submitStock(route)}>確認買入
-          </button>
+
+  const {datePickerDate, name, number, price, sheet} = inputInfo;
+  const {route} = props;
+  const isMobile = browserUtils.isMobile();
+
+  return (
+    <div style={{margin: isMobile ?  '5px 5px 0px 5px' : '5px'}}>
+      <div className="form-row">
+        <div className="col-md-2 stock-input-fields" >
+          <input type="date" className="form-control" placeholder="日期"
+                  onChange={(c) => handleChange(c.target.value)} value={datePickerDate}/>
         </div>
+        <div className="from-group col-md-2 input-sale-info-frame">
+          <input type="text" className="form-control" placeholder="股票名稱"
+                  onChange={(c) => inputName(c.target.value)} value={name} autoComplete="on"/>
+        </div>
+        <div className="from-group col-md-2 input-sale-info-frame">
+          <input type="text" className="form-control" placeholder={route === 'US_account' ?  "美股代號" : "編號" }
+                  onChange={(c) => inputNumber(c.target.value)} value={number} autoComplete="on"/>
+        </div>
+        <div className="from-group col-md-2 input-sale-info-frame">
+          <input type="text" className="form-control" placeholder="單價"
+                  onChange={(c) => inputPrice(c.target.value)} value={price} autoComplete="on"/>
+        </div>
+        <div className="from-group col-md-2 input-sale-info-frame">
+          <input type="text" className="form-control" placeholder={route === 'US_account' ?  "股數" : "張數" }
+                  onChange={(c) => inputSheet(c.target.value)} value={sheet} autoComplete="on"/>
+        </div>
+        <button className="btn btn-primary from-group col-sm-12 col-md-2 input-sale-frame" type="submit"
+                onClick={() => submitStock(route)}>確認買入
+        </button>
       </div>
-    )
-  }
+    </div>
+  )
 }
+
+export default Input

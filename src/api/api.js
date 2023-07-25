@@ -116,7 +116,7 @@ const api = {
   },
 
   async updateStock(salePrice, saleSheet, stock, route){
-      const isDayTrading = stock.date == d.dateFormat(new Date());
+      const isDayTrading = stock.date === d.dateFormat(new Date());
       let income = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.001425) - Math.floor(salePrice * 1000 * saleSheet * 0.003 * (isDayTrading ? 0.5 : 1)) - stock.cost;
       let sale_cost = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.001425) - Math.floor(salePrice * 1000 * saleSheet * 0.003 * (isDayTrading ? 0.5 : 1));
       let US_income = salePrice * saleSheet - stock.cost;

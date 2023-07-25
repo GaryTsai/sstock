@@ -98,25 +98,25 @@ class Login extends Component {
       .then(u => {
         settings.user_id = u.user.uid;
         firebase.database().ref(`/account_data/${u.user.uid}`).set({
-          "tw" : {
-            "account_summary" : {
-              "accountMoney" : 0,
-              "accountStock" : 0,
-              "accountTime" : utils.dateFormat(new Date()),
-              "summary" : 0
+          tw : {
+            account_summary : {
+              accountMoney : 0,
+              accountStock : 0,
+              accountTime : utils.dateFormat(new Date()),
+              summary : 0
             },
-            "account_record" : {},
-            "stock_info" :{}
+            account_record : {},
+            stock_info :{}
           },
-          "us" : {
-            "account_summary" : {
-              "accountMoney" : 0,
-              "accountStock" : 0,
-              "accountTime" : utils.dateFormat(new Date()),
-              "summary" : 0
+          us : {
+            account_summary : {
+              accountMoney : 0,
+              accountStock : 0,
+              accountTime : utils.dateFormat(new Date()),
+              summary : 0
             },
-            "account_record" : {},
-            "stock_info" : {}
+            account_record : {},
+            stock_info : {}
           }
         }).then(() => {
           // 儲存成功後顯示訊息

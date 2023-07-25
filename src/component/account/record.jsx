@@ -39,24 +39,19 @@ const Td = styled('td')((source) => ({
 const initialState = {
 };
 
-export default class Record extends Component {
-  constructor(props) {
-    super(props);
-    this.state = initialState;
-  }
-
-  render() {
-    const {record, index} = this.props;
-    return (
-      <tr>
-        <th scope="row">{index}</th>
-        <td>{parseFloat(record.account_record_Money).toFixed(0)}</td>
-        <td>{parseFloat(record.account_record_Stock).toFixed(0)}</td>
-        <td>{record.transfer}</td>
-        <td>{record.transferStatus=== '轉出' ? '轉出' : '存入'}</td>
-        <td>{record.transferTime}</td>
-        <Td source={record.source}>{record.source}</Td>
-      </tr>
-    )
-  }
+const Record = (props) => {
+  const {record, index} = props;
+  return (
+    <tr>
+      <th scope="row">{index}</th>
+      <td>{parseFloat(record.account_record_Money).toFixed(0)}</td>
+      <td>{parseFloat(record.account_record_Stock).toFixed(0)}</td>
+      <td>{record.transfer}</td>
+      <td>{record.transferStatus=== '轉出' ? '轉出' : '存入'}</td>
+      <td>{record.transferTime}</td>
+      <Td source={record.source}>{record.source}</Td>
+    </tr>
+  )
 }
+
+export default Record

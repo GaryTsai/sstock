@@ -126,7 +126,7 @@ export default class App extends Component {
   };
 
   logOut = () =>{
-    localStorage.removeItem('account-sstock');
+    localStorage.removeItem('account-stock');
     this.setState({logInStatus: false})
   };
 
