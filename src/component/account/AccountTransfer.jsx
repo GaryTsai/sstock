@@ -42,7 +42,7 @@ const AccountTransfer = (props) => {
       }
     }else{
       return {
-        margin: '0px  0px'
+        margin: '3px auto'
       }
     }
   };

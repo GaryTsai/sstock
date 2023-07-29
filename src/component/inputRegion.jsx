@@ -10,8 +10,8 @@ const initialState = {
   dateRegion1: '',
   dateRegion2: '',
   saleStatus: 'all',
-  stockStatus: 'individual'
-
+  stockStatus: 'individual',
+  queryState: ''
 };
 
 const InputRegion = (props) => {
@@ -77,9 +77,9 @@ const InputRegion = (props) => {
     }
   };
 
-  const handleStartDateChange = (date) => setInputInfo({...inputInfo, startStandardDate:date, dateRegion1: date});
+  const handleStartDateChange = (date) => setInputInfo({...inputInfo, startStandardDate:date, dateRegion1: date, queryState: ''});
 
-  const handleEndDateChange = (date) => setInputInfo({...inputInfo, endStandardDate:date, dateRegion2: date});
+  const handleEndDateChange = (date) => setInputInfo({...inputInfo, endStandardDate:date, dateRegion2: date, queryState: ''});
 
   const getSaleOptions = (e) => setInputInfo({...inputInfo, saleStatus: e.target.value});
 
@@ -95,7 +95,7 @@ const InputRegion = (props) => {
       }
     }else{
       return {
-        margin: '3px 5px',
+        margin: '3px 0px',
         paddingRight: '0px',
         paddingLeft: '0px',
         whiteSpace: 'nowrap'
@@ -108,7 +108,7 @@ const InputRegion = (props) => {
   return (
     <div>
         <div className="form-row" style={{margin:'5px', overflowY: isMobile ? 'scroll' : 'unset'}}>
-          <button type="button" className={"btn btn-info from-group col-md-3" + (isMobile ? ' show-all-stock-mobile' : ' show-all-stock')}  onClick={props.resetCallBack}>顯示全部 Stock </button>
+          <button type="button" className={"btn btn-info from-group col-md-1" + (isMobile ? ' show-all-stock-mobile' : ' show-all-stock')}  onClick={props.resetCallBack}>顯示全部 Stock </button>
           <button type="button"  className={"btn btn-group btn-group-toggle" + (isMobile ? ' from-group col-md-6' : ' from-group' +
             ' col-md-2')} data-toggle="buttons" style={{margin: '0px 10px', zIndex: 0, ...getStyleOfButton()}}>
             <label className="btn btn-secondary active" onClick={getSaleOptions}>
@@ -121,27 +121,27 @@ const InputRegion = (props) => {
               <input type="radio" name="saleOption" id="saleOption3" value='unsale'  autoComplete="off" /> 未賣出
             </label>
           </button>
-          <div className={"btn-group" + (isMobile ? " query-region-group-mobile": " query-region-group")}  role="group" aria-label="Basic outlined example" style={{width : isMobile ? 'inherit' :'unset'}}>
-            <button type="button" className="btn btn-outline-primary" onClick={()=> queryRegion(0)} >Today</button>
-            <button type="button" className="btn btn-outline-primary"onClick={()=> queryRegion(7)}>前 7 日</button>
-            <button type="button" className="btn btn-outline-primary"onClick={()=> queryRegion(30)}>前 30 日</button>
-            <button type="button" className="btn btn-outline-primary"onClick={()=> queryRegion(120)}>前三月</button>
-            <button type="button" className="btn btn-outline-primary"onClick={()=> queryRegion('yearAgo')}>去年</button>
-            <button type="button" className="btn btn-outline-primary"onClick={()=> queryRegion('thisYear')}>今年</button>
+          <div className={"btn-group col-md-3" + (isMobile ? " query-region-group-mobile": " query-region-group")}  role="group" aria-label="Basic outlined example" style={{width : isMobile ? 'inherit' :'unset'}}>
+            <button type="button" className="btn btn-outline-primary" onClick={()=> setInputInfo({...inputInfo, queryState: 0})} >Today</button>
+            <button type="button" className="btn btn-outline-primary"onClick={()=> setInputInfo({...inputInfo, queryState: 7})}>前 7 日</button>
+            <button type="button" className="btn btn-outline-primary"onClick={()=> setInputInfo({...inputInfo, queryState: 30})}>前 30 日</button>
+            <button type="button" className="btn btn-outline-primary"onClick={()=> setInputInfo({...inputInfo, queryState: 360})}>前三月</button>
+            <button type="button" className="btn btn-outline-primary"onClick={()=> setInputInfo({...inputInfo, queryState: 'yearAgo'})}>去年</button>
+            <button type="button" className="btn btn-outline-primary"onClick={()=> setInputInfo({...inputInfo, queryState: 'thisYear'})}>今年</button>
           </div>
-          <div style={{margin:'5px', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
+          <div className="col-md-2" style={{margin:'5px 0', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
               <div>起始區間:</div>
               <div className="col">
                 <input type="date" className="form-control" placeholder="日期" onChange={(c) => handleStartDateChange(c.target.value)} value={startStandardDate}/>
               </div>
           </div>
-          <div style={{margin:'5px', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
+          <div  className="col-md-2" style={{margin:'5px 0', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
               <div>結束區間:</div>
               <div className="col">
                 <input type="date" className="form-control" placeholder="日期" onChange={(c) => handleEndDateChange(c.target.value)} value={endStandardDate}/>
               </div>
-            </div>
-          <div className="btn-group btn-group-toggle from-group col-md-1" data-toggle="buttons" style={{...getStyleOfButton(), margin: '10px 5px'}}>
+          </div>
+          <div className="btn-group btn-group-toggle from-group col-md-2" data-toggle="buttons" style={{...getStyleOfButton(), margin: '10px 0px'}}>
             <label className="btn btn-warning active" onClick={getStockOptions} >
               <input type="radio" name="stockOption" id="individual" value='individual' autoComplete="off" /> 個別股
             </label>
@@ -149,8 +149,8 @@ const InputRegion = (props) => {
             {/*  <input type="radio" name="stockOption" id="mutual" value='mutual' autoComplete="off" /> 共同股*/}
             {/*</label>*/}
           </div>
-          <button className={"btn btn-primary query-region-submit "+ (isMobile ? ' from-group col-md-3' : ' from-group col-md-1' +
-            ' query-region-submit') } style={{...getStyleOfButton(), margin: '10px 5px'}} onClick={()=> queryRegion('')}>查詢送出</button>
+          <button className={"btn btn-primary query-region-submit "+ (isMobile ? ' from-group col-md-12' : ' from-group col-md-12' +
+            ' query-region-submit') } style={{...getStyleOfButton(), margin: '10px 0px'}} onClick={()=> queryRegion(inputInfo.queryState)}>查詢送出</button>
         </div>
     </div>
   )

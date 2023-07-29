@@ -156,10 +156,24 @@ const Account = () => {
               </thead>
               <tbody>
               {
-                records&&records.map((record, index) => (
+                records && records.map((record, index) => (
                   <Record ket={index} record={record} index={index}/>
                 ))
               }
+              {records.length == 0 &&<div style={{position: 'absolute',
+                top: 0,
+                left: 0,
+                height: '100%',
+                width: '100%',
+                display: 'block',
+                zIndex: 7}}><img  alt="" style={{display:'flex',
+                width: '64px',
+                height: '64px',
+                position: 'relative',
+                margin: '0px auto',
+                backgroundSize: '100%',
+                top: 'calc(50% - 50px)'
+              }} src={require('./../../assets/img/contentLoading.png')}/></div>}
               </tbody>
             </table>
           </div>

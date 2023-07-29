@@ -2,24 +2,17 @@ import React, { useEffect, useState } from 'react';
 import Stock from './stock';
 import InputRegion from "../inputRegion";
 import browserUtils from "../../utils/browserUtils";
+import { color } from 'highcharts';
 
 const initialState = {
   allData:[],
-  allStocks:"",
+  allStocks: [],
   isQueryOpen: false,
   isTopBtnShow: false
 };
 const Stocks = (props) => {
   const [stockInfo, setStockInfo] = useState(initialState)
-
-  useEffect(()=> {
-    const {allStocks} = props;
-    if (allStocks) {
-      setStockInfo({allStocks: allStocks, ...stockInfo})
-    }
-
-  },[])
-
+  
   const queryData = (stockInfo) => props.queryDataCallback(stockInfo);
 
   const checkQueryOpen = status => setStockInfo({ isQueryOpen:status, ...stockInfo });
@@ -64,9 +57,43 @@ const Stocks = (props) => {
         </thead>
         <tbody>
         {
-          (allStocks.length !== 0) && allStocks.map((stock, index) => (
+          allStocks !== 'No Data' && (allStocks.length !== 0) && allStocks.map((stock, index) => (
           <Stock hideFiled={hideFiled} saleStatus={saleStatus} key={stock.number+index} stock={stock} index={index+1} route={route} stockSaleCallback = {saleStockCallback} delete={index => deleteCallback(index)} isMerge = {isMerge}/>
           ))
+        }
+        {allStocks.length == 0 && route === 'Taiwan_history' && <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          height: '100%',
+          width: '100%',
+          display: 'block',
+          zIndex: 7}}>
+              <img  alt="" style={{display:'flex',
+              width: '64px',
+              height: '64px',
+              position: 'relative',
+              margin: '0px auto',
+              backgroundSize: '100%',
+              top: 'calc(50% - 50px)'
+              }} src={require('./../../assets/img/contentLoading.png')}/>
+          </div>
+        }
+        {allStocks === 'No Data' && <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: 0,
+          height: '50%',
+          width: '100%',
+          display: 'block',
+          zIndex: 7}}>
+              <div  alt="" style={{
+              position: 'relative',
+              margin: '0px auto',
+              color: 'black',
+              fontSize: 32
+              }}>No Data</div>
+          </div>
         }
         </tbody>
       </table>

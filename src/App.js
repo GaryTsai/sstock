@@ -76,7 +76,7 @@ export default class App extends Component {
           this.setState({
             lastYearROI: stockData.lastYearROI,
             saleStatus: 'all',
-            showStocks: stockData.showStocks,
+            showStocks: stockData.showStocks.length === 0 ? 'No Data' : stockData.showStocks,
             allStocks: stockData.allStocks,
             saleStocks: stockData.saleStocks,
             unSaleStocks: stockData.unSaleStocks,
@@ -207,7 +207,8 @@ export default class App extends Component {
         saleCost += result[item].cost;
       }
       profit = (profitAndLoss / saleCost * 100).toFixed(2);
-      this.setState({showStocks: result, profit: profit, saleCost: saleCost, profitAndLoss: profitAndLoss});
+
+      this.setState({showStocks: result.length === 0 ? 'No Data' : result, profit: profit, saleCost: saleCost, profitAndLoss: profitAndLoss});
     } else if (stockInfo.stockStatus === 'mutual') {
     }
   };
