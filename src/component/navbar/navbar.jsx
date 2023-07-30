@@ -34,13 +34,15 @@ const Navbar = (props) => {
         color:'#ed2a2a',
         fontSize:'16px',
         fontWeight:'bold',
+        whiteSpace: 'nowrap'
       }
     }else{
       return {
         flexBasis: 'auto',
         color:'#ed2a2a',
         fontSize:'18px',
-        fontWeight:'bold'
+        fontWeight:'bold',
+        whiteSpace: 'nowrap'
       }
     }
   };
@@ -62,21 +64,21 @@ const Navbar = (props) => {
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarCollapse" style={{ flexBasis: browserUtils.isMobile() ? "100%" : 'auto'}}>
+        <div className="collapse navbar-collapse" id="navbarCollapse" style={{ flexBasis: "100%" }}>
           <ul className="navbar-nav mr-auto" style={{alignItems: isMobile ? "unset" : "center"}}>
-            <li className={`nav-item`} data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'Taiwan_history' ? getActiveStyle() : {whiteSpace: "nowrap"}}>
+            <li className={`nav-item`} data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'Taiwan_history' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available'}}>
               <div className="nav-link"  onClick={e => changeRoute('Taiwan_history')}>台股歷史紀錄 <span className="sr-only"></span></div>
             </li>
             {/* <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'US_account' ? this.getActiveStyle() : {}} >
               <div className="nav-link"　style={{color: '#e91e63'}} onClick={e => changeRoute('US_account')} >美股證卷</div>
             </li> */}
-            <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'account' ? getActiveStyle() : {whiteSpace: "nowrap"}} >
+            <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'account' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available'}} >
               <div className="nav-link" onClick={e => changeRoute('account')} >我的帳戶</div>
             </li>
-            <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'twChart' ? getActiveStyle() : {whiteSpace: "nowrap"}} >
+            <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'twChart' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available'}} >
               <div className="nav-link" onClick={e => changeRoute('twChart')} >損益圖表</div>
             </li>
-            {route === 'Taiwan_account' && <FormGroup>
+            {route === 'Taiwan_account' && <FormGroup sx={{whiteSpace: "nowrap", width: '-webkit-fill-available'}}>
               <FormControlLabel sx={{marginBottom: 0}}control={<Switch checked={isMerge} onChange={() => props.handleMerge()} color="warning"/>} label="股票統整" />
             </FormGroup>}
             {isMobile &&<li className="nav-item"  data-toggle="collapse" data-target=".navbar-collapse.show" style={{marginTop: isMobile ? "5px": "0px", marginLeft: '5px', position: isMobile ? "unset": "absolute" , right: isMobile ? "unset" : "5px"}}>

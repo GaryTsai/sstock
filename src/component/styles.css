@@ -52,6 +52,7 @@
 }
 .show-all-stock {
     margin: 9px 0px;
+    height: 40px;
 }
 .show-all-stock-mobile {
     margin: 0px 0px;
@@ -79,5 +80,8 @@
 @media (min-width: 768px){
     .navbar-expand-md .navbar-nav {
         flex: none;
+    }
+    .query-region-submit {
+        padding: '0'
     }
 }

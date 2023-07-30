@@ -157,7 +157,7 @@ const Account = () => {
               <tbody>
               {
                 records && records.map((record, index) => (
-                  <Record ket={index} record={record} index={index}/>
+                  <Record key={index} record={record} index={index}/>
                 ))
               }
               {records.length == 0 &&<div style={{position: 'absolute',

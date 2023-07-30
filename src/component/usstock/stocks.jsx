@@ -63,13 +63,11 @@ export default class Usstocks extends Component {
             <th scope="col">刪除</th>
           </tr>
           </thead>
-          <tbody>
           {
             (allStocks.length !== 0) && allStocks.map((stock, index) => (
             <Stock hideFiled={hideFiled} UsInfo={UsInfo} saleStatus={saleStatus} key={stock.number+index} stock={stock} index={index+1} route={route}  stockSaleCallback = {saleStockCallback} delete={index => deleteCallback(index)}/>
             ))
           }
-          </tbody>
         </table>
       </div>
       </div>

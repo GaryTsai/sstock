@@ -6,6 +6,7 @@ export default {
     padding: '5px 10px',
     margin: '0px 5px',
     fontSize: '18px',
+    whiteSpace: 'nowrap',
     ':hover': {
       backgroundColor: '#ef0f0f',
     }

@@ -5,6 +5,8 @@ import Grid from '@mui/material/Grid';
 import YearColumnChart from '../../custom/YearColumnChart';
 import DualColumnChart from '../../custom/DulaColumnChart';
 import DividendChart from '../../custom/YearDividendChart';
+import Report from '../../custom/Report';
+
 import api from '../../api/api'
 
 const Container = styled('div')`
@@ -84,7 +86,6 @@ const TwChart = ({
     })
     return [valueArray, ROIArray]
   }
-
   useEffect(() => {
     if(allStocks.length === 0) return
     const saledData = allStocks.filter((it)=>it.income !== 0 )
@@ -145,11 +146,27 @@ const TwChart = ({
 
   return (
     <Grid container style={{justifyContent: "center"}}>
-        <div class="btn-group col-sm-12" role="group" aria-label="Basic example" style={{padding: 0}}>
+        <div className="btn-group col-sm-12" role="group" aria-label="Basic example" style={{padding: 0}}>
           <button type="button" className={`btn btn-info ${chartTab === "monthIncome" && 'active'}`} onClick={()=> setChartTab("monthIncome")}>月損益圖</button>
           <button type="button" className={`btn btn-info ${chartTab === "yearIncome" && 'active'}`} onClick={()=> setChartTab("yearIncome")}>歷年損益圖</button>
           <button type="button" className={`btn btn-info ${chartTab === "dividend" && 'active'}`} onClick={()=> setChartTab("dividend")} >股息表</button>
+          <button type="button" className={`btn btn-info ${chartTab === "report" && 'active'}`} onClick={()=> setChartTab("report")} >年損益報表</button>
         </div>
+        {allStocks !== 'No Data' && allStocks.length === 0 &&<div style={{position: 'absolute',
+            left: 0,
+            top: '58px',
+            height: 'calc(100% - 58px)',
+            width: '100%',
+            display: 'block',
+            zIndex: 7,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)'}}><img  alt="" style={{display:'flex',
+            width: '128px',
+            height: '128px',
+            position: 'relative',
+            margin: '0px auto',
+            backgroundSize: '100%',
+            top: 'calc(50% - 50px)'
+          }} src={require('./../../assets/img/loading.gif')}/></div>}
         {chartTab === "monthIncome" && <Grid item xs={12} md={6}>
           <DualColumnChart chartInfo={chartInfo} type={'year'}/>
         </Grid>}
@@ -158,6 +175,9 @@ const TwChart = ({
         </Grid>}
         {chartTab === "dividend" && <Grid item xs={12} md={6}>
           <DividendChart perDividend={perDividend}/>
+        </Grid>}
+        {chartTab === "report" && <Grid item xs={12} md={6}>
+          <Report allStocks={allStocks} chartInfo={chartInfo}/>
         </Grid>}
     </Grid>
       )
