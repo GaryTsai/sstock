@@ -4,6 +4,14 @@ import './App.css';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
+// Firebase App (the core Firebase SDK) is always required and must be listed first
+import * as firebase from "firebase/app";
+// If you enabled Analytics in your project, add the Firebase SDK for Analytics
+import "firebase/analytics";
+import "firebase/database";
+// Add the Firebase products that you want to use
+import "firebase/auth";
+import "firebase/firestore";
 import Account from './component/account/account';
 import Navbar from './component/navbar/navbar';
 import Input from './component/input';
@@ -99,9 +107,10 @@ export default class App extends Component {
     });
   };
 
-  deleteStock = (timestamp) => {
-    api.deleteStock(timestamp).then(() =>
-      this.updateAllData()
+  deleteStock = (stock) => {
+    api.deleteStock(stock.timestamp).then(() =>
+      this.updateAllData(),
+      this.updateDataForDeleteStock(stock)
     )
   };
 
@@ -115,6 +124,62 @@ export default class App extends Component {
     )
   };
 
+  updateDataForDeleteStock = async stock => {
+    //get all account data
+    let accountRecord = [];
+    let accountInfo = [];
+    let timestamp = stock.timestamp
+    
+    let getAccountRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}` );
+    await getAccountRef.once('value').then((snapshot) => {
+      snapshot.forEach(element => {
+        accountInfo.unshift(element.val());
+      });
+        accountRecord = accountInfo[2]
+      });
+    const deleteRecord = Object.fromEntries(Object.entries(accountRecord).filter(([key]) => key.includes(timestamp)))
+    let newRecords = Object.fromEntries(Object.entries(accountRecord).filter(([key]) => !key.includes(timestamp)))
+    Object.entries(newRecords).forEach(([key, record] )=> {
+        if(deleteRecord[timestamp].timestamp < record.timestamp) {
+          if(deleteRecord[timestamp].transferStatus === '存入') {
+            record.account_record_Money = Number(record.account_record_Money) + deleteRecord[timestamp].transfer
+            record.account_record_Stock = Number(record.account_record_Stock) - deleteRecord[timestamp].transfer
+          } else {
+            record.account_record_Money = Number(record.account_record_Money) - deleteRecord[timestamp].transfer
+            record.account_record_Stock = Number(record.account_record_Stock) + deleteRecord[timestamp].transfer
+          }
+        }
+    });
+    firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}`).update({'account_record':newRecords})
+    
+    api.getAccount().then(async (account)=> {
+        let getRefOfAccount = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/account_summary` );  
+        let accountMoney = parseInt(account.accountMoney)
+        let accountStock = parseInt(account.accountStock)
+
+        if(deleteRecord[timestamp].transferStatus === '存入') {
+          accountMoney += deleteRecord[timestamp].transfer
+          accountStock -= deleteRecord[timestamp].transfer
+        } else {
+          accountMoney -= deleteRecord[timestamp].transfer
+          accountStock += deleteRecord[timestamp].transfer
+        }
+        await getRefOfAccount.update({
+          accountMoney: accountMoney.toFixed(0),
+          accountStock: accountStock.toFixed(0),
+        });
+      });
+    await firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stock_info`).child(timestamp).update({
+      ...stock,
+      income: 0,   
+      sale_cost: 0,
+      sale_date:'',
+      sale_price: 0,
+      sale_sheet: 0,
+      status: "unsale"
+    });
+  }
+
   loginRecord = () =>{
     const account = localStorage.getItem('account-stock');
     if(!!account) {
@@ -126,8 +191,9 @@ export default class App extends Component {
   };
 
   logOut = () =>{
-    localStorage.removeItem('account-stock');
-    this.setState({logInStatus: false})
+    this.updateAccountDataForDeleteStock('1689052041')
+    // localStorage.removeItem('account-stock');
+    // this.setState({logInStatus: false})
   };
 
   changeRoute = (route) => {

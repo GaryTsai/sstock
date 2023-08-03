@@ -142,7 +142,7 @@ const reverseData = Object.assign([], reportInfo.reportData)
         <thead>
           <tr>
             <th>#</th>
-            <th>年投報率</th>
+            <th>年投報率(%)</th>
             <th>年損益</th>
             <th>該年投入(已賣出)</th>
             <th>該年投入(未賣出)</th>
@@ -165,7 +165,7 @@ const reverseData = Object.assign([], reportInfo.reportData)
         <thead>
           <tr>
             <th>#</th>
-            <th>總投報率</th>
+            <th>總投報率(%)</th>
             <th>歷年總損益</th>
             <th>歷年總投入(已賣出)</th>
             <th>歷年總投入</th>

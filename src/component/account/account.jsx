@@ -16,23 +16,21 @@ const initialState = {
   usRecords:[],
   whichAccount: 'Taiwan_account',
   isAssetTransfer: false,
-  isTopBtnShow: false
 };
 
 const Account = () => {
   const [accountInfo, setAccountInfo] = useState(initialState)
+  const [topIconState, setTopIconState] = useState(false)
 
   useEffect(() => {
     const {whichAccount} = accountInfo
     updateAccount(whichAccount);
     window.addEventListener('scroll', () => {
-
       if(document.documentElement.scrollTop > 0 ){
-        setAccountInfo({...accountInfo, isTopBtnShow: true})
+        setTopIconState(true)
       } else {
-        setAccountInfo({...accountInfo, isTopBtnShow: false})
+        setTopIconState(false)
       }
-
     })
   }, [])
 
@@ -83,12 +81,12 @@ const Account = () => {
   const changeAssetTransfer = status => setAccountInfo({...accountInfo, isAssetTransfer:status});
 
 
-  const {acTime, acMoney, acStock, acSummary, records, usRecords, whichAccount, isAssetTransfer, isTopBtnShow} = accountInfo;
+  const {acTime, acMoney, acStock, acSummary, records, usRecords, whichAccount, isAssetTransfer} = accountInfo;
  
   return (
     <div>
       {
-        isTopBtnShow && 
+        topIconState && 
         <div style={{position: "absolute"}}>
           <div style={{
             position: "fixed",

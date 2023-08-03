@@ -126,7 +126,7 @@ const api = {
 
       await getDataRef.child(stock.timestamp).update({
         income: route === 'US_account' ? US_income : income,
-        sale_cost: route === 'US_account' ? US_sale_cost　:　sale_cost,
+        sale_cost: route === 'US_account' ? US_sale_cost : sale_cost,
         sale_date: sale_date,
         sale_price: salePrice,
         sale_sheet: saleSheet,
@@ -187,7 +187,7 @@ const api = {
       account_record_Stock: stock.toFixed(0),
       source: transferInfo.source,
       transfer: transferInfo.price,
-      transferStatus: transferInfo.transferStatus === "transferIn" ? '轉出': '存入',
+      transferStatus: transferInfo.transferStatus === "transferIn" ? '存入(帳戶)': '轉出(帳戶)',
       transferTime: date,
     })
     return ;

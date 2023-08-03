@@ -47,7 +47,7 @@ const Record = (props) => {
       <td>{parseFloat(record.account_record_Money).toFixed(0)}</td>
       <td>{parseFloat(record.account_record_Stock).toFixed(0)}</td>
       <td>{record.transfer}</td>
-      <td>{record.transferStatus=== '轉出' ? '轉出' : '存入'}</td>
+      <td>{record.transferStatus}</td>
       <td>{record.transferTime}</td>
       <Td source={record.source}>{record.source}</Td>
     </tr>

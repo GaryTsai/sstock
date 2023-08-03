@@ -31,7 +31,7 @@ const Stock = (props) =>{
 
   const deleteStock = () => {
     const { stock } = props;
-    props.delete(stock.timestamp);
+    props.delete(stock);
   };
 
   const isFloat = (n) => {
@@ -83,10 +83,6 @@ const Stock = (props) =>{
                       <div className="form-group">
                         <h5 style={{ color: 'black', textAlign: 'left'}} key={'price' + index} htmlFor={`price-name-${index}`} className="col-form-label">賣出單價:</h5>
                         <input type="text" className="form-control"  id={`price-name-${index}`} ref={priceRef} />
-                      </div>
-                      <div className="form-group">
-                        <h5 style={{ color: 'black', textAlign: 'left'}} key={'sheet' + index} htmlFor={`sheet-name-${index}`} className="col-form-label">賣出張數:</h5>
-                        <input type="text" className="form-control" id={`sheet-name-${index}`}  ref={sheetRef}/>
                       </div>
                     </div>
                     <div className="modal-footer">
