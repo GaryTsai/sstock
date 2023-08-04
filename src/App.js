@@ -22,6 +22,9 @@ import settings from './component/settings/settings'
 import TwChart from './component/twChart'
 import api from './api/api'
 import _ from 'lodash'
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeLoading, changeLoginStatus, changeStockMergeState} from './slices/mutualState';
 
 const initialState = {
   inputData: [],
@@ -34,74 +37,66 @@ const initialState = {
   profitAndLoss: 0,
   profit: 0,
   saleCost: 0,
-  saleIsOpen: false,
+  isSaleOpen: false,
   saleStatus: 'all',
-  lastYearROI: 0,
-  logInStatus: false,
-  loading: false,
-  isMerge: false
-  
+  lastYearROI: 0, 
 };
 
-export default class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = initialState;
-  }
+const App = () => {
+  const [accountInfo, setAccountInfo] = useState(initialState)
+  const dispatch = useDispatch();
+  const {logInStatus, loading, isMerge} = useSelector((state) => state.mutualStateReducer)
+  useEffect(() => {
+    loginRecord();
+  }, [])
 
-  componentDidMount() {
-    this.loginRecord();
-    if(this.state.logInStatus) {
-      this.updateAllData();
-    }
-  }
+  useEffect(()=>{
+      logInStatus && updateAllData();
+  }, [logInStatus, accountInfo.route])
 
-  updateAllData = () => {
-      api.getAllData().then((stockData) => {
-        settings.country = 'tw';
-          this.setState({
-            lastYearROI: stockData.lastYearROI,
-            saleStatus: 'all',
-            showStocks: stockData.showStocks.length === 0 ? 'No Data' : stockData.showStocks,
-            allStocks: stockData.allStocks,
-            saleStocks: stockData.saleStocks,
-            unSaleStocks: stockData.unSaleStocks,
-            totalCost: stockData.totalCost,
-            profitAndLoss: stockData.profitAndLoss,
-            saleCost: stockData.saleCost,
-            profit: (stockData.profitAndLoss / stockData.saleCost * 100).toFixed(2),
-            loading: false
-          })
-        }
-      );
-    // }
-  };
-
-  inputData = data => {
-    let self = this;
-    const route = this.state.route
-    api.insertNewData(data).then(() => {
-      self.updateAllData()
+  const updateAllData = () => {
+    api.getAllData().then((stockData) => {
+      settings.country = 'tw';
+      setAccountInfo({
+          ...accountInfo,
+          lastYearROI: stockData.lastYearROI,
+          saleStatus: 'all',
+          showStocks: stockData.showStocks.length === 0 ? 'No Data' : stockData.showStocks,
+          allStocks: stockData.allStocks,
+          saleStocks: stockData.saleStocks,
+          unSaleStocks: stockData.unSaleStocks,
+          totalCost: stockData.totalCost,
+          profitAndLoss: stockData.profitAndLoss,
+          saleCost: stockData.saleCost,
+          profit: (stockData.profitAndLoss / stockData.saleCost * 100).toFixed(2)
+      })
+      dispatch(changeLoading(false))
     });
   };
 
-  deleteStock = (stock) => {
+  const handleInputData = data => {
+    api.insertNewData(data).then(() => {
+      updateAllData()
+    });
+  };
+
+  const deleteStock = (stock) => {
     api.deleteStock(stock.timestamp).then(() =>
-      this.updateAllData(),
-      this.updateDataForDeleteStock(stock)
+      updateAllData(),
+      updateDataForDeleteStock(stock)
     )
   };
 
-  saleStock = (salePrice, saleSheet, stock) => {
+  const saleStock = (salePrice, saleSheet, stock) => {
     api.updateStock(salePrice, saleSheet, stock).then(() => {
       const stockInfo = {'price': salePrice, 'sheet': saleSheet, 'cost': stock.cost, 'date': stock.date};
       api.updateAccountRecord(stockInfo, true);
-      this.updateAllData()
+      updateAllData()
       }
     )
   };
 
-  updateDataForDeleteStock = async stock => {
+  const updateDataForDeleteStock = async stock => {
     //get all account data
     let accountRecord = [];
     let accountInfo = [];
@@ -157,22 +152,27 @@ export default class App extends Component {
     });
   }
 
-  loginRecord = () =>{
+  const loginRecord = () =>{
     const account = localStorage.getItem('account-stock');
     if(!!account) {
       settings.user_id = account;
-      this.closeLoginPage();
-      this.updateAllData();
+      closeLoginPage();
     }
-    else return;
   };
 
-  logOut = async () =>{
+  const logOut = async () =>{
     localStorage.removeItem('account-stock');
-    this.setState({logInStatus: false})
+    dispatch(changeLoginStatus())
+    setAccountInfo({
+      ...accountInfo,
+      logInStatus: false
+    })
   };
 
-  changeRoute = (route) => {
+  const changeRoute = (route) => {
+    if(accountInfo.route === route) 
+      return
+
     switch (route) {
       case 'balanceChart':
       case 'stockHistory':
@@ -180,10 +180,14 @@ export default class App extends Component {
         settings.country = 'tw';
         break;
     }
-    this.setState({route: route, showStocks: []}, ()=>this.updateAllData());
+    setAccountInfo({
+      ...accountInfo,
+      route: route,
+      showStocks: []
+    })
   };
   
-  infoMerge = (datas) => {
+  const infoMerge = (datas) => {
     const result = datas.reduce((mergeResult, prev, next) => {
       const isNotExist = mergeResult && mergeResult.filter((item)=>_.trim(item.number) === _.trim(prev.number)).length === 0
       if(isNotExist){
@@ -215,8 +219,8 @@ export default class App extends Component {
     return result
   } 
 
-  updateQueryData = (stockInfo) => {
-    const {allStocks, unSaleStocks, saleStocks} = this.state;
+  const updateQueryData = (stockInfo) => {
+    const {allStocks, unSaleStocks, saleStocks} = accountInfo;
     const startRegion = stockInfo.dateRegion1;
     const endRegion = stockInfo.dateRegion2;
 
@@ -225,7 +229,6 @@ export default class App extends Component {
     let profitAndLoss = 0;
     let result = '';
 
-    this.setState({saleStatus: stockInfo.saleStatus});
     if (stockInfo.stockStatus === 'individual') {
       switch (stockInfo.saleStatus) {
         case 'all':
@@ -246,82 +249,85 @@ export default class App extends Component {
       }
       profit = (profitAndLoss / saleCost * 100).toFixed(2);
 
-      this.setState({showStocks: result.length === 0 ? 'No Data' : result, profit: profit, saleCost: saleCost, profitAndLoss: profitAndLoss});
+      setAccountInfo({...accountInfo, showStocks: result.length === 0 ? 'No Data' : result, profit: profit, saleCost: saleCost, profitAndLoss: profitAndLoss, saleStatus: stockInfo.saleStatus});
     } else if (stockInfo.stockStatus === 'mutual') {
     }
   };
-  reset = () => this.updateAllData();
+  const reset = () => updateAllData();
 
-  saleIsOpen = () => this.setState({saleIsOpen: !this.state.saleIsOpen});
+  const saleIsOpen = () => setAccountInfo({...accountInfo, isSaleOpen: !accountInfo.isSaleOpen});
 
-  getSaleIsStatus = () => {
+  const getSaleIsStatus = () => {
     if (!browserUtils.isMobile()) {
       return true
     } else {
-      return this.state.saleIsOpen;
+      return accountInfo.isSaleOpen;
     }
   };
 
-  handleMerge = () => this.setState({isMerge: !this.state.isMerge})
+  const handleMerge = () => {
+    dispatch(changeStockMergeState())
+  }
+  
 
-  closeLoginPage = () => this.setState({logInStatus: true, loading: true});
+  const closeLoginPage = () => {
+    dispatch(changeLoginStatus())
+    // setAccountInfo({...accountInfo, logInStatus: true, loading: true});
+  }
 
-  render() {
-    const inputData = this.state.inputData;
-    const unSaleStocks = this.state.unSaleStocks;
-    const showStocks = this.state.showStocks;
-    const {route, logInStatus, lastYearROI, loading, isMerge} = this.state;
-    const result = isMerge ? this.infoMerge(unSaleStocks) : unSaleStocks
+  const { route, lastYearROI, inputData, unSaleStocks, showStocks, totalCost, profitAndLoss, profit, saleCost, isSaleOpen, saleStatus } = accountInfo;
+  const result = isMerge ? infoMerge(unSaleStocks) : unSaleStocks
 
-    if(!logInStatus){
+  if(!logInStatus){
       return (
         <div>
-      <Login logInCallBack ={() => this.updateAllData()} homePageCallBack={this.closeLoginPage}/>
+      <Login logInCallBack ={() => updateAllData()} homePageCallBack={() => closeLoginPage()}/>
         </div>
       )
-    }else {
-      return (
-        <div className="App" style={{
-          height: window.innerHeight,
-          margin: '0 auto',
-        }}>
-          {loading === true &&<div style={{position: 'absolute',
-            top: 0,
-            left: 0,
-            height: '100%',
-            width: '100%',
-            display: 'block',
-            zIndex: 7,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)'}}><img  alt="" style={{display:'flex',
-            width: '128px',
-            height: '128px',
-            position: 'relative',
-            margin: '0px auto',
-            backgroundSize: '100%',
-            top: 'calc(50% - 50px)'
-          }} src={require('./assets/img/loading.gif')}/></div>}
-          <Navbar lastYearROI={lastYearROI} totalCost={this.state.totalCost} profitAndLoss={this.state.profitAndLoss}
-                  route={route} changeRoute={this.changeRoute} profit={this.state.profit} logOutCallBack={this.logOut}
-                  saleCost={this.state.saleCost} handleMerge={this.handleMerge} isMerge={isMerge}/>
-          {browserUtils.isMobile() && !this.state.saleIsOpen && (route === 'accountInfo') &&
-          <button className="btn btn-warning from-group col-sm-2 col-md-12 input-sale-frame" type="submit"
-                  onClick={() => this.saleIsOpen(true)}>買入</button>}
-          {browserUtils.isMobile() && this.state.saleIsOpen && (route === 'accountInfo') &&
-          <button className="btn btn-secondary from-group col-sm-2 col-md-12 input-sale-frame" type="submit"
-                  onClick={() => this.saleIsOpen(false)}>隱藏</button>}
-          {this.getSaleIsStatus() && (route === 'accountInfo') &&
-          <Input callback={this.inputData} route={route}/>}
-          {route === 'accountInfo' &&
-          <Stocks hideFiled={false} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={result}
-                  deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={route} isMerge={isMerge}/>}
-          {route === 'balanceChart' &&<TwChart hideFiled={false} allStocks={showStocks} route={route}/>}
-          {route === 'stockHistory' &&
-          <Stocks hideFiled={true} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={showStocks}
-                  deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={route}
-                  queryDataCallback={this.updateQueryData} resetCallBack={this.reset} isMerge={false}/>}
-          {route === 'account' && <Account route={route}/>}
-        </div>
-      )
-    }
+  } else {
+    return (
+      <div className="App" style={{
+        height: window.innerHeight,
+        margin: '0 auto',
+      }}>
+        {loading == true &&<div style={{position: 'absolute',
+          top: 0,
+          left: 0,
+          height: '100%',
+          width: '100%',
+          display: 'block',
+          zIndex: 7,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)'}}><img  alt="" style={{display:'flex',
+          width: '128px',
+          height: '128px',
+          position: 'relative',
+          margin: '0px auto',
+          backgroundSize: '100%',
+          top: 'calc(50% - 50px)'
+        }} src={require('./assets/img/loading.gif')}/></div>}
+        <Navbar lastYearROI={lastYearROI} totalCost={totalCost} profitAndLoss={profitAndLoss}
+                route={route} changeRoute={changeRoute} profit={profit} logOutCallBack={logOut}
+                saleCost={saleCost} handleMerge={handleMerge} isMerge={isMerge}/>
+        {browserUtils.isMobile() && !isSaleOpen && (route === 'accountInfo') &&
+        <button className="btn btn-warning from-group col-sm-2 col-md-12 input-sale-frame" type="submit"
+                onClick={() => saleIsOpen(true)}>買入</button>}
+        {browserUtils.isMobile() && isSaleOpen && (route === 'accountInfo') &&
+        <button className="btn btn-secondary from-group col-sm-2 col-md-12 input-sale-frame" type="submit"
+                onClick={() => saleIsOpen(false)}>隱藏</button>}
+        {getSaleIsStatus() && (route === 'accountInfo') &&
+        <Input callback={handleInputData} route={route}/>}
+        {route === 'accountInfo' &&
+        <Stocks hideFiled={false} saleStatus={saleStatus} inputData={inputData} allStocks={result}
+                deleteCallback={deleteStock} saleStockCallback={saleStock} route={route} isMerge={isMerge}/>}
+        {route === 'balanceChart' &&<TwChart hideFiled={false} allStocks={showStocks} route={route}/>}
+        {route === 'stockHistory' &&
+        <Stocks hideFiled={true} saleStatus={saleStatus} inputData={inputData} allStocks={showStocks}
+                deleteCallback={deleteStock} saleStockCallback={saleStock} route={route}
+                queryDataCallback={updateQueryData} resetCallBack={reset} isMerge={false}/>}
+        {route === 'account' && <Account route={route}/>}
+      </div>
+    )
   }
 }
+
+export default App

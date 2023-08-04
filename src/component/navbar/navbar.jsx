@@ -60,7 +60,7 @@ const Navbar = (props) => {
   return (
     <div>
       <nav className="navbar navbar-expand-md navbar-light " style={{backgroundColor: 'rgb(52 149 220)'}}>
-        <div className="navbar-brand"  style={route === 'accountInfo' ? {...getActiveStyle(), padding: '5px'} : {}} onClick={e => changeRoute('accountInfo')}>台灣股票</div>
+        <div className="navbar-brand"  style={route === 'accountInfo' ? {...getActiveStyle(), padding: '5px'} : {cursor: 'pointer'}} onClick={e => changeRoute('accountInfo')}>台灣股票</div>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
@@ -70,9 +70,6 @@ const Navbar = (props) => {
             <li className={`nav-item`} data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'stockHistory' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available', cursor: 'pointer'}}>
               <div className="nav-link"  onClick={e => changeRoute('stockHistory')}>台股歷史紀錄 <span className="sr-only"></span></div>
             </li>
-            {/* <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'US_account' ? this.getActiveStyle() : {}} >
-              <div className="nav-link"　style={{color: '#e91e63'}} onClick={e => changeRoute('US_account')} >美股證卷</div>
-            </li> */}
             <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'account' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available', cursor: 'pointer'}} >
               <div className="nav-link" onClick={e => changeRoute('account')} >我的帳戶</div>
             </li>

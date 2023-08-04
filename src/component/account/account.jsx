@@ -4,7 +4,6 @@ import AccountTransfer from './AccountTransfer'
 import './account.css'
 import api from '../../api/api'
 import browserUtils from "../../utils/browserUtils";
-import settings from "../settings/settings";
 import { BiSolidArrowToTop } from "react-icons/bi";
 
 const initialState = {
