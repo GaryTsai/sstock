@@ -31,7 +31,7 @@ const Stock = (props) =>{
 
   const deleteStock = () => {
     const { stock } = props;
-    props.delete(stock);
+    props.deleteCallback(stock);
   };
 
   const isFloat = (n) => {
@@ -93,10 +93,10 @@ const Stock = (props) =>{
               </div>
             </div>
           </td>}
-          {  (route ==='Taiwan_account'  && isMerge === false && stock.status === 'sale') && <td>{stock.sale_date}</td>}
-          {  (route ==='Taiwan_account'  && isMerge === false && stock.status === 'unsale')  && <td>{stock.date}</td>}
-          { route !=='Taiwan_account' && isMerge === false &&(saleStatus === 'all' || saleStatus === 'sale') && (stock.status === 'sale' ? <td>{stock.sale_date}</td> : <td></td>)}
-          { route !=='Taiwan_account' && isMerge === false &&(saleStatus === 'all' || saleStatus === 'unsale') && (stock.status === 'unsale' ? <td>{stock.date}</td>: <td>{stock.date}</td>)}
+          {  (route ==='accountInfo'  && isMerge === false && stock.status === 'sale') && <td>{stock.sale_date}</td>}
+          {  (route ==='accountInfo'  && isMerge === false && stock.status === 'unsale')  && <td>{stock.date}</td>}
+          { route !=='accountInfo' && isMerge === false &&(saleStatus === 'all' || saleStatus === 'sale') && (stock.status === 'sale' ? <td>{stock.sale_date}</td> : <td></td>)}
+          { route !=='accountInfo' && isMerge === false &&(saleStatus === 'all' || saleStatus === 'unsale') && (stock.status === 'unsale' ? <td>{stock.date}</td>: <td>{stock.date}</td>)}
           <td>{stock.name}</td>
           <td>{stock.number}</td>
           <td>{isMerge ? (averagePrice / (stock.sheet)).toFixed(2) : averagePrice }</td>

@@ -13,8 +13,6 @@ const initialState = {
   acStock: '',
   acSummary: '',
   records:[],
-  usRecords:[],
-  whichAccount: 'Taiwan_account',
   isAssetTransfer: false,
 };
 
@@ -23,8 +21,7 @@ const Account = () => {
   const [topIconState, setTopIconState] = useState(false)
 
   useEffect(() => {
-    const {whichAccount} = accountInfo
-    updateAccount(whichAccount);
+    updateAccount();
     window.addEventListener('scroll', () => {
       if(document.documentElement.scrollTop > 0 ){
         setTopIconState(true)
@@ -34,28 +31,8 @@ const Account = () => {
     })
   }, [])
 
-  const updateAccount = (whichAccount = 'Taiwan_account') =>{
+  const updateAccount = () =>{
     api.getAccount().then((account)=> {
-      if(whichAccount === 'Taiwan_account') {
-        api.getAccountRecord().then((data)=>{
-          setAccountInfo({
-            ...accountInfo,
-            acTime: account.accountTime,
-            acMoney: account.accountMoney,
-            acStock: account.accountStock,
-            acSummary: account.summary,
-            records:data
-          });
-        });
-      }else {
-        setAccountInfo({
-          ...accountInfo,
-          acTime: account.accountTime,
-          acMoney: account.accountMoney,
-          acStock: account.accountStock,
-          acSummary: account.summary,
-        });
-      }
       api.getAccountRecord().then((data)=>{
         setAccountInfo({
           ...accountInfo,
@@ -63,25 +40,16 @@ const Account = () => {
           acMoney: account.accountMoney,
           acStock: account.accountStock,
           acSummary: account.summary,
-          usRecords: data
+          records:data
         });
       });
-      });
-  };
-  const selectAccount = account => {
-    if(account === 'Taiwan_account')
-      settings.country = 'tw';
-    else {
-      settings.country = 'us';
-    }
-    setAccountInfo({...accountInfo, whichAccount: account, records:[], usRecords:[]})
-    updateAccount(account)
+    });
   };
 
   const changeAssetTransfer = status => setAccountInfo({...accountInfo, isAssetTransfer:status});
 
 
-  const {acTime, acMoney, acStock, acSummary, records, usRecords, whichAccount, isAssetTransfer} = accountInfo;
+  const {acTime, acMoney, acStock, acSummary, records, isAssetTransfer} = accountInfo;
  
   return (
     <div>
@@ -108,7 +76,7 @@ const Account = () => {
       <nav>
         <div className="nav nav-tabs" id="nav-tab" role="tablist">
           <a className="nav-item nav-link active" style={{width: '100%', border: '0px'}} id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
-              aria-controls="nav-home" aria-selected="true" onClick={() => selectAccount('Taiwan_account')}>台股資產</a>
+              aria-controls="nav-home" aria-selected="true">台股資產</a>
           {/* <a className="nav-item nav-link"  style={{width: '50%'}} id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
               aria-controls="nav-profile" aria-selected="false" onClick={() => this.selectAccount('US_account')}>美股資產</a> */}
         </div>
@@ -117,8 +85,7 @@ const Account = () => {
         <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
           {browserUtils.isMobile() && !isAssetTransfer && <button className="btn btn-warning from-group col-sm-2 col-md-12 input-sale-frame" type="submit" onClick={() => changeAssetTransfer(true)}>資產轉移</button>}
           {browserUtils.isMobile() && !isAssetTransfer  && <button className="btn btn-secondary from-group col-sm-2 col-md-12 input-sale-frame" type="submit" onClick={() => changeAssetTransfer(false)}>隱藏</button>}
-          {isAssetTransfer && <AccountTransfer whichAccount={whichAccount} callback={updateAccount}/>}
-          {!browserUtils.isMobile() && <AccountTransfer whichAccount={whichAccount} callback={updateAccount}/>}
+          {isAssetTransfer && <AccountTransfer updateAccount={updateAccount}/>}
           <div className="container">
             <table className="table table-striped">
               <thead>
@@ -179,8 +146,8 @@ const Account = () => {
         <div className="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
           {browserUtils.isMobile() && !isAssetTransfer && <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit" onClick={() => changeAssetTransfer(true)}>資產轉移</button>}
           {browserUtils.isMobile() && isAssetTransfer  && <button className="btn btn-secondary from-group col-md-2 input-sale-frame" type="submit" onClick={() => changeAssetTransfer(false)}>隱藏</button>}
-          {isAssetTransfer && <AccountTransfer whichAccount={whichAccount} callback={updateAccount}/>}
-          {!browserUtils.isMobile() && <AccountTransfer whichAccount={whichAccount} callback={updateAccount}/>}
+          {isAssetTransfer && <AccountTransfer updateAccount={updateAccount}/>}
+          {!browserUtils.isMobile() && <AccountTransfer updateAccount={updateAccount}/>}
           <div className="container">
             <table className="table table-striped">
               <thead>

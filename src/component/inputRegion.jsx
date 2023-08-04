@@ -145,9 +145,6 @@ const InputRegion = (props) => {
             {/* <label className="btn btn-warning active" onClick={getStockOptions} >
               <input type="radio" name="stockOption" id="individual" value='individual' autoComplete="off" /> 個別股
             </label> */}
-            {/*<label className="btn btn-warning" onClick={this.getStockOptions} >*/}
-            {/*  <input type="radio" name="stockOption" id="mutual" value='mutual' autoComplete="off" /> 共同股*/}
-            {/*</label>*/}
           {/* </div> */}
           <button className={"btn btn-primary query-region-submit "+ (isMobile ? ' from-group col-md-2' : ' from-group col-md-2' +
             ' query-region-submit') } style={{...getStyleOfButton(), margin: '10px 0px'}} onClick={()=> queryRegion(inputInfo.queryState)}>查詢送出</button>

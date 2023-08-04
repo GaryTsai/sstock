@@ -79,19 +79,19 @@ const api = {
     return stockData;
   },
 
-  async insertNewData(data, route){
+  async insertNewData(data){
     let timestamp = Math.floor(Date.now() / 1000);
     let cost = Math.floor(data.price * 1000 * data.sheet * 1.001425);
-    let US_cost = data.price * data.sheet;
     let  getDataRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stock_info` );
-      await getDataRef.child(timestamp.toString()).set({
+
+    await getDataRef.child(timestamp.toString()).set({
       timestamp: timestamp,
       date: data.date,
       name: data.name,
       number: data.number,
       price: data.price,
       sheet: data.sheet,
-      cost: route === "US_account" ?　US_cost : cost,
+      cost: cost,
       income:0,
       sale_cost:0,
       sale_date:0,
@@ -115,18 +115,16 @@ const api = {
     });
   },
 
-  async updateStock(salePrice, saleSheet, stock, route){
+  async updateStock(salePrice, saleSheet, stock){
       const isDayTrading = stock.date === d.dateFormat(new Date());
       let income = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.001425) - Math.floor(salePrice * 1000 * saleSheet * 0.003 * (isDayTrading ? 0.5 : 1)) - stock.cost;
       let sale_cost = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.001425) - Math.floor(salePrice * 1000 * saleSheet * 0.003 * (isDayTrading ? 0.5 : 1));
-      let US_income = salePrice * saleSheet - stock.cost;
-      let US_sale_cost = salePrice * saleSheet;
       let sale_date = d.dateFormat(new Date());
-      let  getDataRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stock_info` );
+      let getDataRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stock_info` );
 
       await getDataRef.child(stock.timestamp).update({
-        income: route === 'US_account' ? US_income : income,
-        sale_cost: route === 'US_account' ? US_sale_cost : sale_cost,
+        income: income,
+        sale_cost: sale_cost,
         sale_date: sale_date,
         sale_price: salePrice,
         sale_sheet: saleSheet,
@@ -155,7 +153,7 @@ const api = {
     return accountRecord;
   },
 
-  async tradeForAccount(transferInfo, whichAccount){
+  async tradeForAccount(transferInfo){
     let accountData = [];
     let transfer_price = 0;
     let date = d.dateFormat(new Date());
@@ -167,12 +165,12 @@ const api = {
         accountData = snapshot.val();
     });
     if(transferInfo.transferStatus === "transferOut"){
-      transfer_price = whichAccount === 'Taiwan_account' ? parseInt(transferInfo.price) * -1 : parseFloat(transferInfo.price) * -1;
+      transfer_price = parseFloat(transferInfo.price) * -1;
     }else{
-      transfer_price = whichAccount === 'Taiwan_account' ? parseInt(transferInfo.price) : parseFloat(transferInfo.price);
+      transfer_price = parseFloat(transferInfo.price);
     }
-    let money = ((whichAccount === 'Taiwan_account' ? parseInt(accountData.accountMoney) : parseFloat(accountData.accountMoney)) + transfer_price);
-    let stock = (whichAccount === 'Taiwan_account' ? parseInt(accountData.accountStock) : parseFloat(accountData.accountStock));
+    let money = parseFloat(accountData.accountMoney) + transfer_price;
+    let stock = parseFloat(accountData.accountStock);
     let summary = money + stock;
 
     await getRefOfAccount.update({
@@ -193,7 +191,7 @@ const api = {
     return ;
 
   },
-  async updateAccountRecord(stockInfo, sale, route){
+  async updateAccountRecord(stockInfo, sale){
     let timestamp = Math.floor(Date.now() / 1000);
     let transfer_date = d.dateFormat(new Date())
     let accountData = [];
@@ -206,28 +204,17 @@ const api = {
     let cost = 0;
     let salePrice = 0;
     const isDayTrading = stockInfo.date == d.dateFormat(new Date());
-    if(route !== "US_account") {
-      if (sale) {
-        salePrice = Math.round(stockInfo.price * 1000 * stockInfo.sheet) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * (isDayTrading ? 0.5 : 1) * 0.003);
-        money = parseInt(accountData.accountMoney) + salePrice;
-        stock = parseInt(accountData.accountStock) - stockInfo.cost;
-      } else {
-        cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet) + Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425);
-        money = parseInt(accountData.accountMoney) - cost;
-        stock = parseInt(accountData.accountStock) + cost;
-      }
-    }else{
-      if (sale) {
-        salePrice =  parseFloat(stockInfo.price) * parseFloat(stockInfo.sheet);
-        cost = parseFloat(stockInfo.cost);
-        money = parseFloat(accountData.accountMoney) + parseFloat(salePrice);
-        stock = parseFloat(accountData.accountStock) - cost;
-      } else{
-        cost = parseFloat(stockInfo.price) * parseFloat(stockInfo.sheet);
-        money = parseFloat(accountData.accountMoney) - cost;
-        stock =  parseFloat(accountData.accountStock) + cost;
-      }
+    
+    if (sale) {
+      salePrice = Math.round(stockInfo.price * 1000 * stockInfo.sheet) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * (isDayTrading ? 0.5 : 1) * 0.003);
+      money = parseInt(accountData.accountMoney) + salePrice;
+      stock = parseInt(accountData.accountStock) - stockInfo.cost;
+    } else {
+      cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet) + Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425);
+      money = parseInt(accountData.accountMoney) - cost;
+      stock = parseInt(accountData.accountStock) + cost;
     }
+
     money = parseFloat(money.toFixed(2));
     stock = parseFloat(stock.toFixed(2));
     await getRefOfAccount.update({

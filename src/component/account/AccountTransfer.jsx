@@ -11,20 +11,18 @@ const initialState = {
 };
 
 const AccountTransfer = (props) => {
+
   const [accountInfo, setAccountInfo] = useState(initialState)
-  
-  const inputSource = source => {
-    setAccountInfo({...accountInfo, source
-    })
-  };
+
+  const inputSource = source => setAccountInfo({...accountInfo, source})
 
   const submitTrade = () => {
     const {price, transferStatus, source} = accountInfo;
-    const {whichAccount, callback} = props;
+    const {updateAccount} = props;
     if (transferStatus && source && !isNaN(price)) {
       const transferInfo = {price: price, transferStatus: transferStatus, source: source};
-      api.tradeForAccount(transferInfo, whichAccount).then(() => {
-        callback(whichAccount);
+      api.tradeForAccount(transferInfo).then(() => {
+        updateAccount();
       });
       setAccountInfo({...accountInfo, 
         price: '',

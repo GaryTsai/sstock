@@ -46,11 +46,11 @@ const Input = (props) => {
     })
   };
 
-  const submitStock = route => {
+  const submitStock = () => {
     const {date, name, number, price, sheet} = inputInfo;
     if (date && name && number && !isNaN(price) && !isNaN(sheet)) {
       const stockInfo = {'date': date, 'name': name, 'number': number, 'price': price, 'sheet': sheet};
-      api.updateAccountRecord(stockInfo, false, route);
+      api.updateAccountRecord(stockInfo, false);
       props && props.callback(stockInfo);
       setInputInfo({
         'name': '',
@@ -69,7 +69,6 @@ const Input = (props) => {
 
 
   const {datePickerDate, name, number, price, sheet} = inputInfo;
-  const {route} = props;
   const isMobile = browserUtils.isMobile();
 
   return (
@@ -84,7 +83,7 @@ const Input = (props) => {
                   onChange={(c) => inputName(c.target.value)} value={name} autoComplete="on"/>
         </div>
         <div className="from-group col-md-2 input-sale-info-frame">
-          <input type="text" className="form-control" placeholder={route === 'US_account' ?  "美股代號" : "編號" }
+          <input type="text" className="form-control" placeholder={"編號" }
                   onChange={(c) => inputNumber(c.target.value)} value={number} autoComplete="on"/>
         </div>
         <div className="from-group col-md-2 input-sale-info-frame">
@@ -92,11 +91,11 @@ const Input = (props) => {
                   onChange={(c) => inputPrice(c.target.value)} value={price} autoComplete="on"/>
         </div>
         <div className="from-group col-md-2 input-sale-info-frame">
-          <input type="text" className="form-control" placeholder={route === 'US_account' ?  "股數" : "張數" }
+          <input type="text" className="form-control" placeholder={"張數" }
                   onChange={(c) => inputSheet(c.target.value)} value={sheet} autoComplete="on"/>
         </div>
         <button className="btn btn-primary from-group col-sm-12 col-md-2 input-sale-frame" type="submit"
-                onClick={() => submitStock(route)}>確認買入
+                onClick={() => submitStock()}>確認買入
         </button>
       </div>
     </div>

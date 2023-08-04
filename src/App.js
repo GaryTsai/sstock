@@ -16,7 +16,6 @@ import Account from './component/account/account';
 import Navbar from './component/navbar/navbar';
 import Input from './component/input';
 import Stocks from './component/stock/stocks';
-import Usstocks from './component/usstock/stocks';
 import browserUtils from "./utils/browserUtils";
 import Login from './component/login/login';
 import settings from './component/settings/settings'
@@ -31,7 +30,7 @@ const initialState = {
   allStocks: [],
   showStocks: [],
   totalCost: 0,
-  route: 'Taiwan_account',
+  route: 'accountInfo',
   profitAndLoss: 0,
   profit: 0,
   saleCost: 0,
@@ -58,27 +57,6 @@ export default class App extends Component {
   }
 
   updateAllData = () => {
-    const {route} = this.state;
-    settings.route = route;
-    // if(route === "US_account") {
-    //   settings.country = 'us';
-    //   api.getAllData().then((stockData) => {
-    //       this.setState({
-    //         lastYearROI: stockData.lastYearROI,
-    //         saleStatus: 'US_all',
-    //         showStocks: stockData.showStocks,
-    //         allStocks: stockData.allStocks,
-    //         saleStocks: stockData.saleStocks,
-    //         unSaleStocks: stockData.unSaleStocks,
-    //         totalCost: stockData.totalCost,
-    //         profitAndLoss: stockData.profitAndLoss,
-    //         saleCost: stockData.saleCost,
-    //         profit: (stockData.profitAndLoss / stockData.saleCost * 100).toFixed(2),
-    //         loading: false
-    //       })
-    //     }
-    //   );
-    // }else{
       api.getAllData().then((stockData) => {
         settings.country = 'tw';
           this.setState({
@@ -102,7 +80,7 @@ export default class App extends Component {
   inputData = data => {
     let self = this;
     const route = this.state.route
-    api.insertNewData(data, route).then(() => {
+    api.insertNewData(data).then(() => {
       self.updateAllData()
     });
   };
@@ -115,10 +93,9 @@ export default class App extends Component {
   };
 
   saleStock = (salePrice, saleSheet, stock) => {
-    const {route} = this.state;
-    api.updateStock(salePrice, saleSheet, stock, route).then(() => {
+    api.updateStock(salePrice, saleSheet, stock).then(() => {
       const stockInfo = {'price': salePrice, 'sheet': saleSheet, 'cost': stock.cost, 'date': stock.date};
-      api.updateAccountRecord(stockInfo, true, route);
+      api.updateAccountRecord(stockInfo, true);
       this.updateAllData()
       }
     )
@@ -129,7 +106,7 @@ export default class App extends Component {
     let accountRecord = [];
     let accountInfo = [];
     let timestamp = stock.timestamp
-    
+
     let getAccountRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}` );
     await getAccountRef.once('value').then((snapshot) => {
       snapshot.forEach(element => {
@@ -191,16 +168,15 @@ export default class App extends Component {
   };
 
   logOut = () =>{
-    this.updateAccountDataForDeleteStock('1689052041')
-    // localStorage.removeItem('account-stock');
-    // this.setState({logInStatus: false})
+    localStorage.removeItem('account-stock');
+    this.setState({logInStatus: false})
   };
 
   changeRoute = (route) => {
     switch (route) {
-      case 'twChart':
-      case 'Taiwan_history':
-      case 'Taiwan_account':
+      case 'balanceChart':
+      case 'stockHistory':
+      case 'accountInfo':
         settings.country = 'tw';
         break;
       // case 'US_account':
@@ -331,19 +307,19 @@ export default class App extends Component {
           <Navbar lastYearROI={lastYearROI} totalCost={this.state.totalCost} profitAndLoss={this.state.profitAndLoss}
                   route={route} changeRoute={this.changeRoute} profit={this.state.profit} logOutCallBack={this.logOut}
                   saleCost={this.state.saleCost} handleMerge={this.handleMerge} isMerge={isMerge}/>
-          {browserUtils.isMobile() && !this.state.saleIsOpen && (route === 'Taiwan_account' || route === 'US_account') &&
+          {browserUtils.isMobile() && !this.state.saleIsOpen && (route === 'accountInfo') &&
           <button className="btn btn-warning from-group col-sm-2 col-md-12 input-sale-frame" type="submit"
                   onClick={() => this.saleIsOpen(true)}>買入</button>}
-          {browserUtils.isMobile() && this.state.saleIsOpen && (route === 'Taiwan_account' || route === 'US_account') &&
+          {browserUtils.isMobile() && this.state.saleIsOpen && (route === 'accountInfo') &&
           <button className="btn btn-secondary from-group col-sm-2 col-md-12 input-sale-frame" type="submit"
                   onClick={() => this.saleIsOpen(false)}>隱藏</button>}
-          {this.getSaleIsStatus() && (route === 'Taiwan_account' || route === 'US_account') &&
+          {this.getSaleIsStatus() && (route === 'accountInfo') &&
           <Input callback={this.inputData} route={route}/>}
-          {route === 'Taiwan_account' &&
+          {route === 'accountInfo' &&
           <Stocks hideFiled={false} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={result}
                   deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={route} isMerge={isMerge}/>}
-          {route === 'twChart' &&<TwChart hideFiled={false} allStocks={showStocks} route={route}/>}
-          {route === 'Taiwan_history' &&
+          {route === 'balanceChart' &&<TwChart hideFiled={false} allStocks={showStocks} route={route}/>}
+          {route === 'stockHistory' &&
           <Stocks hideFiled={true} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={showStocks}
                   deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={route}
                   queryDataCallback={this.updateQueryData} resetCallBack={this.reset} isMerge={false}/>}

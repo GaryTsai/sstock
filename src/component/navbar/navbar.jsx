@@ -59,15 +59,15 @@ const Navbar = (props) => {
   return (
     <div>
       <nav className="navbar navbar-expand-md navbar-light " style={{backgroundColor: 'rgb(52 149 220)', cursor: 'pointer'}}>
-        <div className="navbar-brand"  style={route === 'Taiwan_account' ? {...getActiveStyle(), padding: '5px'} : {}} onClick={e => changeRoute('Taiwan_account')}>台灣股票</div>
+        <div className="navbar-brand"  style={route === 'accountInfo' ? {...getActiveStyle(), padding: '5px'} : {}} onClick={e => changeRoute('accountInfo')}>台灣股票</div>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarCollapse" style={{ flexBasis: "100%" }}>
           <ul className="navbar-nav mr-auto" style={{alignItems: isMobile ? "unset" : "center"}}>
-            <li className={`nav-item`} data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'Taiwan_history' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available'}}>
-              <div className="nav-link"  onClick={e => changeRoute('Taiwan_history')}>台股歷史紀錄 <span className="sr-only"></span></div>
+            <li className={`nav-item`} data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'stockHistory' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available'}}>
+              <div className="nav-link"  onClick={e => changeRoute('stockHistory')}>台股歷史紀錄 <span className="sr-only"></span></div>
             </li>
             {/* <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'US_account' ? this.getActiveStyle() : {}} >
               <div className="nav-link"　style={{color: '#e91e63'}} onClick={e => changeRoute('US_account')} >美股證卷</div>
@@ -75,10 +75,10 @@ const Navbar = (props) => {
             <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'account' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available'}} >
               <div className="nav-link" onClick={e => changeRoute('account')} >我的帳戶</div>
             </li>
-            <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'twChart' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available'}} >
-              <div className="nav-link" onClick={e => changeRoute('twChart')} >損益圖表</div>
+            <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={route === 'balanceChart' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available'}} >
+              <div className="nav-link" onClick={e => changeRoute('balanceChart')} >損益圖表</div>
             </li>
-            {route === 'Taiwan_account' && <FormGroup sx={{whiteSpace: "nowrap", width: '-webkit-fill-available'}}>
+            {route === 'accountInfo' && <FormGroup sx={{whiteSpace: "nowrap", width: '-webkit-fill-available'}}>
               <FormControlLabel sx={{marginBottom: 0}}control={<Switch checked={isMerge} onChange={() => props.handleMerge()} color="warning"/>} label="股票統整" />
             </FormGroup>}
             {isMobile &&<li className="nav-item"  data-toggle="collapse" data-target=".navbar-collapse.show" style={{marginTop: isMobile ? "5px": "0px", marginLeft: '5px', position: isMobile ? "unset": "absolute" , right: isMobile ? "unset" : "5px"}}>
@@ -86,10 +86,10 @@ const Navbar = (props) => {
             </li>}
           </ul>
         </div>
-        {(route === 'Taiwan_account' || route === 'US_account') && <div style={{ padding: '5px 0px',...getComputeStyleForMobile()}}>
+        {(route === 'accountInfo') && <div style={{ padding: '5px 0px',...getComputeStyleForMobile()}}>
               <div style={isMobile ? styles.reportFormatMobile : styles.reportFormat}><div>目前投入總成本:</div><div> {totalCost.toFixed(2)}元</div></div>
             </div>}
-        {(route === 'Taiwan_history' || route === 'US_account') && <div style={{display: 'inherit',...getComputeStyleForMobile()}}>
+        {(route === 'stockHistory') && <div style={{display: 'inherit',...getComputeStyleForMobile()}}>
               <div style={isMobile ? styles.reportMobile : styles.report}>
               <div style={isMobile ? styles.reportFormatMobile : styles.reportFormat}><div>投入成本:</div><div>{saleCost.toFixed(2)}元</div></div>
               <div style={isMobile ? styles.reportFormatMobile : styles.reportFormat}><div>總損益:</div> <div>{profitAndLoss.toFixed(2)}元</div></div>

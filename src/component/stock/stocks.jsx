@@ -27,7 +27,7 @@ const Stocks = (props) => {
   const { allStocks, deleteCallback, queryDataCallback, saleStockCallback, resetCallBack, hideFiled, saleStatus, route, isMerge }= props;
   const { isQueryOpen }= stockInfo;
   const isMobile = browserUtils.isMobile();
-  const isShowQueryOption = route === 'Taiwan_history';
+  const isShowQueryOption = route === 'stockHistory';
 
   return (
     <div>
@@ -41,7 +41,7 @@ const Stocks = (props) => {
           <th scope="col">#</th>
           {!hideFiled && isMerge === false &&<th scope="col">賣出</th>}
           { saleStatus !== 'all' &&((saleStatus === 'sale') ? <th scope="col">賣出日期</th> : <th scope="col">購買日期</th> )}
-          {(saleStatus === 'all' && route !== 'Taiwan_account') && <th scope="col">賣出日期</th>}
+          {(saleStatus === 'all' && route !== 'accountInfo') && <th scope="col">賣出日期</th>}
           { saleStatus === 'all'  && isMerge === false && <th scope="col">購買日期</th>}
           <th scope="col">股票名稱</th>
           <th scope="col">編號</th>
@@ -58,10 +58,10 @@ const Stocks = (props) => {
         <tbody>
         {
           allStocks !== 'No Data' && (allStocks.length !== 0) && allStocks.map((stock, index) => (
-          <Stock hideFiled={hideFiled} saleStatus={saleStatus} key={stock.number+index} stock={stock} index={index+1} route={route} stockSaleCallback = {saleStockCallback} delete={index => deleteCallback(index)} isMerge = {isMerge}/>
+          <Stock hideFiled={hideFiled} saleStatus={saleStatus} key={stock.number+index} stock={stock} index={index+1} route={route} stockSaleCallback = {saleStockCallback} deleteCallback={index => deleteCallback(index)} isMerge = {isMerge}/>
           ))
         }
-        {allStocks.length == 0 && route === 'Taiwan_history' && <div style={{
+        {allStocks.length == 0 && route === 'stockHistory' && <div style={{
           position: 'absolute',
           top: 0,
           left: 0,
