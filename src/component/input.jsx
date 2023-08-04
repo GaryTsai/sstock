@@ -5,13 +5,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import browserUtils from "./../utils/browserUtils";
 
 const initialState = {
-  'date': new Date(),
-  'name': '',
-  'number': '',
-  'code_name':'',
-  'price': '',
-  'sheet': '',
-  'datePickerDate': new Date()
+  date: new Date(),
+  name: '',
+  number: '',
+  code_name:'',
+  price: '',
+  sheet: '',
+  datePickerDate: new Date()
 };
 
 const Input = (props) => {
@@ -49,14 +49,15 @@ const Input = (props) => {
   const submitStock = () => {
     const {date, name, number, price, sheet} = inputInfo;
     if (date && name && number && !isNaN(price) && !isNaN(sheet)) {
-      const stockInfo = {'date': date, 'name': name, 'number': number, 'price': price, 'sheet': sheet};
+      const stockInfo = {date: date, name: name, number: number, price: parseFloat(price), sheet: parseFloat(sheet)};
       api.updateAccountRecord(stockInfo, false);
       props && props.callback(stockInfo);
       setInputInfo({
-        'name': '',
-        'number': '',
-        'price': '',
-        'sheet': '', ...inputInfo
+        ...inputInfo,
+        name: '',
+        number: '',
+        price: '',
+        sheet: ''
       })
     } else {
       return alert('不許有任何一個為空');

@@ -44,8 +44,8 @@ const Record = (props) => {
   return (
     <tr>
       <th scope="row">{index}</th>
-      <td>{parseFloat(record.account_record_Money).toFixed(0)}</td>
-      <td>{parseFloat(record.account_record_Stock).toFixed(0)}</td>
+      <td>{record.account_record_Money}</td>
+      <td>{record.account_record_Stock}</td>
       <td>{record.transfer}</td>
       <td>{record.transferStatus}</td>
       <td>{record.transferTime}</td>

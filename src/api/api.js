@@ -165,24 +165,24 @@ const api = {
         accountData = snapshot.val();
     });
     if(transferInfo.transferStatus === "transferOut"){
-      transfer_price = parseFloat(transferInfo.price) * -1;
+      transfer_price = transferInfo.price * -1;
     }else{
-      transfer_price = parseFloat(transferInfo.price);
+      transfer_price = transferInfo.price;
     }
     let money = parseFloat(accountData.accountMoney) + transfer_price;
     let stock = parseFloat(accountData.accountStock);
     let summary = money + stock;
 
     await getRefOfAccount.update({
-      accountMoney: money.toFixed(0),
-      accountStock: stock.toFixed(0),
-      summary: summary.toFixed(0)
+      accountMoney: money,
+      accountStock: stock,
+      summary: summary
     });
 
     await getRefOfAccountRecord.child(timestamp.toString()).set({
       timestamp: timestamp,
-      account_record_Money: money.toFixed(0),
-      account_record_Stock: stock.toFixed(0),
+      account_record_Money: money,
+      account_record_Stock: stock,
       source: transferInfo.source,
       transfer: transferInfo.price,
       transferStatus: transferInfo.transferStatus === "transferIn" ? '存入(帳戶)': '轉出(帳戶)',
@@ -207,20 +207,18 @@ const api = {
     
     if (sale) {
       salePrice = Math.round(stockInfo.price * 1000 * stockInfo.sheet) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * (isDayTrading ? 0.5 : 1) * 0.003);
-      money = parseInt(accountData.accountMoney) + salePrice;
-      stock = parseInt(accountData.accountStock) - stockInfo.cost;
+      money = accountData.accountMoney + salePrice;
+      stock = accountData.accountStock - stockInfo.cost;
     } else {
       cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet) + Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425);
-      money = parseInt(accountData.accountMoney) - cost;
-      stock = parseInt(accountData.accountStock) + cost;
+      money = accountData.accountMoney - cost;
+      stock = accountData.accountStock + cost;
     }
 
-    money = parseFloat(money.toFixed(2));
-    stock = parseFloat(stock.toFixed(2));
     await getRefOfAccount.update({
       accountMoney: money,
       accountStock: stock,
-      summary: (money + stock).toFixed(2)
+      summary: (money + stock)
     });
 
     let getRefOfAccountRecord = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/account_record` );
@@ -239,7 +237,7 @@ const api = {
 
   async getLastYearROI(items){
     let accountInfo  = await this.getAccount();
-    let summary = parseInt(accountInfo.summary);
+    let summary = accountInfo.summary;
     let lastYearStartDate = d.dateFormat(new Date(new Date().getFullYear() - 1,0,1));
     let lastYearEndDate = d.dateFormat(new Date(new Date().getFullYear() - 1,11,31));
     let thisYearStartDate = d.dateFormat(new Date(new Date().getFullYear(),0,1));
@@ -258,7 +256,7 @@ const api = {
     let accountRecords  = await this.getAccountRecord();
     let thisYearAccountRecords = accountRecords.filter(a => (thisYearStartDate <= a.transferTime && a.transferTime <= thisYearEndDate));
     for (let record in thisYearAccountRecords) {
-      inAccountOfThisYear += thisYearAccountRecords[record].source !== '股票' ? parseInt(thisYearAccountRecords[record].transfer) : 0;
+      inAccountOfThisYear += thisYearAccountRecords[record].source !== '股票' ? thisYearAccountRecords[record].transfer : 0;
     }
     let ROI = (incomeOfLastYear/(summary - incomeOfThisYear - inAccountOfThisYear));
     return ROI.toFixed(4)

@@ -38,7 +38,7 @@ const Stock = (props) =>{
     return Number(n) === n && n % 1 !== 0;
   }
   const { stock, saleStatus, index, route, isMerge } = props;
-  const averagePrice = stock.price * 1.001425.toFixed(2);
+  const averagePrice = parseFloat((stock.price * 1.001425).toFixed(2));
   const handlingFee = stock.price * 1000 * stock.sheet * 0.001424 < 20 ? 20 : Math.round(stock.price * 1000 * stock.sheet * 0.001424);
 
   return (
@@ -99,9 +99,9 @@ const Stock = (props) =>{
           { route !=='accountInfo' && isMerge === false &&(saleStatus === 'all' || saleStatus === 'unsale') && (stock.status === 'unsale' ? <td>{stock.date}</td>: <td>{stock.date}</td>)}
           <td>{stock.name}</td>
           <td>{stock.number}</td>
-          <td>{isMerge ? (averagePrice / (stock.sheet)).toFixed(2) : averagePrice }</td>
-          <td>{isFloat(stock.sheet) ? parseFloat(stock.sheet).toFixed(3) : stock.sheet}</td>
-          <td>{isMerge ? parseFloat(stock.cost - averagePrice * 1000).toFixed(0) : Math.floor(handlingFee)}</td>
+          <td>{isMerge ? (averagePrice / (stock.sheet)).toFixed(4) : averagePrice }</td>
+          <td>{isFloat(stock.sheet) ? stock.sheet.toFixed(3) : stock.sheet}</td>
+          <td>{isMerge ? (stock.cost - averagePrice * 1000).toFixed(0) : Math.floor(handlingFee)}</td>
           <td>{Math.floor(stock.cost)}</td>
           <td>{stock.status === "unsale" ? '未賣出' : '已賣出'}</td>
           <td>{Math.floor(stock.sale_cost)}</td>

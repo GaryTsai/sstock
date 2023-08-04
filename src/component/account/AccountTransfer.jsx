@@ -51,7 +51,6 @@ const AccountTransfer = (props) => {
 
   const getTransferOptions = (e) => setAccountInfo({...accountInfo, transferStatus: e.target.value});
 
-
   return (
     <div style={{margin: '5px 5px'}}>
       <div className="form-row">

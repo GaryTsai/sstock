@@ -31,7 +31,7 @@ const Account = () => {
     })
   }, [])
 
-  const updateAccount = () =>{
+  const updateAccount = () => {
     api.getAccount().then((account)=> {
       api.getAccountRecord().then((data)=>{
         setAccountInfo({
@@ -77,8 +77,6 @@ const Account = () => {
         <div className="nav nav-tabs" id="nav-tab" role="tablist">
           <a className="nav-item nav-link active" style={{width: '100%', border: '0px'}} id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
               aria-controls="nav-home" aria-selected="true">台股資產</a>
-          {/* <a className="nav-item nav-link"  style={{width: '50%'}} id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
-              aria-controls="nav-profile" aria-selected="false" onClick={() => this.selectAccount('US_account')}>美股資產</a> */}
         </div>
       </nav>
       <div className="tab-content" id="nav-tabContent">
@@ -86,6 +84,7 @@ const Account = () => {
           {browserUtils.isMobile() && !isAssetTransfer && <button className="btn btn-warning from-group col-sm-2 col-md-12 input-sale-frame" type="submit" onClick={() => changeAssetTransfer(true)}>資產轉移</button>}
           {browserUtils.isMobile() && !isAssetTransfer  && <button className="btn btn-secondary from-group col-sm-2 col-md-12 input-sale-frame" type="submit" onClick={() => changeAssetTransfer(false)}>隱藏</button>}
           {isAssetTransfer && <AccountTransfer updateAccount={updateAccount}/>}
+          {!browserUtils.isMobile() && <AccountTransfer updateAccount={updateAccount}/>}
           <div className="container">
             <table className="table table-striped">
               <thead>
@@ -99,9 +98,9 @@ const Account = () => {
               <tbody>
               <tr>
                 <td>{acTime}</td>
-                <td>{parseFloat(acMoney).toFixed(0)}</td>
-                <td>{parseFloat(acStock).toFixed(0)}</td>
-                <td>{parseFloat(acSummary).toFixed(0)}</td>
+                <td>{acMoney}</td>
+                <td>{acStock}</td>
+                <td>{acSummary}</td>
               </tr>
               </tbody>
             </table>

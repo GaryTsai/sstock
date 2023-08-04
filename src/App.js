@@ -119,11 +119,11 @@ export default class App extends Component {
     Object.entries(newRecords).forEach(([key, record] )=> {
         if(deleteRecord[timestamp].timestamp < record.timestamp) {
           if(deleteRecord[timestamp].transferStatus === '存入') {
-            record.account_record_Money = Number(record.account_record_Money) + deleteRecord[timestamp].transfer
-            record.account_record_Stock = Number(record.account_record_Stock) - deleteRecord[timestamp].transfer
+            record.account_record_Money = record.account_record_Money + deleteRecord[timestamp].transfer
+            record.account_record_Stock = record.account_record_Stock - deleteRecord[timestamp].transfer
           } else {
-            record.account_record_Money = Number(record.account_record_Money) - deleteRecord[timestamp].transfer
-            record.account_record_Stock = Number(record.account_record_Stock) + deleteRecord[timestamp].transfer
+            record.account_record_Money = record.account_record_Money - deleteRecord[timestamp].transfer
+            record.account_record_Stock = record.account_record_Stock + deleteRecord[timestamp].transfer
           }
         }
     });
@@ -131,8 +131,8 @@ export default class App extends Component {
     
     api.getAccount().then(async (account)=> {
         let getRefOfAccount = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/account_summary` );  
-        let accountMoney = parseInt(account.accountMoney)
-        let accountStock = parseInt(account.accountStock)
+        let accountMoney = account.accountMoney
+        let accountStock = account.accountStock
 
         if(deleteRecord[timestamp].transferStatus === '存入') {
           accountMoney += deleteRecord[timestamp].transfer
@@ -142,8 +142,8 @@ export default class App extends Component {
           accountStock += deleteRecord[timestamp].transfer
         }
         await getRefOfAccount.update({
-          accountMoney: accountMoney.toFixed(0),
-          accountStock: accountStock.toFixed(0),
+          accountMoney: accountMoney,
+          accountStock: accountStock
         });
       });
     await firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stock_info`).child(timestamp).update({
@@ -167,7 +167,7 @@ export default class App extends Component {
     else return;
   };
 
-  logOut = () =>{
+  logOut = async () =>{
     localStorage.removeItem('account-stock');
     this.setState({logInStatus: false})
   };
@@ -178,10 +178,6 @@ export default class App extends Component {
       case 'stockHistory':
       case 'accountInfo':
         settings.country = 'tw';
-        break;
-      // case 'US_account':
-      // case 'US_history':
-      //   settings.country = 'us';
         break;
     }
     this.setState({route: route, showStocks: []}, ()=>this.updateAllData());
@@ -196,21 +192,21 @@ export default class App extends Component {
           income: 0,
           name: prev.name,
           number: prev.number,
-          price: Number(prev.price) * Number(prev.sheet),
+          price: prev.price * prev.sheet,
           sale_cost: 0,
           sale_date: 0,
           sale_price: 0,
           sale_sheet: 0,
-          sheet: Number(prev.sheet),
+          sheet: prev.sheet,
           status: "unsale"
         })
       } else {
         const index = _.findIndex(mergeResult, (e) => _.trim(e.number) === _.trim(prev.number), 0); 
         mergeResult[index] = {
           ...mergeResult[index],
-          cost: Math.round(Number(mergeResult[index].cost) + Number(prev.cost), 2),
-          price: Number(mergeResult[index].price) + (Number(prev.price)*Number(prev.sheet)),
-          sheet: Number(mergeResult[index].sheet) + Number(prev.sheet),
+          cost: mergeResult[index].cost + prev.cost,
+          price: mergeResult[index].price + (prev.price * prev.sheet),
+          sheet: mergeResult[index].sheet + prev.sheet,
         }
       }
       return mergeResult
@@ -323,10 +319,6 @@ export default class App extends Component {
           <Stocks hideFiled={true} saleStatus={this.state.saleStatus} inputData={inputData} allStocks={showStocks}
                   deleteCallback={this.deleteStock} saleStockCallback={this.saleStock} route={route}
                   queryDataCallback={this.updateQueryData} resetCallBack={this.reset} isMerge={false}/>}
-          {/* {route === 'US_account' &&
-          <Usstocks hideFiled={false} saleStatus={'US_all'} route={route} allStocks={showStocks}
-                    saleStockCallback={this.saleStock} deleteCallback={this.deleteStock}
-                    queryDataCallback={this.updateQueryData} resetCallBack={this.reset}/>} */}
           {route === 'account' && <Account route={route}/>}
         </div>
       )
