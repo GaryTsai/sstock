@@ -169,8 +169,9 @@ const api = {
     }else{
       transfer_price = transferInfo.price;
     }
-    let money = parseFloat(accountData.accountMoney) + transfer_price;
-    let stock = parseFloat(accountData.accountStock);
+
+    let money = accountData.accountMoney + transfer_price;
+    let stock = accountData.accountStock;
     let summary = money + stock;
 
     await getRefOfAccount.update({

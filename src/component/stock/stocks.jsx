@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Stock from './stock';
 import InputRegion from "../inputRegion";
 import browserUtils from "../../utils/browserUtils";
-import { color } from 'highcharts';
+import { useSelector } from 'react-redux';
 
 const initialState = {
   allData:[],
@@ -12,7 +12,8 @@ const initialState = {
 };
 const Stocks = (props) => {
   const [stockInfo, setStockInfo] = useState(initialState)
-  
+  const { contentLoading } = useSelector((state) => state.mutualStateReducer)
+
   const queryData = (stockInfo) => props.queryDataCallback(stockInfo);
 
   const checkQueryOpen = status => setStockInfo({ isQueryOpen:status, ...stockInfo });
@@ -61,7 +62,7 @@ const Stocks = (props) => {
           <Stock hideFiled={hideFiled} saleStatus={saleStatus} key={stock.number+index} stock={stock} index={index+1} route={route} stockSaleCallback = {saleStockCallback} deleteCallback={index => deleteCallback(index)} isMerge = {isMerge}/>
           ))
         }
-        {allStocks.length == 0 && route === 'stockHistory' && <div style={{
+        {contentLoading && <div style={{
           position: 'absolute',
           top: 0,
           left: 0,

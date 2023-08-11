@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import browserUtils from "../../utils/browserUtils";
 import api from "../../api/api";
 import "react-datepicker/dist/react-datepicker.css";
-
+import { useDispatch } from 'react-redux';
+import { changeContentLoading } from './../../slices/mutualState';
 const initialState = {
   date: new Date(),
   price: '',
@@ -13,14 +14,21 @@ const initialState = {
 const AccountTransfer = (props) => {
 
   const [accountInfo, setAccountInfo] = useState(initialState)
+  const dispatch = useDispatch();
 
-  const inputSource = source => setAccountInfo({...accountInfo, source})
+  const inputSource = source => setAccountInfo({...accountInfo, source: source.trim()})
 
   const submitTrade = () => {
-    const {price, transferStatus, source} = accountInfo;
+    const {price , transferStatus, source} = accountInfo;
     const {updateAccount} = props;
+
+    if(isNaN(price) || price.trim() === '' ){
+      alert('金額欄位請輸入數字')
+      return 
+    }
     if (transferStatus && source && !isNaN(price)) {
-      const transferInfo = {price: price, transferStatus: transferStatus, source: source};
+      dispatch(changeContentLoading(true))
+      const transferInfo = {price: Number(price), transferStatus: transferStatus, source: source};
       api.tradeForAccount(transferInfo).then(() => {
         updateAccount();
       });
@@ -45,9 +53,7 @@ const AccountTransfer = (props) => {
     }
   };
 
-  const handleChange = (price) => {
-    setAccountInfo({...accountInfo, price: price});
-  };
+  const handleChange = price => setAccountInfo({...accountInfo, price: price.trim()})
 
   const getTransferOptions = (e) => setAccountInfo({...accountInfo, transferStatus: e.target.value});
 

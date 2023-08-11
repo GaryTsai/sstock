@@ -4,7 +4,8 @@ import { createSlice } from "@reduxjs/toolkit";
 //     contentLoading: Boolean,
 // }
 const initialState = {
-    loading: true,
+    loading: false,
+    contentLoading: false,
     isMerge: false,
     logInStatus: false,
 }
@@ -12,6 +13,9 @@ export const mutualStateSlice = createSlice({
     name: 'mutualState',
     initialState,
     reducers: {
+        changeContentLoading: (state,action) => {
+            state.contentLoading = action.payload
+        },
         changeLoading: (state,action) => {
             state.loading = action.payload
         },

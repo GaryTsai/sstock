@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import utils from "./../utils/dateFormat";
 import browserUtils from "./../utils/browserUtils";
 import "./styles.css";
@@ -16,13 +16,14 @@ const initialState = {
 
 const InputRegion = (props) => {
   const [inputInfo, setInputInfo] = useState(initialState)
+  const timeRegionInputRef = useRef({})
 
   useEffect(() => {
     setInputInfo({...inputInfo, date: utils.dateFormat(new Date()),dateRegion1: utils.dateFormat(new Date()),dateRegion2: utils.dateFormat(new Date()), startStandardDate: utils.dateFormat(new Date()), endStandardDate: utils.dateFormat(new Date())})
   }, [])
 
-  const queryRegion = (region = false) => {
-    const {dateRegion1, dateRegion2, saleStatus, stockStatus} = inputInfo;
+  const queryRegion = (region = '') => {
+    const {dateRegion1, dateRegion2, saleStatus, stockStatus } = inputInfo;
     let stockInfo = {};
     let startDate = new Date();
     let endDate = new Date();
@@ -77,13 +78,34 @@ const InputRegion = (props) => {
     }
   };
 
-  const handleStartDateChange = (date) => setInputInfo({...inputInfo, startStandardDate:date, dateRegion1: date, queryState: ''});
+  const inActiveTimeRegionGroup = () =>{
+    Object.keys(timeRegionInputRef.current).map((option, index)=>{
+      timeRegionInputRef.current[option].classList.remove('active')
+    });   
+  }
 
-  const handleEndDateChange = (date) => setInputInfo({...inputInfo, endStandardDate:date, dateRegion2: date, queryState: ''});
+  const handleDateChange = (date, dateState) => {
+    inActiveTimeRegionGroup()
+
+    if(dateState === 'start'){
+      if(date > inputInfo.endStandardDate){
+        alert('起始時間不可大於結束時間')
+        return
+      }
+      setInputInfo({...inputInfo, startStandardDate:date, dateRegion1: date, queryState: ''});
+    }
+    else{
+      if(date < inputInfo.startStandardDate){
+        alert('結束時間不可小於起始時間')
+        return
+      }
+      setInputInfo({...inputInfo, endStandardDate:date, dateRegion2: date, queryState: ''});
+    }
+  }
 
   const getSaleOptions = (e) => setInputInfo({...inputInfo, saleStatus: e.target.value});
 
-  const getStockOptions = (e) => setInputInfo({...inputInfo, stockStatus: e.target.value});
+  // const getStockOptions = (e) => setInputInfo({...inputInfo, stockStatus: e.target.value});
 
   const getStyleOfButton = () =>{
     if(browserUtils.isMobile()) {
@@ -103,8 +125,9 @@ const InputRegion = (props) => {
     }
   };
 
-  const {startStandardDate, endStandardDate} = inputInfo;
+  const { startStandardDate, endStandardDate } = inputInfo;
   const isMobile = browserUtils.isMobile();
+
   return (
     <div>
         <div className="form-row" style={{margin:'5px', overflowY: isMobile ? 'scroll' : 'unset', whiteSpace: 'nowrap'}}>
@@ -121,31 +144,36 @@ const InputRegion = (props) => {
               <input type="radio" name="saleOption" id="saleOption3" value='unsale'  autoComplete="off" /> 未賣出
             </label>
           </button>
-          <div className={"btn-group col-sm-12 col-md-3" + (isMobile ? " query-region-group-mobile": " query-region-group")}  role="group" aria-label="Basic outlined example" style={{width : isMobile ? 'inherit' :'unset', height: '40px', whiteSpace: 'nowrap'}}>
-            <button type="button" className="btn btn-outline-primary" onClick={()=> setInputInfo({...inputInfo, queryState: 0})} >Today</button>
-            <button type="button" className="btn btn-outline-primary"onClick={()=> setInputInfo({...inputInfo, queryState: 7})}>前 7 日</button>
-            <button type="button" className="btn btn-outline-primary"onClick={()=> setInputInfo({...inputInfo, queryState: 30})}>前 30 日</button>
-            <button type="button" className="btn btn-outline-primary"onClick={()=> setInputInfo({...inputInfo, queryState: 360})}>前三月</button>
-            <button type="button" className="btn btn-outline-primary"onClick={()=> setInputInfo({...inputInfo, queryState: 'yearAgo'})}>去年</button>
-            <button type="button" className="btn btn-outline-primary"onClick={()=> setInputInfo({...inputInfo, queryState: 'thisYear'})}>今年</button>
+          <div className={"btn-group btn-group-toggle col-sm-12 col-md-3" + (isMobile ? " query-region-group-mobile": " query-region-group")} data-toggle="buttons">
+            <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option1'] = el} >
+              <input type="radio" name="options" id="option1" onClick={()=> setInputInfo({...inputInfo, queryState: 0})} /> Today
+            </label>
+            <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option2'] = el} >
+              <input type="radio" name="options" id="option2" onClick={()=> setInputInfo({...inputInfo, queryState: 7})}/> 前 7 日
+            </label>
+            <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option3'] = el} >
+              <input type="radio" name="options" id="option3" onClick={()=> setInputInfo({...inputInfo, queryState: 120})} /> 前三月
+            </label>
+            <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option4'] = el} >
+            <input type="radio" name="options" id="option4" onClick={()=> setInputInfo({...inputInfo, queryState: 'yearAgo'})}/> 去年
+            </label>
+            <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option5'] = el} >
+            <input type="radio" name="options" id="option5" onClick={()=> setInputInfo({...inputInfo, queryState: 'thisYear'})}/> 今年
+            </label>
           </div>
           <div className="col-sm-6 col-md-2" style={{margin:'5px 0', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
-              <div>起始區間:</div>
+              <div>起始:</div>
               <div className="col">
-                <input type="date" className="form-control" placeholder="日期" onChange={(c) => handleStartDateChange(c.target.value)} value={startStandardDate}/>
+                <input type="date" className="form-control" placeholder="日期" onChange={(c) => handleDateChange(c.target.value, 'start')} value={startStandardDate}/>
               </div>
           </div>
           <div  className="col-sm-6 col-md-2" style={{margin:'5px 0', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
-              <div>結束區間:</div>
+              <div>結束:</div>
               <div className="col">
-                <input type="date" className="form-control" placeholder="日期" onChange={(c) => handleEndDateChange(c.target.value)} value={endStandardDate}/>
+                <input type="date" className="form-control" placeholder="日期" onChange={(c) => handleDateChange(c.target.value, 'end')} value={endStandardDate}/>
               </div>
           </div>
-          {/* <div className="btn-group btn-group-toggle from-group col-md-1" data-toggle="buttons" style={{...getStyleOfButton(), margin: '10px 0px'}}> */}
-            {/* <label className="btn btn-warning active" onClick={getStockOptions} >
-              <input type="radio" name="stockOption" id="individual" value='individual' autoComplete="off" /> 個別股
-            </label> */}
-          {/* </div> */}
+
           <button className={"btn btn-primary query-region-submit "+ (isMobile ? ' from-group col-md-2' : ' from-group col-md-2' +
             ' query-region-submit') } style={{...getStyleOfButton(), margin: '10px 0px'}} onClick={()=> queryRegion(inputInfo.queryState)}>查詢送出</button>
         </div>

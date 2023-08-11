@@ -15,7 +15,6 @@ const initialState = {
 };
 
 const Input = (props) => {
-
   const [inputInfo, setInputInfo] = useState(initialState)
 
   useEffect(() => {

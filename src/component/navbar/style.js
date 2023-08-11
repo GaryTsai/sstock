@@ -7,6 +7,7 @@ export default {
     margin: '0px 5px',
     fontSize: '18px',
     whiteSpace: 'nowrap',
+    cursor: 'pointer',
     ':hover': {
       backgroundColor: '#ef0f0f',
     }

@@ -5,6 +5,8 @@ import './account.css'
 import api from '../../api/api'
 import browserUtils from "../../utils/browserUtils";
 import { BiSolidArrowToTop } from "react-icons/bi";
+import { useSelector, useDispatch } from 'react-redux';
+import { changeContentLoading, changeLoading } from './../../slices/mutualState';
 
 const initialState = {
   acTime: '',
@@ -18,6 +20,9 @@ const initialState = {
 const Account = () => {
   const [accountInfo, setAccountInfo] = useState(initialState)
   const [topIconState, setTopIconState] = useState(false)
+
+  const dispatch = useDispatch();
+  const { contentLoading } = useSelector((state) => state.mutualStateReducer)
 
   useEffect(() => {
     updateAccount();
@@ -41,15 +46,17 @@ const Account = () => {
           acSummary: account.summary,
           records:data
         });
+        dispatch(changeContentLoading(false))
+        dispatch(changeLoading(false))
+
       });
     });
   };
 
   const changeAssetTransfer = status => setAccountInfo({...accountInfo, isAssetTransfer:status});
 
-
   const {acTime, acMoney, acStock, acSummary, records, isAssetTransfer} = accountInfo;
- 
+
   return (
     <div>
       {
@@ -119,11 +126,11 @@ const Account = () => {
               </thead>
               <tbody>
               {
-                records && records.map((record, index) => (
+                !contentLoading && records && records.map((record, index) => (
                   <Record key={index} record={record} index={index}/>
                 ))
               }
-              {records.length == 0 &&<div style={{position: 'absolute',
+              {contentLoading && <div style={{position: 'absolute',
                 top: 0,
                 left: 0,
                 height: '100%',

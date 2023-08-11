@@ -24,7 +24,7 @@ import api from './api/api'
 import _ from 'lodash'
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeLoading, changeLoginStatus, changeStockMergeState} from './slices/mutualState';
+import { changeLoading, changeLoginStatus, changeStockMergeState, changeContentLoading} from './slices/mutualState';
 
 const initialState = {
   inputData: [],
@@ -45,8 +45,9 @@ const initialState = {
 const App = () => {
   const [accountInfo, setAccountInfo] = useState(initialState)
   const dispatch = useDispatch();
-  const {logInStatus, loading, isMerge} = useSelector((state) => state.mutualStateReducer)
+  const { logInStatus, loading, isMerge, contentLoading } = useSelector((state) => state.mutualStateReducer)
   useEffect(() => {
+    dispatch(changeLoading(true))
     loginRecord();
   }, [])
 
@@ -70,11 +71,13 @@ const App = () => {
           saleCost: stockData.saleCost,
           profit: (stockData.profitAndLoss / stockData.saleCost * 100).toFixed(2)
       })
+      dispatch(changeContentLoading(false))
       dispatch(changeLoading(false))
     });
   };
 
   const handleInputData = data => {
+    dispatch(changeContentLoading(true))
     api.insertNewData(data).then(() => {
       updateAllData()
     });
@@ -172,11 +175,12 @@ const App = () => {
   const changeRoute = (route) => {
     if(accountInfo.route === route) 
       return
-
     switch (route) {
       case 'balanceChart':
       case 'stockHistory':
       case 'accountInfo':
+      case 'account':
+        dispatch(changeLoading(true))
         settings.country = 'tw';
         break;
     }
@@ -232,7 +236,7 @@ const App = () => {
     if (stockInfo.stockStatus === 'individual') {
       switch (stockInfo.saleStatus) {
         case 'all':
-          result = allStocks.filter(a => (startRegion <= a.sale_date && a.sale_date <= endRegion));
+          result = allStocks.filter(a => (startRegion <= a.sale_date || startRegion <= a.date) && (a.date <= endRegion || a.sale_date <= endRegion));
           break;
         case 'sale':
           result = saleStocks.filter(a => startRegion <= a.sale_date && a.sale_date <= endRegion);
@@ -243,6 +247,7 @@ const App = () => {
         default:
           break;
       }
+
       for (let item in result) {
         profitAndLoss += result[item].income;
         saleCost += result[item].cost;
