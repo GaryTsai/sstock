@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { useState, useEffect} from 'react';
 import Radium from "radium";
 // Firebase App (the core Firebase SDK) is always required and must be listed first
 import * as firebase from "firebase/app";
@@ -10,6 +10,7 @@ import styles from './styles'
 import settings from './../settings/settings'
 import utils from './../../utils/dateFormat'
 import browserUtils from "./../../utils/browserUtils";
+
 const initialState = {
   email:'',
   resetEmail:'',
@@ -20,47 +21,28 @@ const initialState = {
   isOpenForgetPWD: false
 };
 
-class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = initialState;
-  }
-  componentWillUnmount() {
-    window.document.removeEventListener('keydown', (function(e) {
-      if( e.keyCode === 13 ) this.loginSubmitWithKeydown();
-    }).bind(this));
-  }
+const Login = (props) => {
+  
+  const [loginInfo, setLoginInfo] = useState(initialState)
 
-  componentDidMount() {
-    window.document.addEventListener('keydown', (function(e) {
-      if( e.keyCode === 13 ) this.loginSubmitWithKeydown();
-    }).bind(this));
-  }
+  const logInSelect = status => setLoginInfo({...loginInfo, isOpenForgetPWD: false,isLogIn: status});
 
-  loginSubmitWithKeydown =() => this.getStatusMethod();
+  const actionForSubmit = () =>{
+    const {email, password ,isLogIn} = loginInfo;
 
-  getStatusMethod = ()=>{
-    return this.actionForSubmit(this.state.email, this.state.password);
-  }
-
-  logInSelect = status => this.setState({isOpenForgetPWD: false,isLogIn: status});
-
-  actionForSubmit = () =>{
-    const {email, password ,isLogIn} = this.state;
-    const self = this;
     switch (isLogIn) {
       case true:
-        return self.logInSubmit(email, password);
+        return logInSubmit(email, password);
       case false:
-        return self.registerSubmit(email, password);
+        return registerSubmit(email, password);
     }
   };
 
-  logInSubmit = (email, password) =>{
-    const {logInCallBack, homePageCallBack} = this.props;
+  const logInSubmit = (email, password) =>{
+    const {logInCallBack, homePageCallBack} = props;
     if(!email && !password ){
-      this.setState({error:true, message:'Please input email&password'});
-      setTimeout(() =>this.setState({error:false, message: ''}), 5000)
+      setLoginInfo({...loginInfo, error:true, message:'Please input email&password'});
+      setTimeout(() =>setLoginInfo({...loginInfo, error:false, message: ''}), 5000)
       return ;
     }
     firebase.auth().signInWithEmailAndPassword(email, password)
@@ -71,23 +53,24 @@ class Login extends Component {
           localStorage.setItem('account-stock', user.uid);
           console.log('log in successfully');
           settings.user_id = user.uid;
+          setLoginInfo({...loginInfo, email: '', password: ''})
           logInCallBack&&logInCallBack(user.uid);
           homePageCallBack&&homePageCallBack();
         }
       })
       .catch((error) => {
         window.alert(error.message.toString())
-        this.setState({error:true, message: error.message})
-        setTimeout(() =>this.setState({error:false, message: ''}), 5000);
+        setLoginInfo({...loginInfo, error:true, message: error.message})
+        setTimeout(() => setLoginInfo({...loginInfo, error:false, message: ''}), 5000);
         return ;
       });
   };
 
-  registerSubmit = (email, password) =>{
-    const {logInCallBack, homePageCallBack} = this.props;
+  const registerSubmit = (email, password) =>{
+    const {logInCallBack, homePageCallBack} = props;
     if(!email && !password ){
-      this.setState({error:true, message:'Please input email&password'});
-      setTimeout(() =>this.setState({error: false, message: ''}), 5000);
+      setLoginInfo({...loginInfo, error:true, message:'Please input email&password'});
+      setTimeout(() => setLoginInfo({...loginInfo, error: false, message: ''}), 5000);
       return ;
     }
     let user = {
@@ -127,73 +110,69 @@ class Login extends Component {
         });
       }).catch(error => {
       // 註冊失敗時顯示錯誤訊息
-      this.setState({exist: true, error:true, message: error.message.toString()});
+      setLoginInfo({...loginInfo, exist: true, error:true, message: error.message.toString()});
       window.alert(error.message.toString())
       console.log('register failed');
       return ;
     });
   }
 
-  setEmail = email => this.setState({email:email});
+  const setEmail = email => setLoginInfo({...loginInfo, email});
 
-  setPassword = password => this.setState({password:password});
+  const setPassword = password =>  setLoginInfo({...loginInfo, password});
 
-  openForgetPWD = () => this.setState({isOpenForgetPWD: true});
+  const openForgetPWD = () => setLoginInfo({...loginInfo, isOpenForgetPWD: true});
 
-  closeForgetPWD = () => this.setState({isOpenForgetPWD: false});
+  const closeForgetPWD = () => setLoginInfo({...loginInfo, isOpenForgetPWD: false});
 
-  resetPWD = () =>{
-    const {resetEmail} = this.state;
-    const self = this;
+  const resetPWD = () =>{
+    const { resetEmail } = loginInfo;
     const auth = firebase.auth();
     auth.sendPasswordResetEmail(resetEmail).then(function() {
       window.alert('已發送信件至信箱，請按照信件說明重設密碼');
-      self.closeForgetPWD();
+      closeForgetPWD();
     }).catch(function(error) {
       window.alert(error.message)
     });
   };
 
-  setResetEmail = (email) => this.setState({resetEmail: email})
+  const setResetEmail = (email) => setLoginInfo({...loginInfo, resetEmail: email})
+  const {isLogIn, isOpenForgetPWD} = loginInfo;
+  const isMobile = browserUtils.isMobile();
 
-  render() {
-    const {isLogIn, isOpenForgetPWD} = this.state;
-    const isMobile = browserUtils.isMobile();
-
-    return (
-        <div style={styles.wrapper} >
-          <div className="fadeInDown"  style={{ width: isMobile ? '80%' : '40%', display: 'flex', position: 'fixed', top: '5%'}}>
-            <div key='logIn' style={{...styles.logIn, border: isLogIn ? '3px solid white' : ''}} onClick={() => this.logInSelect(true)}>登入</div>
-            <div key='register' style={{...styles.register, border: isLogIn ? '' : '3px solid white' }} onClick={() => this.logInSelect(false)}>註冊</div>
-          </div>
-        <div className="fadeInDown"  style={{...styles.frameContent, border: isLogIn ? '5px' +
-            ' solid #2196f3' : '5px solid rgb(232 88 78)'}}>
-          {!isOpenForgetPWD && <div>
-          <div className="fadeIn first">
-            <div style={{...styles.logo, backgroundImage: 'url(' + require('./../../assets/img/logo.png') + ')'}}/>
-          </div>
-          <div style={{...styles.inputContent}}>
-            <input type="text" style={styles.input} id="email"  onChange={(c) => this.setEmail(c.target.value)} className="fadeIn second" name="login" placeholder="email"/>
-            <input type="password" style={styles.input} id="password" onChange={(c) => this.setPassword(c.target.value)} className="fadeIn third" name="login" placeholder="password"/>
-          </div>
-          <input style={{...styles.submit}}  type="submit" className="fadeIn fourth"
-                 value={isLogIn ? 'Log In' : 'Register' } onClick={this.actionForSubmit}/>
-          {isLogIn && <div id="formFooter"  style={styles.forgetPWD} >
-            <a className="underlineHover" href="#" onClick={this.openForgetPWD} >Forgot Password?</a>
-          </div>}
-          </div>}
-          {isOpenForgetPWD &&
-          <div style={{...styles.inputContent}}>
-            <input type="text" style={styles.input} id="email"  onChange={(c) => this.setResetEmail(c.target.value)} className="fadeIn second" name="login" placeholder="email"/>
-            <input key={'backToLogIn'} style={{...styles.back, margin: '5px', width: '45%'}}  onClick={this.closeForgetPWD} type="button" className="fadeIn fourth"
-                   value={'back'}/>
-            <input style={{...styles.submit, margin: '5px',  width: '45%'}}  type="submit" className="fadeIn fourth"
-                   value={'submit to mail'} onClick={this.resetPWD}/>
-          </div>}
+  return (
+      <div style={styles.wrapper} >
+        <div className="fadeInDown"  style={{ width: isMobile ? '80%' : '40%', display: 'flex', position: 'fixed', top: '5%'}}>
+          <div key='logIn' style={{...styles.logIn, border: isLogIn ? '3px solid white' : ''}} onClick={() => logInSelect(true)}>登入</div>
+          <div key='register' style={{...styles.register, border: isLogIn ? '' : '3px solid white' }} onClick={() => logInSelect(false)}>註冊</div>
         </div>
+      <div className="fadeInDown"  style={{...styles.frameContent, border: isLogIn ? '5px' +
+          ' solid #2196f3' : '5px solid rgb(232 88 78)'}}>
+        {!isOpenForgetPWD && <div>
+        <div className="fadeIn first">
+          <div style={{...styles.logo, backgroundImage: 'url(' + require('./../../assets/img/logo.png') + ')'}}/>
+        </div>
+        <div style={{...styles.inputContent}}>
+          <input type="text" style={styles.input} id="email"  onChange={(c) => setEmail(c.target.value)} className="fadeIn second" name="login" placeholder="email"/>
+          <input type="password" style={styles.input} id="password" onChange={(c) => setPassword(c.target.value)} className="fadeIn third" name="login" placeholder="password"/>
+        </div>
+        <input style={{...styles.submit}}  type="submit" className="fadeIn fourth"
+                value={isLogIn ? 'Log In' : 'Register' } onClick={actionForSubmit}/>
+        {isLogIn && <div id="formFooter"  style={styles.forgetPWD} >
+          <a className="underlineHover" href="#" onClick={openForgetPWD} >Forgot Password?</a>
+        </div>}
+        </div>}
+        {isOpenForgetPWD &&
+        <div style={{...styles.inputContent}}>
+          <input type="text" style={styles.input} id="email"  onChange={(c) => setResetEmail(c.target.value)} className="fadeIn second" name="login" placeholder="email"/>
+          <input key={'backToLogIn'} style={{...styles.back, margin: '5px', width: '45%'}}  onClick={closeForgetPWD} type="button" className="fadeIn fourth"
+                  value={'back'}/>
+          <input style={{...styles.submit, margin: '5px',  width: '45%'}}  type="submit" className="fadeIn fourth"
+                  value={'submit to mail'} onClick={resetPWD}/>
+        </div>}
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 export default Radium(Login)
