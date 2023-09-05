@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { styled } from "@mui/material";
 const sourceMapping = {
   '股利': 1,
@@ -19,25 +19,18 @@ const sourceColor = ({source}) => {
   switch (colorNumber) {
     case 1:
       return 'red'
-      break;
     case 2:
       return 'green'
-      break;  
     case 3:
       return 'purple'
-      break;  
     default:
       return 'black'
-      break;
   }
 }
 
 const Td = styled('td')((source) => ({
   color: sourceColor(source),
 }));
-
-const initialState = {
-};
 
 const Record = (props) => {
   const {record, index} = props;

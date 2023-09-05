@@ -1,5 +1,4 @@
-import React, { Component, useEffect, useRef, useState } from "react";
-import { render } from "react-dom";
+import React, { useEffect, useRef, useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { styled } from "@mui/material/styles";
@@ -22,7 +21,7 @@ const ChartValue = styled("span")`
 `;
 const DividendChart = ({ perDividend }) => {
   const [totalDividend, setTotalDividend] = useState(0)
-  const chartComponentRef = useRef < HighchartsReact.RefObject > null;
+  const chartComponentRef = useRef(null);
   const options = {
     chart: {
       animation: {
@@ -112,16 +111,17 @@ const DividendChart = ({ perDividend }) => {
 }
 
 };
-  const getSummary = () => {
-    let accumulator = 0
-    perDividend.flat().reduce(
-      (previousValue , currentValue) => {
-        if(!isNaN(currentValue)) return accumulator += currentValue
-      }
-    );
-    setTotalDividend(accumulator)
+  // const getSummary = () => {
+  //   let accumulator = 0
+  //   perDividend.flat().reduce(
+  //     (previousValue , currentValue) => {
+  //       if(!isNaN(currentValue)) return accumulator += currentValue
+  //     }
+  //   );
+  //   setTotalDividend(accumulator)
 
-  }
+  // }
+
   useEffect(()=>{
     let accumulatorDividend = 0
 
@@ -131,11 +131,12 @@ const DividendChart = ({ perDividend }) => {
           accumulatorDividend += accumulator.y
         if(!isNaN(currentValue.y)) 
           accumulatorDividend += currentValue.y
+        return {}
       }
     );
     setTotalDividend(accumulatorDividend)
-
   },[])
+  
   return (
     <div style={{ height: "60vh" }}>
       <SummaryInfo>

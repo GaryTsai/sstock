@@ -1,8 +1,12 @@
 import React, { useState, useEffect} from 'react';
+import { useDispatch } from 'react-redux';
 import utils from "./../utils/dateFormat";
 import api from './../api/api'
 import "react-datepicker/dist/react-datepicker.css";
 import browserUtils from "./../utils/browserUtils";
+import { changeContentLoading } from '../slices/mutualState';
+import { fetchStock } from '../slices/apiDataSlice';
+import { useLocation } from 'react-router';
 
 const initialState = {
   date: new Date(),
@@ -11,11 +15,14 @@ const initialState = {
   code_name:'',
   price: '',
   sheet: '',
+  isSaleOpen: true,
   datePickerDate: new Date()
 };
 
-const Input = (props) => {
+const Input = () => {
   const [inputInfo, setInputInfo] = useState(initialState)
+  const dispatch = useDispatch()
+  const location = useLocation()
 
   useEffect(() => {
     setInputInfo({...inputInfo, date: utils.dateFormat(new Date()), datePickerDate: utils.dateFormat(new Date())})
@@ -49,8 +56,13 @@ const Input = (props) => {
     const {date, name, number, price, sheet} = inputInfo;
     if (date && name && number && !isNaN(price) && !isNaN(sheet)) {
       const stockInfo = {date: date, name: name, number: number, price: parseFloat(price), sheet: parseFloat(sheet)};
-      api.updateAccountRecord(stockInfo, false);
-      props && props.callback(stockInfo);
+      
+      dispatch(changeContentLoading(true))//無作用
+      api.insertNewData(stockInfo).then(() => {
+        api.updateAccountRecord(stockInfo, false);
+        dispatch(fetchStock())
+        dispatch(changeContentLoading(false))//無作用
+      });
       setInputInfo({
         ...inputInfo,
         name: '',
@@ -67,13 +79,16 @@ const Input = (props) => {
     setInputInfo({...inputInfo, date: date, datePickerDate: date})
   };
 
-
-  const {datePickerDate, name, number, price, sheet} = inputInfo;
+  const saleIsOpen = () => setInputInfo({...inputInfo, isSaleOpen: !inputInfo.isSaleOpen});
+  
+  const {datePickerDate, name, number, price, sheet, isSaleOpen} = inputInfo;
   const isMobile = browserUtils.isMobile();
-
+  const isStockHistory = location.pathname === '/stockHistory'
+ 
   return (
-    <div style={{margin: isMobile ?  '5px 5px 0px 5px' : '5px'}}>
-      <div className="form-row">
+    <>
+    {!isStockHistory && <div style={{margin: isMobile ?  '0px 5px 0px 5px' : '0 5px'}}> 
+      {isSaleOpen && <div className="form-row">
         <div className="col-md-2 stock-input-fields" >
           <input type="date" className="form-control" placeholder="日期"
                   onChange={(c) => handleChange(c.target.value)} value={datePickerDate}/>
@@ -94,11 +109,17 @@ const Input = (props) => {
           <input type="text" className="form-control" placeholder={"張數" }
                   onChange={(c) => inputSheet(c.target.value)} value={sheet} autoComplete="on"/>
         </div>
-        <button className="btn btn-primary from-group col-sm-12 col-md-2 input-sale-frame" type="submit"
+        <button className="btn btn-primary from-group col-sm-12 col-md-2 input-sale-frame" type="submit" style={{borderRadius: '5px', margin: '3px 0px'}}
                 onClick={() => submitStock()}>確認買入
         </button>
-      </div>
-    </div>
+      </div>}
+    </div>}
+    {isMobile && !isSaleOpen && <button className="btn btn-warning from-group col-sm-2 col-md-12 input-sale-frame" type="submit"
+              onClick={() => saleIsOpen()}>買入</button>}
+    {isMobile && isSaleOpen &&
+    <button className="btn btn-secondary from-group col-sm-2 col-md-12 input-sale-frame" type="submit"
+              onClick={() => saleIsOpen(false)}>隱藏</button>}  
+    </>
   )
 }
 

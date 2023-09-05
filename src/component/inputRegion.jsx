@@ -2,8 +2,12 @@ import React, { useState, useEffect, useRef} from 'react';
 import utils from "./../utils/dateFormat";
 import browserUtils from "./../utils/browserUtils";
 import "./styles.css";
-
+import { useLocation } from 'react-router-dom';
 import "react-datepicker/dist/react-datepicker.css";
+import { useDispatch } from 'react-redux';
+import { updateQueryData } from '../slices/apiDataSlice';
+import { changeQueryStatus } from '../slices/mutualState';
+
 const initialState = {
   startStandardDate: '',
   endStandardDate: '',
@@ -11,15 +15,25 @@ const initialState = {
   dateRegion2: '',
   saleStatus: 'all',
   stockStatus: 'individual',
-  queryState: ''
+  queryState: '',
+  isQueryOpen: true
 };
 
 const InputRegion = (props) => {
   const [inputInfo, setInputInfo] = useState(initialState)
   const timeRegionInputRef = useRef({})
-
+  const dispatch = useDispatch()
+  const location = useLocation()
+  const isMobile = browserUtils.isMobile();
+  
   useEffect(() => {
-    setInputInfo({...inputInfo, date: utils.dateFormat(new Date()),dateRegion1: utils.dateFormat(new Date()),dateRegion2: utils.dateFormat(new Date()), startStandardDate: utils.dateFormat(new Date()), endStandardDate: utils.dateFormat(new Date())})
+    setInputInfo({...inputInfo, 
+      date: utils.dateFormat(new Date()),
+      dateRegion1: utils.dateFormat(new Date()),
+      dateRegion2: utils.dateFormat(new Date()), 
+      startStandardDate: utils.dateFormat(new Date()), 
+      endStandardDate: utils.dateFormat(new Date()),
+      isQueryOpen: true})
   }, [])
 
   const queryRegion = (region = '') => {
@@ -27,7 +41,7 @@ const InputRegion = (props) => {
     let stockInfo = {};
     let startDate = new Date();
     let endDate = new Date();
-
+    dispatch(changeQueryStatus('query'))
     if (region) {
       if (region === 'yearAgo') {
         const yearAgo = new Date().getFullYear() - 1
@@ -55,7 +69,7 @@ const InputRegion = (props) => {
           stockStatus: stockStatus
         };
       }
-      return props && props.callback(stockInfo);
+      return dispatch(updateQueryData(stockInfo));
     } else {
       if (dateRegion1 && dateRegion2 && saleStatus && stockStatus) {
         stockInfo = {
@@ -64,7 +78,7 @@ const InputRegion = (props) => {
           saleStatus: saleStatus,
           stockStatus: stockStatus
         };
-        props && props.callback(stockInfo);
+        dispatch(updateQueryData(stockInfo));
         setInputInfo({...inputInfo,
           date: '',
           name: '',
@@ -78,9 +92,45 @@ const InputRegion = (props) => {
     }
   };
 
+  // const updateQueryData = (stockInfo) => {
+  //   const startRegion = stockInfo.dateRegion1;
+  //   const endRegion = stockInfo.dateRegion2;
+
+  //   let profit = 0;
+  //   let saleCost = 0;
+  //   let profitAndLoss = 0;
+  //   let result = '';
+
+  //   if (stockInfo.stockStatus === 'individual') {
+  //     switch (stockInfo.saleStatus) {
+  //       case 'all':
+  //         result = allStocks.filter(a => (startRegion <= a.sale_date || startRegion <= a.date) && (a.date <= endRegion || a.sale_date <= endRegion));
+  //         break;
+  //       case 'sale':
+  //         result = saleStocks.filter(a => startRegion <= a.sale_date && a.sale_date <= endRegion);
+  //         break;
+  //       case 'unsale':
+  //         result = unSaleStocks.filter(a => startRegion <= a.date && a.date <= endRegion);
+  //         break;
+  //       default:
+  //         break;
+  //     }
+
+  //     for (let item in result) {
+  //       profitAndLoss += result[item].income;
+  //       saleCost += result[item].cost;
+  //     }
+  //     profit = (profitAndLoss / saleCost * 100).toFixed(2);
+
+  //     // setAccountInfo({...accountInfo, showStocks: result.length === 0 ? 'No Data' : result, profit: profit, saleCost: saleCost, profitAndLoss: profitAndLoss, saleStatus: stockInfo.saleStatus});
+  //   } else if (stockInfo.stockStatus === 'mutual') {
+  //   }
+  // };
+
   const inActiveTimeRegionGroup = () =>{
     Object.keys(timeRegionInputRef.current).map((option, index)=>{
       timeRegionInputRef.current[option].classList.remove('active')
+      return {}
     });   
   }
 
@@ -108,7 +158,7 @@ const InputRegion = (props) => {
   // const getStockOptions = (e) => setInputInfo({...inputInfo, stockStatus: e.target.value});
 
   const getStyleOfButton = () =>{
-    if(browserUtils.isMobile()) {
+    if(isMobile) {
       return {
         margin: '0px 0px',
         paddingRight: '0px',
@@ -118,20 +168,24 @@ const InputRegion = (props) => {
     }else{
       return {
         margin: '3px 0px',
-        paddingRight: '0px',
-        paddingLeft: '0px',
+        padding: 0,
         whiteSpace: 'nowrap'
       }
     }
   };
 
-  const { startStandardDate, endStandardDate } = inputInfo;
-  const isMobile = browserUtils.isMobile();
+  const setQueryOpen = status => setInputInfo({ ...inputInfo ,isQueryOpen:status });
+
+  const { startStandardDate, endStandardDate, isQueryOpen } = inputInfo;
+  const isStockHistory = location.pathname === '/stockHistory';
 
   return (
-    <div>
-        <div className="form-row" style={{margin:'5px', overflowY: isMobile ? 'scroll' : 'unset', whiteSpace: 'nowrap'}}>
-          <button type="button" className={"btn btn-info from-group col-md-1" + (isMobile ? ' show-all-stock-mobile' : ' show-all-stock')}  onClick={props.resetCallBack}>顯示全部 Stock </button>
+    <>
+      {isStockHistory && !isQueryOpen && isMobile && <button style={{borderRadius: '0px'}} className="btn btn-success from-group col-sm-2 col-md-12" type="submit" onClick={() => setQueryOpen(true)}>查詢時區</button>}
+      {isStockHistory && isQueryOpen && isMobile && <button style={{borderRadius: '0px'}} className="btn btn-secondary from-group col-sm-2 col-md-12" type="submit" onClick={() => setQueryOpen(false)}>隱藏</button>}
+    {isStockHistory && isQueryOpen && <div>
+        <div className="form-row" style={{margin:'0 5px', overflowY: isMobile ? 'scroll' : 'unset', whiteSpace: 'nowrap'}}>
+          <button type="button" className={"btn btn-info from-group col-md-1" + (isMobile ? ' show-all-stock-mobile' : ' show-all-stock')}  onClick={()=> dispatch(changeQueryStatus('all'))}>顯示全部 Stock </button>
           <button type="button"  className={"btn btn-group btn-group-toggle" + (isMobile ? ' from-group col-md-6' : ' from-group' +
             ' col-md-2')} data-toggle="buttons" style={{margin: '0px 10px', zIndex: 0, ...getStyleOfButton()}}>
             <label className="btn btn-secondary active" onClick={getSaleOptions}>
@@ -161,13 +215,13 @@ const InputRegion = (props) => {
             <input type="radio" name="options" id="option5" onClick={()=> setInputInfo({...inputInfo, queryState: 'thisYear'})}/> 今年
             </label>
           </div>
-          <div className="col-sm-6 col-md-2" style={{margin:'5px 0', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
+          <div className="col-sm-6 col-md-2" style={{margin:'3px 0', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
               <div>起始:</div>
               <div className="col">
                 <input type="date" className="form-control" placeholder="日期" onChange={(c) => handleDateChange(c.target.value, 'start')} value={startStandardDate}/>
               </div>
           </div>
-          <div  className="col-sm-6 col-md-2" style={{margin:'5px 0', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
+          <div  className="col-sm-6 col-md-2" style={{margin:'3px 0', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
               <div>結束:</div>
               <div className="col">
                 <input type="date" className="form-control" placeholder="日期" onChange={(c) => handleDateChange(c.target.value, 'end')} value={endStandardDate}/>
@@ -175,9 +229,10 @@ const InputRegion = (props) => {
           </div>
 
           <button className={"btn btn-primary query-region-submit "+ (isMobile ? ' from-group col-md-2' : ' from-group col-md-2' +
-            ' query-region-submit') } style={{...getStyleOfButton(), margin: '10px 0px'}} onClick={()=> queryRegion(inputInfo.queryState)}>查詢送出</button>
+            ' query-region-submit') } style={{...getStyleOfButton(), margin: '3px 0px'}} onClick={()=> queryRegion(inputInfo.queryState)}>查詢送出</button>
         </div>
-    </div>
+    </div>}
+    </>
   )
 }
 

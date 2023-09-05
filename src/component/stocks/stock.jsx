@@ -1,9 +1,16 @@
 import React, {useRef, useEffect, useState} from 'react';
 import { BiSolidArrowToTop } from "react-icons/bi";
+import { useLocation } from 'react-router-dom';
+import { fetchStock } from '../../slices/apiDataSlice';
+import api from '../../api/api';
+import { useDispatch } from 'react-redux';
+import { changeContentLoading } from '../../slices/mutualState';
+
 const Stock = (props) =>{
   const priceRef = useRef(null);
-  const sheetRef = useRef(null);
   const [isTopBtnShow, setIsTopBtnShow] = useState(false)
+  const location = useLocation()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     window.addEventListener('scroll', () => {
@@ -20,27 +27,41 @@ const Stock = (props) =>{
   const updateStockStatus = () => {
     const {stock} = props;
     const salePrice = parseInt(priceRef.current.value);
-    if((stock.sheet < sheetRef.current.value) || isNaN(salePrice) || !salePrice )
-      alert('賣出張數錯誤');
+    if(isNaN(salePrice) || !salePrice )
+      alert('請輸入數字');
     else{
-      props.stockSaleCallback(priceRef.current.value,sheetRef.current.value,stock);
-      priceRef.current.value = '';
-      sheetRef.current.value = '';
+            dispatch(changeContentLoading(true))
+            api.updateStock(salePrice, stock.sheet, stock).then(() => {
+                const stockInfo = {'price': salePrice, 'sheet': stock.sheet, 'cost': stock.cost, 'date': stock.date, 'purchaseTimestamp': stock.timestamp};
+                api.updateAccountRecord(stockInfo, true);
+                dispatch(fetchStock())
+                dispatch(changeContentLoading(false))
+                }
+            )
+        priceRef.current.value = '';
     }
   };
 
-  const deleteStock = () => {
+  const handleDeleteStock = () => {
     const { stock } = props;
-    props.deleteCallback(stock);
+    dispatch(changeContentLoading(true))
+    if(stock.status === 'unsale') {
+        api.deleteStock(stock.timestamp)
+    }
+    dispatch(fetchStock())
+    api.updateDataForDeleteStock(stock).then(()=>{
+        dispatch(changeContentLoading(false))
+    })
   };
 
   const isFloat = (n) => {
     return Number(n) === n && n % 1 !== 0;
   }
-  const { stock, saleStatus, index, route, isMerge } = props;
+  const { stock, index, isMerge } = props;
   const averagePrice = parseFloat((stock.price * 1.001425).toFixed(2));
   const handlingFee = stock.price * 1000 * stock.sheet * 0.001424 < 20 ? 20 : Math.round(stock.price * 1000 * stock.sheet * 0.001424);
-
+  const isStockHistory = location.pathname === '/stockHistory'
+  
   return (
     <>
         {
@@ -66,7 +87,7 @@ const Stock = (props) =>{
         }
         <tr>
           <th scope="row">{index}</th>
-          {isMerge === false && !props.hideFiled && <td key={stock.timestamp}>
+          {!isStockHistory && isMerge === false && <td key={stock.timestamp}>
             {<button type="button" className="btn btn-info" data-toggle="modal" data-target={`#modal-${stock.timestamp}`}>賣出</button>}
             <div>
               <div className="modal fade" id={`modal-${stock.timestamp}`} tabIndex="-1" role="dialog"
@@ -93,10 +114,11 @@ const Stock = (props) =>{
               </div>
             </div>
           </td>}
-          {  (route ==='accountInfo'  && isMerge === false && stock.status === 'sale') && <td>{stock.sale_date}</td>}
-          {  (route ==='accountInfo'  && isMerge === false && stock.status === 'unsale')  && <td>{stock.date}</td>}
-          { route !=='accountInfo' && isMerge === false &&(saleStatus === 'all' || saleStatus === 'sale') && (stock.status === 'sale' ? <td>{stock.sale_date}</td> : <td></td>)}
-          { route !=='accountInfo' && isMerge === false &&(saleStatus === 'all' || saleStatus === 'unsale') && (stock.status === 'unsale' ? <td>{stock.date}</td>: <td>{stock.date}</td>)}
+          {/* {  (!isStockHistory && isMerge === false && stock.status === 'sale') && <td>{stock.sale_date}</td>} */}
+          {  (!isStockHistory && isMerge === false && stock.status === 'unsale')  && <td>{stock.date}</td>}
+          {/* { isMerge === false && (stock.status === 'unsale' ? <td>{stock.date}</td>: <td>{stock.date}</td>)} */}
+          { isStockHistory && <td>{stock.date}</td>}
+          { isStockHistory && (stock.status === 'sale' ? <td>{stock.sale_date}</td> : <td></td>)}
           <td>{stock.name}</td>
           <td>{stock.number}</td>
           <td>{isMerge ? (averagePrice / (stock.sheet)).toFixed(4) : averagePrice }</td>
@@ -106,9 +128,12 @@ const Stock = (props) =>{
           <td>{stock.status === "unsale" ? '未賣出' : '已賣出'}</td>
           <td>{Math.floor(stock.sale_cost)}</td>
           <td style={{ 'color': stock.income < 0 ? '#30ff30' : 'rgb(255 19 19)'}}>{Math.floor(stock.income)}</td>
-          { isMerge === false && <td>
-            <button type="button" className="btn btn-danger" onClick={deleteStock}>刪除</button>
-          </td> }
+          { !isStockHistory && isMerge === false && <td>
+            <button type="button" className="btn btn-danger" onClick={handleDeleteStock}>刪除</button>
+          </td>}
+          {/* { isStockHistory && stock.status === 'sale' ? <td>
+            <button type="button" className="btn btn-danger" onClick={handleDeleteStock}>刪除</button>
+          </td> : <td><div style={{ height: '38px'}} ></div></td>} */}
         </tr>
   </>
   )

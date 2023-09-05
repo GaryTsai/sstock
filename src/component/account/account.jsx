@@ -7,14 +7,10 @@ import browserUtils from "../../utils/browserUtils";
 import { BiSolidArrowToTop } from "react-icons/bi";
 import { useSelector, useDispatch } from 'react-redux';
 import { changeContentLoading, changeLoading } from './../../slices/mutualState';
+import { fetchRecords, fetchAccountSummary} from './../../slices/apiDataSlice';
 
 const initialState = {
-  acTime: '',
-  acMoney: '',
-  acStock: '',
-  acSummary: '',
-  records:[],
-  isAssetTransfer: false,
+  isAssetTransfer: true
 };
 
 const Account = () => {
@@ -23,9 +19,12 @@ const Account = () => {
 
   const dispatch = useDispatch();
   const { contentLoading } = useSelector((state) => state.mutualStateReducer)
-
+  const { records, recordsLoading, acTime, acMoney, acStock, acSummary } = useSelector((state) => state.apiDataReducer)
+ 
   useEffect(() => {
-    updateAccount();
+    if(records.length === 0)
+      dispatch(fetchRecords())
+    dispatch(fetchAccountSummary())
     window.addEventListener('scroll', () => {
       if(document.documentElement.scrollTop > 0 ){
         setTopIconState(true)
@@ -35,27 +34,9 @@ const Account = () => {
     })
   }, [])
 
-  const updateAccount = () => {
-    api.getAccount().then((account)=> {
-      api.getAccountRecord().then((data)=>{
-        setAccountInfo({
-          ...accountInfo,
-          acTime: account.accountTime,
-          acMoney: account.accountMoney,
-          acStock: account.accountStock,
-          acSummary: account.summary,
-          records:data
-        });
-        dispatch(changeContentLoading(false))
-        dispatch(changeLoading(false))
+  const hideAssetTransfer = () => setAccountInfo({...accountInfo, isAssetTransfer: !isAssetTransfer});
 
-      });
-    });
-  };
-
-  const changeAssetTransfer = status => setAccountInfo({...accountInfo, isAssetTransfer:status});
-
-  const {acTime, acMoney, acStock, acSummary, records, isAssetTransfer} = accountInfo;
+  const { isAssetTransfer} = accountInfo;
 
   return (
     <div>
@@ -81,16 +62,15 @@ const Account = () => {
       }
       <nav>
         <div className="nav nav-tabs" id="nav-tab" role="tablist">
-          <a className="nav-item nav-link active" style={{width: '100%', border: '0px'}} id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+          <a className="nav-item nav-link active" style={{width: '100%', border: '0px', display: 'flex', justifyContent: 'center'}} id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
               aria-controls="nav-home" aria-selected="true">台股資產</a>
         </div>
       </nav>
       <div className="tab-content" id="nav-tabContent">
         <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-          {browserUtils.isMobile() && !isAssetTransfer && <button className="btn btn-warning from-group col-sm-2 col-md-12 input-sale-frame" type="submit" onClick={() => changeAssetTransfer(true)}>資產轉移</button>}
-          {browserUtils.isMobile() && !isAssetTransfer  && <button className="btn btn-secondary from-group col-sm-2 col-md-12 input-sale-frame" type="submit" onClick={() => changeAssetTransfer(false)}>隱藏</button>}
-          {isAssetTransfer && <AccountTransfer updateAccount={updateAccount}/>}
-          {!browserUtils.isMobile() && <AccountTransfer updateAccount={updateAccount}/>}
+          {browserUtils.isMobile() && !isAssetTransfer && <button className="btn btn-warning from-group col-sm-2 col-md-12 input-sale-frame" type="submit" onClick={() => hideAssetTransfer()}>資產轉移</button>}
+          {browserUtils.isMobile() && isAssetTransfer  && <button className="btn btn-secondary from-group col-sm-2 col-md-12 input-sale-frame" type="submit" onClick={() => hideAssetTransfer()}>隱藏</button>}
+          {isAssetTransfer && <AccountTransfer/>}
           <div className="container">
             <table className="table table-striped">
               <thead>
@@ -126,11 +106,11 @@ const Account = () => {
               </thead>
               <tbody>
               {
-                !contentLoading && records && records.map((record, index) => (
+                !recordsLoading && records.map((record, index) => (
                   <Record key={index} record={record} index={index}/>
                 ))
               }
-              {contentLoading && <div style={{position: 'absolute',
+              {recordsLoading && <div style={{position: 'absolute',
                 top: 0,
                 left: 0,
                 height: '100%',
@@ -149,10 +129,9 @@ const Account = () => {
           </div>
         </div>
         <div className="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-          {browserUtils.isMobile() && !isAssetTransfer && <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit" onClick={() => changeAssetTransfer(true)}>資產轉移</button>}
-          {browserUtils.isMobile() && isAssetTransfer  && <button className="btn btn-secondary from-group col-md-2 input-sale-frame" type="submit" onClick={() => changeAssetTransfer(false)}>隱藏</button>}
-          {isAssetTransfer && <AccountTransfer updateAccount={updateAccount}/>}
-          {!browserUtils.isMobile() && <AccountTransfer updateAccount={updateAccount}/>}
+          {browserUtils.isMobile() && isAssetTransfer && <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit" onClick={() => hideAssetTransfer()}>資產轉移</button>}
+          {browserUtils.isMobile() && !isAssetTransfer  && <button className="btn btn-secondary from-group col-md-2 input-sale-frame" type="submit" onClick={() => hideAssetTransfer()}>隱藏</button>}
+          {isAssetTransfer && <AccountTransfer/>}
           <div className="container">
             <table className="table table-striped">
               <thead>

@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import mutualStateReducer from './slices/mutualState'
+import apiDataReducer from './slices/apiDataSlice'
 import { combineReducers } from 'redux'
 
 const reducers = combineReducers({
     mutualStateReducer,
+    apiDataReducer
     // [todoApiService.reducerPath]: todoApiService.reducer//透過createApi 創建的reducer
 })
 const store = configureStore({

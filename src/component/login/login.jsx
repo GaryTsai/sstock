@@ -1,5 +1,6 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import Radium from "radium";
+import { useDispatch } from 'react-redux';
 // Firebase App (the core Firebase SDK) is always required and must be listed first
 import * as firebase from "firebase/app";
 // If you enabled Analytics in your project, add the Firebase SDK for Analytics
@@ -10,6 +11,8 @@ import styles from './styles'
 import settings from './../settings/settings'
 import utils from './../../utils/dateFormat'
 import browserUtils from "./../../utils/browserUtils";
+import { useNavigate } from "react-router-dom";
+import { changeLoginStatus } from './../../slices/mutualState';
 
 const initialState = {
   email:'',
@@ -22,7 +25,8 @@ const initialState = {
 };
 
 const Login = (props) => {
-  
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [loginInfo, setLoginInfo] = useState(initialState)
 
   const logInSelect = status => setLoginInfo({...loginInfo, isOpenForgetPWD: false,isLogIn: status});
@@ -35,11 +39,13 @@ const Login = (props) => {
         return logInSubmit(email, password);
       case false:
         return registerSubmit(email, password);
+      default:
+        return {}
     }
   };
 
   const logInSubmit = (email, password) =>{
-    const {logInCallBack, homePageCallBack} = props;
+    const { logInCallBack } = props;
     if(!email && !password ){
       setLoginInfo({...loginInfo, error:true, message:'Please input email&password'});
       setTimeout(() =>setLoginInfo({...loginInfo, error:false, message: ''}), 5000)
@@ -54,8 +60,9 @@ const Login = (props) => {
           console.log('log in successfully');
           settings.user_id = user.uid;
           setLoginInfo({...loginInfo, email: '', password: ''})
-          logInCallBack&&logInCallBack(user.uid);
-          homePageCallBack&&homePageCallBack();
+          logInCallBack && logInCallBack(user.uid);
+          dispatch(changeLoginStatus())
+          navigate('/')
         }
       })
       .catch((error) => {

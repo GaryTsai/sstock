@@ -33,6 +33,7 @@ const initialState = {
     totalPercent: 0
 }
 const [reportInfo, setReportInfo] = useState(initialState)
+
 useEffect(() => {
     let totalIncome = 0
     let totalSaleCost = 0
@@ -42,6 +43,7 @@ useEffect(() => {
         totalCost += item.cost
         if(item.status === 'sale')
             totalSaleCost += item.cost
+        return {};
     })  
     setReportInfo({...reportInfo, totalIncome: totalIncome, totalSaleCost: totalSaleCost,totalCost: totalCost, totalPercent: (totalIncome/totalSaleCost * 100).toFixed(2)})
 }, [])
@@ -65,9 +67,10 @@ const queryReport = () => {
                 yearIncome += item.income    
                 yearCost += item.cost                 
             }
+            return {}
         })
 
-        data.push({year: String(start), yearIncome: yearIncome, yearCost: yearCost, yearUnsale: yearUnsale, incomePercent: (yearIncome/yearCost * 100).toFixed(2)}) 
+        data.push({year: String(start), yearIncome , yearCost , yearUnsale , incomePercent: (yearIncome/yearCost * 100).toFixed(2)}) 
       }
 
       setReportInfo({...reportInfo, reportData: data})

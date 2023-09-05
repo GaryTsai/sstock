@@ -1,25 +1,30 @@
-import React, { Component, useEffect, useState } from 'react'
-import _ from 'lodash';
-import { styled } from '@mui/material/styles';
+import React, { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid';
 import YearColumnChart from '../../custom/YearColumnChart';
 import DualColumnChart from '../../custom/DulaColumnChart';
 import DividendChart from '../../custom/YearDividendChart';
 import Report from '../../custom/Report';
 import api from '../../api/api'
+import { useSelector, useDispatch} from 'react-redux';
+import { fetchStock } from '../../slices/apiDataSlice';
 
-const Container = styled('div')`
-  display: block;
-`
-const TwChart = ({
-  allStocks=[], 
-  route
-}) => {
+const TwChart = () => {
 
-  const [chartInfo, setChartInfo] = useState({})
-  const [dividend, setDividend] = useState(null)
-  const [perDividend, setPerDividend] = useState(null)
+  // const [chartInfo, setChartInfo] = useState({})
+  const [dividendInfo, setDividendInfo] = useState({
+    yearDividend: {},
+    perDividend: [],
+    chartInfo: {
+      categories: [],
+      monthValue: [],
+      monthRate: [],
+      yearCategories: [],
+      yearValue: []
+    }
+  })
   const [chartTab, setChartTab] = useState("monthIncome")
+  const { allStocks } = useSelector((state) => state.apiDataReducer)
+  const dispatch = useDispatch()
 
   const getDate = data => {
     const firstDateYear = data[data.length-1].date.substring(0 ,4)
@@ -49,6 +54,7 @@ const TwChart = ({
         }
       })
       valueArray.push({y: balance, color: balance > 0 ? "#32a852" : "#ff0000"})
+      return {}
     })
     return valueArray
   }
@@ -82,9 +88,17 @@ const TwChart = ({
       }
       valueArray.push({y: balance, date: date, color: balance > 0 ? "#32a852" : "#ff0000"})
       ROIArray.push({y: ROI, date: date, color: ROI > 0 ? "#0e6124" : "#8E0011"})
+      return {}
     })
     return [valueArray, ROIArray]
   }
+
+  useEffect(() => {
+    console.log('一 useEffect');
+    if(allStocks.length === 0)
+      dispatch(fetchStock())
+  }, [])
+
   useEffect(() => {
     if(allStocks.length === 0) return
     const saledData = allStocks.filter((it)=>it.income !== 0 )
@@ -95,53 +109,43 @@ const TwChart = ({
     const monthValue = getValue(categories, handleDateData)
     const yearCategories = getYearDate(allStocks)
     const yearValue = getYearValue(yearCategories, handleDateData)
-    setChartInfo({
-      categories,
-      monthValue: monthValue[0],
-      monthRate: monthValue[1],
-      yearCategories,
-      yearValue
-    })
-    return () => {
-      allStocks = []
-  };
-  }, [allStocks]);
 
-  useEffect(()=>{
-    const dividendInfo = {}
-    const fetchData = async () => {
-      return  await api.getAccountRecord()
-    }
-
+    const yearDividendInfo = {}
+    let perDividendInfo = [] 
     const isDividend = record => (/股利/).test(record.source)
-    // YearDividend
-    fetchData().then((accountRecord)=>{
+    api.getAccountRecord().then((accountRecord)=>{
       accountRecord.map(record => {
-      if(!dividendInfo[record.transferTime.substring(0,4)] && isDividend(record)) {
-        dividendInfo[record.transferTime.substr(0,4)] = []
-        dividendInfo[record.transferTime.substr(0,4)].push(record)
+      // YearDividend
+      if(!yearDividendInfo[record.transferTime.substring(0,4)] && isDividend(record)) {
+        yearDividendInfo[record.transferTime.substr(0,4)] = []
+        yearDividendInfo[record.transferTime.substr(0,4)].push(record)
       }else if(isDividend(record)){
-      dividendInfo[record.transferTime.substr(0,4)].push(record)
+        yearDividendInfo[record.transferTime.substr(0,4)].push(record)
       }
-      })
-      setDividend(dividendInfo)
+      // Dividend
+      if(isDividend(record) && !perDividendInfo.flat().includes(record.source)){
+        perDividendInfo.push([record.source, Number(record.transfer)])
+      }
+      else if(isDividend(record) && perDividendInfo.flat().includes(record.source)){
+        perDividendInfo.forEach(dividend => {
+          if(dividend[0] === record.source) dividend[1] += Number(record.transfer)
+        })
+      }
     })
-    // Dividend
-    let dividendName = [] 
-    fetchData().then((accountRecord)=>{
-      accountRecord.map(record => {
-        if(isDividend(record) && !dividendName.flat().includes(record.source)){
-          dividendName.push([record.source, Number(record.transfer)])
-        }
-        else if(isDividend(record) && dividendName.flat().includes(record.source)){
-          dividendName.forEach(dividend => {
-            if(dividend[0] === record.source) dividend[1] += Number(record.transfer)
-          })
-        }
-      })
-      setPerDividend(dividendName)
     })
-  },[])
+    setDividendInfo({
+      yearDividend: yearDividendInfo,
+      perDividend: perDividendInfo,
+      chartInfo:{
+        categories,
+        monthValue: monthValue[0],
+        monthRate: monthValue[1],
+        yearCategories,
+        yearValue
+      }
+    })
+
+  }, [allStocks]);
 
   return (
     <Grid container style={{justifyContent: "center"}}>
@@ -152,16 +156,16 @@ const TwChart = ({
           <button type="button" className={`btn btn-info ${chartTab === "report" && 'active'}`} onClick={()=> setChartTab("report")} >年損益報表</button>
         </div>
         {chartTab === "monthIncome" && <Grid item xs={12} md={6}>
-          <DualColumnChart chartInfo={chartInfo} type={'year'}/>
+          <DualColumnChart chartInfo={dividendInfo.chartInfo} type={'year'}/>
         </Grid>}
         {chartTab === "yearIncome" && <Grid item xs={12} md={6}>
-          <YearColumnChart chartInfo={chartInfo} type={'year'} dividend={dividend}/>
+          <YearColumnChart chartInfo={dividendInfo.chartInfo} type={'year'} dividend={dividendInfo.yearDividend}/>
         </Grid>}
         {chartTab === "dividend" && <Grid item xs={12} md={6}>
-          <DividendChart perDividend={perDividend}/>
+          <DividendChart perDividend={dividendInfo.perDividend}/>
         </Grid>}
         {chartTab === "report" && <Grid item xs={12} md={6}>
-          <Report allStocks={allStocks} chartInfo={chartInfo}/>
+          <Report allStocks={allStocks} chartInfo={dividendInfo.chartInfo}/>
         </Grid>}
     </Grid>
       )

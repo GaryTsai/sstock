@@ -31,12 +31,12 @@ firebase.analytics();
 // var getUSAccountRecordRef = firebase.database().ref(`/us_accountRecord` );
 // var getUSAccountRef = firebase.database().ref(`/us_account` );
 var stockData;
+settings.user_id = localStorage.getItem('account-stock')
 
 const api = {
   async getAllData() {
     let  getDataRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stock_info` );
     await getDataRef.once('value').then(async (snapshot) => {
-
       let items = [];
       snapshot.forEach(element => {
         items.unshift(element.val());
@@ -76,6 +76,7 @@ const api = {
         }
       }
     });
+
     return stockData;
   },
 
@@ -116,6 +117,7 @@ const api = {
   },
 
   async updateStock(salePrice, saleSheet, stock){
+      console.log(stock);
       const isDayTrading = stock.date === d.dateFormat(new Date());
       let income = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.001425) - Math.floor(salePrice * 1000 * saleSheet * 0.003 * (isDayTrading ? 0.5 : 1)) - stock.cost;
       let sale_cost = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.001425) - Math.floor(salePrice * 1000 * saleSheet * 0.003 * (isDayTrading ? 0.5 : 1));
@@ -204,7 +206,7 @@ const api = {
     let stock = 0;
     let cost = 0;
     let salePrice = 0;
-    const isDayTrading = stockInfo.date == d.dateFormat(new Date());
+    const isDayTrading = stockInfo.date === d.dateFormat(new Date());
     
     if (sale) {
       salePrice = Math.round(stockInfo.price * 1000 * stockInfo.sheet) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * (isDayTrading ? 0.5 : 1) * 0.003);
@@ -224,6 +226,7 @@ const api = {
 
     let getRefOfAccountRecord = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/account_record` );
     await getRefOfAccountRecord.child(timestamp.toString()).set({
+    //   purchaseTimestamp: stockInfo.purchaseTimestamp,
       timestamp: timestamp,
       account_record_Money: money,
       account_record_Stock: stock,
@@ -248,20 +251,87 @@ const api = {
     let incomeOfLastYear = 0;
     let incomeOfThisYear = 0;
     let inAccountOfThisYear = 0;
+    
     for (let item in lastYearItems) {
       incomeOfLastYear += lastYearItems[item].income;
     }
+
     for (let item in thisYearItems) {
       incomeOfThisYear += thisYearItems[item].income;
     }
+
     let accountRecords  = await this.getAccountRecord();
     let thisYearAccountRecords = accountRecords.filter(a => (thisYearStartDate <= a.transferTime && a.transferTime <= thisYearEndDate));
     for (let record in thisYearAccountRecords) {
       inAccountOfThisYear += thisYearAccountRecords[record].source !== '股票' ? thisYearAccountRecords[record].transfer : 0;
     }
+
     let ROI = (incomeOfLastYear/(summary - incomeOfThisYear - inAccountOfThisYear));
     return ROI.toFixed(4)
-  }
+  },
+  async updateDataForDeleteStock(stock){
+      //get all account data
+      let accountRecord = [];
+      let accountInfo = [];
+      let timestamp = stock.timestamp
+      console.log(stock);
+      console.log(stock.timestamp);
+  
+      let getAccountRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}` );
+      await getAccountRef.once('value').then((snapshot) => {
+        snapshot.forEach(element => {
+          accountInfo.unshift(element.val());
+        });
+          accountRecord = accountInfo[2]
+        });
+      const deleteRecord = Object.fromEntries(Object.entries(accountRecord).filter(([key]) => key.includes(timestamp)))
+      let newRecords = Object.fromEntries(Object.entries(accountRecord).filter(([key]) => !key.includes(timestamp)))
+      console.log(deleteRecord[timestamp])
+
+      Object.entries(newRecords).forEach(([key, record] )=> {
+          if(deleteRecord[timestamp].timestamp < record.timestamp) {
+            if(deleteRecord[timestamp].transferStatus === '存入') {
+              record.account_record_Money = record.account_record_Money + deleteRecord[timestamp].transfer
+              record.account_record_Stock = record.account_record_Stock - deleteRecord[timestamp].transfer
+            } else {
+              record.account_record_Money = record.account_record_Money - deleteRecord[timestamp].transfer
+              record.account_record_Stock = record.account_record_Stock + deleteRecord[timestamp].transfer
+            }
+          }
+      });
+    
+      firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}`).update({'account_record':newRecords})
+      
+      api.getAccount().then(async (account)=> {
+          let getRefOfAccount = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/account_summary` );  
+          let accountMoney = account.accountMoney
+          let accountStock = account.accountStock
+  
+          if(deleteRecord[timestamp].transferStatus === '存入') {
+            accountMoney += deleteRecord[timestamp].transfer
+            accountStock -= deleteRecord[timestamp].transfer
+          } else {
+            accountMoney -= deleteRecord[timestamp].transfer
+            accountStock += deleteRecord[timestamp].transfer
+          }
+          await getRefOfAccount.update({
+            accountMoney: accountMoney,
+            accountStock: accountStock
+          });
+        });
+      if(stock.status === 'sale'){
+        await firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stock_info`).child(timestamp).update({
+            ...stock,
+            income: 0,   
+            sale_cost: 0,
+            sale_date:'',
+            sale_price: 0,
+            sale_sheet: 0,
+            status: "unsale"
+        });
+      }
+      return stock
+    }
 };
 
 export default api;

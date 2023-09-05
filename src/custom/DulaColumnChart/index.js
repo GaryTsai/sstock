@@ -1,5 +1,4 @@
-import React, { Component, useEffect, useRef, useState } from "react";
-import { render } from "react-dom";
+import React, { useEffect, useRef, useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { TextField, MenuItem } from "@mui/material";
@@ -45,7 +44,6 @@ const DualColumnChart = ({ chartInfo, type,  dividend }) => {
   const [selectList, setSelectList] = useState([{value:'all', label: 'all'}]);
   const [info, setInfo] = useState({ value: [], rate: [], date: [] });
   const chartComponentRef = useRef < HighchartsReact.RefObject > null;
-  const isMobile = browserUtils.isMobile();
 
   const handleChange = (e) => {
     setSelectTimeRange(e.target.value);

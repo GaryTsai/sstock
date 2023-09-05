@@ -4,6 +4,7 @@ import api from "../../api/api";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch } from 'react-redux';
 import { changeContentLoading } from './../../slices/mutualState';
+import { fetchAccountSummary, fetchRecords } from '../../slices/apiDataSlice';
 const initialState = {
   date: new Date(),
   price: '',
@@ -20,17 +21,16 @@ const AccountTransfer = (props) => {
 
   const submitTrade = () => {
     const {price , transferStatus, source} = accountInfo;
-    const {updateAccount} = props;
 
     if(isNaN(price) || price.trim() === '' ){
       alert('金額欄位請輸入數字')
       return 
     }
     if (transferStatus && source && !isNaN(price)) {
-      dispatch(changeContentLoading(true))
       const transferInfo = {price: Number(price), transferStatus: transferStatus, source: source};
       api.tradeForAccount(transferInfo).then(() => {
-        updateAccount();
+        dispatch(fetchRecords());
+        dispatch(fetchAccountSummary());
       });
       setAccountInfo({...accountInfo, 
         price: '',
