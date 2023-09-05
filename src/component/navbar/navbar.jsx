@@ -5,7 +5,7 @@ import { FormGroup, FormControlLabel, Switch } from '@mui/material'
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { changeLoginStatus, changeStockMergeState } from './../../slices/mutualState';
-
+import SummaryList from './summaryList'
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -15,7 +15,12 @@ const Navbar = () => {
 
   const currentStockPage = location.pathname === '/'
   const isStockHistory = location.pathname === '/stockHistory'
-
+  const summaryTitle = {
+    "投入成本:": totalCost + '元',
+    "總損益:": profitAndLoss + '元',
+    "投報率:": profit + '%',
+    "去年投報率:": lastYearROI + '%',
+  };
   const getActiveStyle = () =>{
     if(browserUtils.isMobile()){
       return {
@@ -70,7 +75,10 @@ const Navbar = () => {
   }
 
   const isMobile = browserUtils.isMobile();
-
+  const summary = Object.entries(summaryTitle).map(([key, value])=>{
+    return <SummaryList key={key} title={key} value={value}/>
+  })
+  console.log(summary);
   return (
     <div>
       <nav className="navbar navbar-expand-md navbar-light " style={{backgroundColor: 'rgb(52 149 220)'}}>
@@ -103,10 +111,15 @@ const Navbar = () => {
             </div>}
         { isStockHistory && <div style={{display: 'inherit',...getComputeStyleForMobile()}}>
               <div style={isMobile ? styles.reportMobile : styles.report}>
-              <div style={isMobile ? styles.reportFormatMobile : styles.reportFormat}><div>投入成本:</div><div>{saleCost}元</div></div>
+                {summary/* {
+                Object.entries(summaryTitle).map(({title, value})=>{
+                  return <SummaryList key={title} title={title} value={value}/>
+                })
+                } */}
+              {/* <div style={isMobile ? styles.reportFormatMobile : styles.reportFormat}><div>投入成本:</div><div>{saleCost}元</div></div>
               <div style={isMobile ? styles.reportFormatMobile : styles.reportFormat}><div>總損益:</div> <div>{profitAndLoss}元</div></div>
               <div style={isMobile ? styles.reportFormatMobile : styles.reportFormat}><div>投報率:</div> <div>{profit}%</div></div>
-              <div style={isMobile ? styles.reportFormatMobile : styles.reportFormat}><div>去年投報率:</div> <div>{lastYearROI}%</div></div>
+              <div style={isMobile ? styles.reportFormatMobile : styles.reportFormat}><div>去年投報率:</div> <div>{lastYearROI}%</div></div> */}
               </div>
         </div>}
         {!isMobile && <div style={styles.logOutButton} onClick={() => logOut()}>登出</div>}

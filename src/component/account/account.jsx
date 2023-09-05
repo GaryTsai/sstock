@@ -74,7 +74,7 @@ const Account = () => {
           <div className="container">
             <table className="table table-striped">
               <thead>
-              <tr>
+              <tr  style={{}}> 
                 <th>創建時間</th>
                 <th>帳戶金額</th>
                 <th>股票帳戶</th>
@@ -91,41 +91,48 @@ const Account = () => {
               </tbody>
             </table>
           </div>
-          <div className="table-responsive">
-            <table className="table">
-              <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">帳戶金額</th>
-                <th scope="col">股票金額</th>
-                <th scope="col">金額(含損益)</th>
-                <th scope="col">狀態</th>
-                <th scope="col">時間</th>
-                <th scope="col">來源</th>
-              </tr>
-              </thead>
-              <tbody>
-              {
-                !recordsLoading && records.map((record, index) => (
-                  <Record key={index} record={record} index={index}/>
-                ))
-              }
-              {recordsLoading && <div style={{position: 'absolute',
-                top: 0,
-                left: 0,
-                height: '100%',
-                width: '100%',
-                display: 'block',
-                zIndex: 7}}><img  alt="" style={{display:'flex',
-                width: '64px',
-                height: '64px',
-                position: 'relative',
-                margin: '0px auto',
-                backgroundSize: '100%',
-                top: 'calc(50% - 50px)'
-              }} src={require('./../../assets/img/contentLoading.png')}/></div>}
-              </tbody>
-            </table>
+          <div>
+            <div className="table-responsive" style={{ overflowX: 'unset' }}>
+              <table className="table">
+                <thead>
+                <tr style={{
+                  position: "sticky",
+                  top: "0px",
+                  backgroundColor: "black",
+                  color: "#FFFFFF"
+                  }}>
+                  <th scope="col">#</th>
+                  <th scope="col">帳戶金額</th>
+                  <th scope="col">股票金額</th>
+                  <th scope="col">金額(含損益)</th>
+                  <th scope="col">狀態</th>
+                  <th scope="col">時間</th>
+                  <th scope="col">來源</th>
+                </tr>
+                </thead>
+                <tbody>
+                {
+                  !recordsLoading && records.map((record, index) => (
+                    <Record key={index} record={record} index={index}/>
+                  ))
+                }
+                {recordsLoading && <div style={{position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  height: '100%',
+                  width: '100%',
+                  display: 'block',
+                  zIndex: 7}}><img  alt="" style={{display:'flex',
+                  width: '64px',
+                  height: '64px',
+                  position: 'relative',
+                  margin: '0px auto',
+                  backgroundSize: '100%',
+                  top: 'calc(50% - 50px)'
+                }} src={require('./../../assets/img/contentLoading.png')}/></div>}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
         <div className="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
