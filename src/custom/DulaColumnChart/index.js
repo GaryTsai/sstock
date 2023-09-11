@@ -156,23 +156,7 @@ const DualColumnChart = ({ chartInfo, type,  dividend }) => {
         },
         opposite: false,
       },
-      // { 
-      //   softMax: info.rate ? Math.max(...info.rate.map(item => item.y)) : 0,
-      //   softMin: info.rate ? Math.min(...info.rate.map(item => item.y)) : 0,
-      //   title: {
-      //     text: "投報率",
-      //     style: {
-      //       color: Highcharts.getOptions().colors[1],
-      //     },
-      //   },
-      //   labels: {
-      //     format: "{value} %",
-      //     style: {
-      //       color: Highcharts.getOptions().colors[1],
-      //     },
-      //   },
-      //   opposite: false,
-      // },
+
     ],
     series: [
       {

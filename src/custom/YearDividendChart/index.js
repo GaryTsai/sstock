@@ -111,16 +111,6 @@ const DividendChart = ({ perDividend }) => {
 }
 
 };
-  // const getSummary = () => {
-  //   let accumulator = 0
-  //   perDividend.flat().reduce(
-  //     (previousValue , currentValue) => {
-  //       if(!isNaN(currentValue)) return accumulator += currentValue
-  //     }
-  //   );
-  //   setTotalDividend(accumulator)
-
-  // }
 
   useEffect(()=>{
     let accumulatorDividend = 0

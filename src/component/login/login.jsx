@@ -13,6 +13,7 @@ import utils from './../../utils/dateFormat'
 import browserUtils from "./../../utils/browserUtils";
 import { useNavigate } from "react-router-dom";
 import { changeLoginStatus } from './../../slices/mutualState';
+import Swal from 'sweetalert2'
 
 const initialState = {
   email:'',
@@ -62,11 +63,16 @@ const Login = (props) => {
           setLoginInfo({...loginInfo, email: '', password: ''})
           logInCallBack && logInCallBack(user.uid);
           dispatch(changeLoginStatus())
-          navigate('/')
+          navigate('/sstock')
         }
       })
       .catch((error) => {
-        window.alert(error.message.toString())
+        Swal.fire({
+          icon: 'warning',
+          title: '警告',
+          text: error.message.toString()
+        })
+        
         setLoginInfo({...loginInfo, error:true, message: error.message})
         setTimeout(() => setLoginInfo({...loginInfo, error:false, message: ''}), 5000);
         return ;
@@ -118,7 +124,11 @@ const Login = (props) => {
       }).catch(error => {
       // 註冊失敗時顯示錯誤訊息
       setLoginInfo({...loginInfo, exist: true, error:true, message: error.message.toString()});
-      window.alert(error.message.toString())
+      Swal.fire({
+        icon: 'warning',
+        title: '警告',
+        text: error.message.toString()
+      })
       console.log('register failed');
       return ;
     });
@@ -136,10 +146,18 @@ const Login = (props) => {
     const { resetEmail } = loginInfo;
     const auth = firebase.auth();
     auth.sendPasswordResetEmail(resetEmail).then(function() {
-      window.alert('已發送信件至信箱，請按照信件說明重設密碼');
+      Swal.fire({
+        icon: 'warning',
+        title: '警告',
+        text: '已發送信件至信箱，請按照信件說明重設密碼'
+      })
       closeForgetPWD();
     }).catch(function(error) {
-      window.alert(error.message)
+      Swal.fire({
+        icon: 'warning',
+        title: '警告',
+        text: error.message
+      })
     });
   };
 

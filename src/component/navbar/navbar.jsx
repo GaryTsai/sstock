@@ -12,8 +12,7 @@ const Navbar = () => {
   const location = useLocation()
   const { isMerge } = useSelector((state) => state.mutualStateReducer)
   const { totalCost, saleCost, profit, profitAndLoss, lastYearROI} = useSelector((state) => state.apiDataReducer)
-
-  const currentStockPage = location.pathname === '/'
+  const currentStockPage = location.pathname === '/sstock'
   const isStockHistory = location.pathname === '/stockHistory'
   const summaryTitle = {
     "投入成本:": totalCost + '元',
@@ -78,11 +77,11 @@ const Navbar = () => {
   const summary = Object.entries(summaryTitle).map(([key, value])=>{
     return <SummaryList key={key} title={key} value={value}/>
   })
-  console.log(summary);
+
   return (
     <div>
       <nav className="navbar navbar-expand-md navbar-light " style={{backgroundColor: 'rgb(52 149 220)'}}>
-        <div className="navbar-brand"  style={currentStockPage ? {...getActiveStyle(), padding: '5px'} : {cursor: 'pointer'}} onClick={e => navigate('/')}>台灣股票</div>
+        <div className="navbar-brand"  style={currentStockPage ? {...getActiveStyle(), padding: '5px'} : {cursor: 'pointer'}} onClick={e => navigate('/sstock')}>台灣股票</div>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
@@ -107,19 +106,11 @@ const Navbar = () => {
           </ul>
         </div>
         { currentStockPage && <div style={{ padding: '5px 0px',...getComputeStyleForMobile()}}>
-              <div style={isMobile ? styles.reportFormatMobile : styles.reportFormat}><div>目前投入總成本:</div><div> {totalCost}元</div></div>
+              <SummaryList title={'目前投入總成本:'} value={totalCost + '元'}/>
             </div>}
         { isStockHistory && <div style={{display: 'inherit',...getComputeStyleForMobile()}}>
               <div style={isMobile ? styles.reportMobile : styles.report}>
-                {summary/* {
-                Object.entries(summaryTitle).map(({title, value})=>{
-                  return <SummaryList key={title} title={title} value={value}/>
-                })
-                } */}
-              {/* <div style={isMobile ? styles.reportFormatMobile : styles.reportFormat}><div>投入成本:</div><div>{saleCost}元</div></div>
-              <div style={isMobile ? styles.reportFormatMobile : styles.reportFormat}><div>總損益:</div> <div>{profitAndLoss}元</div></div>
-              <div style={isMobile ? styles.reportFormatMobile : styles.reportFormat}><div>投報率:</div> <div>{profit}%</div></div>
-              <div style={isMobile ? styles.reportFormatMobile : styles.reportFormat}><div>去年投報率:</div> <div>{lastYearROI}%</div></div> */}
+                {summary}
               </div>
         </div>}
         {!isMobile && <div style={styles.logOutButton} onClick={() => logOut()}>登出</div>}

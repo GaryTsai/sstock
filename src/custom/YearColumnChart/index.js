@@ -24,7 +24,7 @@ const ColumnChart = ({
   type,
   dividend
 }) => {
-    // if(JSON.stringify(chartInfo) === '{}') 
+
     const [yearDividend, setYearDividend] = useState([]);
 
     const chartComponentRef = useRef<HighchartsReact.RefObject>(null);

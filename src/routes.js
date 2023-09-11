@@ -8,7 +8,7 @@ import WrapLayout from "./component/WrapLayout";
 
 const routes = [
     {
-        path: "/",
+        path: "/sstock",
         element: <WrapLayout children={<Stocks/>}></WrapLayout>,
         children: [],
     },

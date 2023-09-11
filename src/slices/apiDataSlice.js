@@ -1,7 +1,6 @@
 
-import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from './../api/api'
-import { changeContentLoading } from "./mutualState";
 
 export const fetchStock = createAsyncThunk("stock/fetchStock", async () => {
   console.log('-----------fetchStocks-------------');

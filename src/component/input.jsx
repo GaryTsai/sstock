@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import utils from "./../utils/dateFormat";
 import api from './../api/api'
 import "react-datepicker/dist/react-datepicker.css";
@@ -7,6 +7,7 @@ import browserUtils from "./../utils/browserUtils";
 import { changeContentLoading } from '../slices/mutualState';
 import { fetchStock } from '../slices/apiDataSlice';
 import { useLocation } from 'react-router';
+import Swal from 'sweetalert2'
 
 const initialState = {
   date: new Date(),
@@ -23,7 +24,9 @@ const Input = () => {
   const [inputInfo, setInputInfo] = useState(initialState)
   const dispatch = useDispatch()
   const location = useLocation()
-
+  const { acMoney } = useSelector(
+    (state) => state.apiDataReducer
+  );
   useEffect(() => {
     setInputInfo({...inputInfo, date: utils.dateFormat(new Date()), datePickerDate: utils.dateFormat(new Date())})
   }, [])
@@ -54,14 +57,20 @@ const Input = () => {
 
   const submitStock = () => {
     const {date, name, number, price, sheet} = inputInfo;
-    if (date && name && number && !isNaN(price) && !isNaN(sheet)) {
+    const buyExpense = parseFloat(price) * parseFloat(sheet) * 1000
+
+    if(buyExpense > acMoney){
+      Swal.fire({
+        icon: 'error',
+        title: '錯誤',
+        text: '存款不足以買入該價格股票，請確保該帳戶有足夠的金額!'
+      })
+    } else if (date && name && number && !isNaN(price) && !isNaN(sheet)) {
       const stockInfo = {date: date, name: name, number: number, price: parseFloat(price), sheet: parseFloat(sheet)};
       
-      dispatch(changeContentLoading(true))//無作用
       api.insertNewData(stockInfo).then(() => {
         api.updateAccountRecord(stockInfo, false);
         dispatch(fetchStock())
-        dispatch(changeContentLoading(false))//無作用
       });
       setInputInfo({
         ...inputInfo,
@@ -71,7 +80,11 @@ const Input = () => {
         sheet: ''
       })
     } else {
-      return alert('不許有任何一個為空');
+      return Swal.fire({
+        icon: 'warning',
+        title: '警告',
+        text: '買入資訊不許有一個欄位為空!'
+      })
     }
   };
 
@@ -84,7 +97,7 @@ const Input = () => {
   const {datePickerDate, name, number, price, sheet, isSaleOpen} = inputInfo;
   const isMobile = browserUtils.isMobile();
   const isStockHistory = location.pathname === '/stockHistory'
- 
+
   return (
     <>
     {!isStockHistory && <div style={{margin: isMobile ?  '0px 5px 0px 5px' : '0 5px'}}> 

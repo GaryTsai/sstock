@@ -9,8 +9,7 @@ import { useSelector, useDispatch} from 'react-redux';
 import { fetchStock } from '../../slices/apiDataSlice';
 
 const TwChart = () => {
-
-  // const [chartInfo, setChartInfo] = useState({})
+  
   const [dividendInfo, setDividendInfo] = useState({
     yearDividend: {},
     perDividend: [],
@@ -94,7 +93,6 @@ const TwChart = () => {
   }
 
   useEffect(() => {
-    console.log('一 useEffect');
     if(allStocks.length === 0)
       dispatch(fetchStock())
   }, [])

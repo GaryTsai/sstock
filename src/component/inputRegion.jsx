@@ -7,7 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch } from 'react-redux';
 import { updateQueryData } from '../slices/apiDataSlice';
 import { changeQueryStatus } from '../slices/mutualState';
-
+import Swal from 'sweetalert2'
 const initialState = {
   startStandardDate: '',
   endStandardDate: '',
@@ -87,45 +87,14 @@ const InputRegion = (props) => {
           sheet: ''
         })
       } else {
-        return alert('不許有任何一個為空');
+        return Swal.fire({
+          icon: 'warning',
+          title: '警告',
+          text: '不許有任何一個為空!'
+        })
       }
     }
   };
-
-  // const updateQueryData = (stockInfo) => {
-  //   const startRegion = stockInfo.dateRegion1;
-  //   const endRegion = stockInfo.dateRegion2;
-
-  //   let profit = 0;
-  //   let saleCost = 0;
-  //   let profitAndLoss = 0;
-  //   let result = '';
-
-  //   if (stockInfo.stockStatus === 'individual') {
-  //     switch (stockInfo.saleStatus) {
-  //       case 'all':
-  //         result = allStocks.filter(a => (startRegion <= a.sale_date || startRegion <= a.date) && (a.date <= endRegion || a.sale_date <= endRegion));
-  //         break;
-  //       case 'sale':
-  //         result = saleStocks.filter(a => startRegion <= a.sale_date && a.sale_date <= endRegion);
-  //         break;
-  //       case 'unsale':
-  //         result = unSaleStocks.filter(a => startRegion <= a.date && a.date <= endRegion);
-  //         break;
-  //       default:
-  //         break;
-  //     }
-
-  //     for (let item in result) {
-  //       profitAndLoss += result[item].income;
-  //       saleCost += result[item].cost;
-  //     }
-  //     profit = (profitAndLoss / saleCost * 100).toFixed(2);
-
-  //     // setAccountInfo({...accountInfo, showStocks: result.length === 0 ? 'No Data' : result, profit: profit, saleCost: saleCost, profitAndLoss: profitAndLoss, saleStatus: stockInfo.saleStatus});
-  //   } else if (stockInfo.stockStatus === 'mutual') {
-  //   }
-  // };
 
   const inActiveTimeRegionGroup = () =>{
     Object.keys(timeRegionInputRef.current).map((option, index)=>{
@@ -139,14 +108,22 @@ const InputRegion = (props) => {
 
     if(dateState === 'start'){
       if(date > inputInfo.endStandardDate){
-        alert('起始時間不可大於結束時間')
+        Swal.fire({
+          icon: 'warning',
+          title: '警告',
+          text: '起始時間不可大於結束時間!'
+        })
         return
       }
       setInputInfo({...inputInfo, startStandardDate:date, dateRegion1: date, queryState: ''});
     }
     else{
       if(date < inputInfo.startStandardDate){
-        alert('結束時間不可小於起始時間')
+        Swal.fire({
+          icon: 'warning',
+          title: '警告',
+          text: '結束時間不可小於起始時間!'
+        })
         return
       }
       setInputInfo({...inputInfo, endStandardDate:date, dateRegion2: date, queryState: ''});
@@ -154,8 +131,6 @@ const InputRegion = (props) => {
   }
 
   const getSaleOptions = (e) => setInputInfo({...inputInfo, saleStatus: e.target.value});
-
-  // const getStockOptions = (e) => setInputInfo({...inputInfo, stockStatus: e.target.value});
 
   const getStyleOfButton = () =>{
     if(isMobile) {

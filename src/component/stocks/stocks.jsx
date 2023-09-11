@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Stock from "./stock";
 import InputRegion from "../inputRegion";
 import Input from "../input";
@@ -6,33 +6,38 @@ import browserUtils from "../../utils/browserUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import _ from "lodash";
-import { fetchStock } from "../../slices/apiDataSlice";
-import { changeLoading } from "../../slices/mutualState";
+import { fetchStock, fetchAccountSummary } from "../../slices/apiDataSlice";
+import { changeInitLoading } from "../../slices/mutualState";
+import settings from "../settings/settings";
 
 const Stocks = () => {
-  const { contentLoading, queryStatus, isMerge } = useSelector(
+  const { queryStatus, isMerge } = useSelector(
     (state) => state.mutualStateReducer
   );
-  const { allStocks, unSaleStocks, showStocks } = useSelector(
+  const { allStocks, unSaleStocks, showStocks, loading } = useSelector(
     (state) => state.apiDataReducer
   );
+
   const location = useLocation();
   const dispatch = useDispatch();
   const isMobile = browserUtils.isMobile();
   const isStockHistory = location.pathname === "/stockHistory";
 
   useEffect(() => {
-    dispatch(changeLoading(true));
+    if(settings.isFirst){
+      dispatch(changeInitLoading(true));
+    }
+    dispatch(fetchAccountSummary())
     dispatch(fetchStock());
   }, []);
 
   const infoMerge = (datas) => {
     const result = datas.reduce((mergeResult, prev, next) => {
       const isNotExist =
-        mergeResult &&
-        mergeResult.filter(
-          (item) => _.trim(item.number) === _.trim(prev.number)
-        ).length === 0;
+        mergeResult && mergeResult.filter((item) => _.trim(item.number) === _.trim(prev.number)).length === 0;
+        let handingFee = prev.price * 1000 * prev.sheet * 0.001425 < 20 ? 20 : Math.floor(prev.price * 1000 * prev.sheet * 0.001425);
+        if(prev.number === '00878')
+          console.log(handingFee)
       if (isNotExist) {
         mergeResult.push({
           cost: prev.cost,
@@ -46,6 +51,7 @@ const Stocks = () => {
           sale_sheet: 0,
           sheet: prev.sheet,
           status: "unsale",
+          handingFee: handingFee
         });
       } else {
         const index = _.findIndex(
@@ -58,24 +64,25 @@ const Stocks = () => {
           cost: mergeResult[index].cost + prev.cost,
           price: mergeResult[index].price + prev.price * prev.sheet,
           sheet: mergeResult[index].sheet + prev.sheet,
+          handingFee: mergeResult[index].handingFee +  handingFee
         };
       }
+      console.log(mergeResult)
       return mergeResult;
     }, []);
 
     return result;
   };
 
-  const stocks = isStockHistory
-    ? queryStatus === "all"
-      ? allStocks
-      : showStocks
-    : isMerge
-    ? infoMerge(unSaleStocks)
-    : unSaleStocks;
+  const stocks = isStockHistory ? queryStatus === "all" ? allStocks : showStocks : isMerge ? infoMerge(unSaleStocks) : unSaleStocks;
+  
   if (stocks === "No Data" || stocks.length !== 0) {
-    dispatch(changeLoading(false));
+    if(settings.isFirst){
+      dispatch(changeInitLoading(false));
+      settings.isFirst = false
+    }
   }
+
   return (
     <div>
       <Input />
@@ -112,7 +119,7 @@ const Stocks = () => {
             </tr>
           </thead>
           <tbody>
-            {!contentLoading &&
+            {!loading &&
               stocks !== "No Data" &&
               stocks.length !== 0 &&
               stocks.map((stock, index) => (
@@ -123,7 +130,7 @@ const Stocks = () => {
                   isMerge={isMerge}
                 />
               ))}
-            {contentLoading && (
+            {!settings.isFirst && loading && (
               <div
                 style={{
                   position: "absolute",

@@ -3,8 +3,9 @@ import browserUtils from "../../utils/browserUtils";
 import api from "../../api/api";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch } from 'react-redux';
-import { changeContentLoading } from './../../slices/mutualState';
 import { fetchAccountSummary, fetchRecords } from '../../slices/apiDataSlice';
+import Swal from 'sweetalert2'
+
 const initialState = {
   date: new Date(),
   price: '',
@@ -23,7 +24,11 @@ const AccountTransfer = (props) => {
     const {price , transferStatus, source} = accountInfo;
 
     if(isNaN(price) || price.trim() === '' ){
-      alert('金額欄位請輸入數字')
+      Swal.fire({
+        icon: 'warning',
+        title: '警告',
+        text: '金額欄位請輸入數字!',
+      })
       return 
     }
     if (transferStatus && source && !isNaN(price)) {
@@ -37,7 +42,11 @@ const AccountTransfer = (props) => {
         source: ''
       });
     } else {
-      return alert('不許有任何一個為空');
+      return Swal.fire({
+        icon: 'warning',
+        title: '警告',
+        text: '不許有任何一個為空!',
+      })
     }
   };
 

@@ -5,6 +5,7 @@ import { fetchStock } from '../../slices/apiDataSlice';
 import api from '../../api/api';
 import { useDispatch } from 'react-redux';
 import { changeContentLoading } from '../../slices/mutualState';
+import Swal from 'sweetalert2'
 
 const Stock = (props) =>{
   const priceRef = useRef(null);
@@ -26,9 +27,13 @@ const Stock = (props) =>{
   
   const updateStockStatus = () => {
     const {stock} = props;
-    const salePrice = parseInt(priceRef.current.value);
+    const salePrice = parseFloat(priceRef.current.value);
     if(isNaN(salePrice) || !salePrice )
-      alert('請輸入數字');
+      Swal.fire({
+        icon: 'error',
+        title: '錯誤',
+        text: '請輸入數字'
+      })
     else{
             dispatch(changeContentLoading(true))
             api.updateStock(salePrice, stock.sheet, stock).then(() => {
@@ -114,16 +119,14 @@ const Stock = (props) =>{
               </div>
             </div>
           </td>}
-          {/* {  (!isStockHistory && isMerge === false && stock.status === 'sale') && <td>{stock.sale_date}</td>} */}
           {  (!isStockHistory && isMerge === false && stock.status === 'unsale')  && <td>{stock.date}</td>}
-          {/* { isMerge === false && (stock.status === 'unsale' ? <td>{stock.date}</td>: <td>{stock.date}</td>)} */}
           { isStockHistory && <td>{stock.date}</td>}
           { isStockHistory && (stock.status === 'sale' ? <td>{stock.sale_date}</td> : <td></td>)}
           <td>{stock.name}</td>
           <td>{stock.number}</td>
           <td>{isMerge ? (averagePrice / (stock.sheet)).toFixed(4) : averagePrice }</td>
           <td>{isFloat(stock.sheet) ? stock.sheet.toFixed(3) : stock.sheet}</td>
-          <td>{isMerge ? (stock.cost - averagePrice * 1000).toFixed(0) : Math.floor(handlingFee)}</td>
+          <td>{isMerge ? stock.handingFee : Math.floor(handlingFee)}</td>
           <td>{Math.floor(stock.cost)}</td>
           <td>{stock.status === "unsale" ? '未賣出' : '已賣出'}</td>
           <td>{Math.floor(stock.sale_cost)}</td>

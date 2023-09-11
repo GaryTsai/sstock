@@ -1,10 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-// interface initialState {
-//     loading: Boolean,
-//     contentLoading: Boolean,
-// }
+
 const initialState = {
-    loading: false,
+    initLoading: false,
     contentLoading: false,
     isMerge: false,
     logInStatus: false,
@@ -17,9 +14,8 @@ export const mutualStateSlice = createSlice({
         changeContentLoading: (state, action) => {
             state.contentLoading = action.payload
         },
-        changeLoading: (state,action) => {
-            console.log('action.payload',action.payload)
-            state.loading = action.payload
+        changeInitLoading: (state,action) => {
+            state.initLoading = action.payload
         },
         changeStockMergeState: (state) => {
             state.isMerge = !state.isMerge
@@ -34,6 +30,6 @@ export const mutualStateSlice = createSlice({
 
 })
 
-export const { changeLoading, changeContentLoading, changeStockMergeState, changeLoginStatus, changeQueryStatus} = mutualStateSlice.actions
+export const { changeInitLoading, changeContentLoading, changeStockMergeState, changeLoginStatus, changeQueryStatus} = mutualStateSlice.actions
 
 export default mutualStateSlice.reducer

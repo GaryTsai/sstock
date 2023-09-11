@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 const WrapLayout = ({children}) => {
     const navigate = useNavigate()
     const account = localStorage.getItem('account-stock');
-    const { loading } = useSelector(state => state.mutualStateReducer)
+    const { initLoading } = useSelector(state => state.mutualStateReducer)
     useEffect(() => {
         if(!account) {
             navigate('/login')
@@ -16,7 +16,7 @@ const WrapLayout = ({children}) => {
 
     return (
         <div>
-            {loading === true &&<div style={{position: 'absolute',
+            {initLoading === true &&<div style={{position: 'absolute',
             top: 0,
             left: 0,
             height: '100%',

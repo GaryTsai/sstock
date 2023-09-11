@@ -22,14 +22,7 @@ const fireBaseConfig= {
 
 firebase.initializeApp(fireBaseConfig);
 firebase.analytics();
-// get database refer
-// var getDataRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stockInfo` );
-// var getUSDataRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stockInfo` );
-//
-// var getAccountRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/account_record` );
-// var getAccountRecordRef = firebase.database().ref(`/accountRecord` );
-// var getUSAccountRecordRef = firebase.database().ref(`/us_accountRecord` );
-// var getUSAccountRef = firebase.database().ref(`/us_account` );
+
 var stockData;
 settings.user_id = localStorage.getItem('account-stock')
 
@@ -101,7 +94,6 @@ const api = {
       status:"unsale"
     }).then(function () {
       console.log("insert new stock successfully");
-      // self.updateAllData();
     }).catch(function (err) {
       console.error("insert new stock failed：", err);
     });
@@ -117,10 +109,10 @@ const api = {
   },
 
   async updateStock(salePrice, saleSheet, stock){
-      console.log(stock);
       const isDayTrading = stock.date === d.dateFormat(new Date());
-      let income = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.001425) - Math.floor(salePrice * 1000 * saleSheet * 0.003 * (isDayTrading ? 0.5 : 1)) - stock.cost;
-      let sale_cost = Math.round(salePrice * 1000 * saleSheet) - Math.floor(salePrice * 1000 * saleSheet * 0.001425) - Math.floor(salePrice * 1000 * saleSheet * 0.003 * (isDayTrading ? 0.5 : 1));
+      let handlingFee = isDayTrading ? Math.floor(salePrice * 1000 * saleSheet * 0.001425) + Math.floor(salePrice * 1000 * saleSheet * 0.003 * (isDayTrading ? 0.5 : 1)) : Math.floor(salePrice * 1000 * saleSheet * 0.004425) 
+      let income = Math.round(salePrice * 1000 * saleSheet) - handlingFee - stock.cost;
+      let sale_cost = Math.round(salePrice * 1000 * saleSheet) - handlingFee;
       let sale_date = d.dateFormat(new Date());
       let getDataRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stock_info` );
 
@@ -207,9 +199,9 @@ const api = {
     let cost = 0;
     let salePrice = 0;
     const isDayTrading = stockInfo.date === d.dateFormat(new Date());
-    
+    let handlingFee = isDayTrading ? Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425) + Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.003 * (isDayTrading ? 0.5 : 1)) : Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.004425) 
     if (sale) {
-      salePrice = Math.round(stockInfo.price * 1000 * stockInfo.sheet) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425) - Math.floor(stockInfo.price * 1000 * stockInfo.sheet * (isDayTrading ? 0.5 : 1) * 0.003);
+      salePrice = Math.round(stockInfo.price * 1000 * stockInfo.sheet) - handlingFee;
       money = accountData.accountMoney + salePrice;
       stock = accountData.accountStock - stockInfo.cost;
     } else {
