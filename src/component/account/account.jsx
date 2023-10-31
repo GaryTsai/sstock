@@ -24,8 +24,8 @@ const Account = () => {
   const { records, recordsLoading, acTime, acMoney, acStock, acSummary } = useSelector((state) => state.apiDataReducer)
  
   useEffect(() => {
-    if(records.length === 0)
-      dispatch(fetchRecords())
+
+    dispatch(fetchRecords())
     dispatch(fetchAccountSummary())
     window.addEventListener('scroll', () => {
       if(document.documentElement.scrollTop > 0 ){

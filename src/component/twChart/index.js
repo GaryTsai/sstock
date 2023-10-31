@@ -30,8 +30,8 @@ const TwChart = () => {
   const getDate = data => {
     const firstDateYear = data[data.length-1].date.substring(0 ,4)
     const firstDateMonth = data[data.length-1].date.substring(5 ,7)
-    const lastDateYear = new Date().getFullYear()
-    const lastDateMonth = new Date().getMonth() + 1
+    const lastDateYear = new Date().getFullYear().toString()
+    const lastDateMonth = (new Date().getMonth() + 1).toString()
     let dateArray = []
     for(let year = firstDateYear; year <= lastDateYear; year++ ){
       for(let month = (year === firstDateYear ? firstDateMonth : 1 ); month <= (year === lastDateYear ? lastDateMonth : 12 ); month++ ){
@@ -41,7 +41,9 @@ const TwChart = () => {
           dateArray.push(`${year}-${month}`)
       }
     }
-    dateArray = dateArray.slice(11);
+    if(dateArray > 12)
+      dateArray = dateArray.slice(11);
+
     return dateArray
   }
 

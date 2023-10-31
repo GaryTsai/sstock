@@ -15,7 +15,7 @@ const Stocks = () => {
   const { queryStatus, isMerge } = useSelector(
     (state) => state.mutualStateReducer
   );
-  const { allStocks, unSaleStocks, showStocks, loading } = useSelector(
+  const { allStocks, unSaleStocks, showStocks, loading, initLoading } = useSelector(
     (state) => state.apiDataReducer
   );
 
@@ -26,6 +26,7 @@ const Stocks = () => {
   const isStockHistory = location.pathname === "/stockHistory";
 
   useEffect(() => {
+    console.log('1.', settings.isFirst)
     if(settings.isFirst){
       dispatch(changeInitLoading(true));
     }
@@ -68,7 +69,7 @@ const Stocks = () => {
           handingFee: mergeResult[index].handingFee +  handingFee
         };
       }
-      console.log(mergeResult)
+
       return mergeResult;
     }, []);
 
@@ -77,11 +78,13 @@ const Stocks = () => {
 
   const stocks = isStockHistory ? queryStatus === "all" ? allStocks : showStocks : isMerge ? infoMerge(unSaleStocks) : unSaleStocks;
   
-  if (stocks === "No Data" || stocks.length !== 0) {
+  if (stocks === "No Data" || stocks.length === 0) {
     if(settings.isFirst){
       dispatch(changeInitLoading(false));
       settings.isFirst = false
     }
+  } else {
+    dispatch(changeInitLoading(false));
   }
 
   return (

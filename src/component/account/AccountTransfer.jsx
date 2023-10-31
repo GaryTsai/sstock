@@ -81,10 +81,10 @@ const AccountTransfer = (props) => {
         <div className="btn-group btn-group-toggle from-group col-md-2" data-toggle="buttons"
               style={{...getStyleOfButton()}}>
           <label className="btn btn-warning active" onClick={getTransferOptions}>
-            <input type="radio" name="stockOption" id="individual" value='transferIn' autoComplete="off"/> {t("transfer")}
+            <input type="radio" name="stockOption" id="individual" value='transferIn' autoComplete="off"/> {t("deposit")}
           </label>
           <label className="btn btn-warning" onClick={getTransferOptions}>
-            <input type="radio" name="stockOption" id="mutual" value='transferOut' autoComplete="off"/> {t("deposit")}
+            <input type="radio" name="stockOption" id="mutual" value='transferOut' autoComplete="off"/> {t("transfer")}
           </label>
         </div>
         <button style={{borderRadius: '5px', margin: 'auto 5px'}} className="btn btn-primary from-group col-md-2 input-sale-frame" type="submit"

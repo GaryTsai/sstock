@@ -266,8 +266,6 @@ const api = {
         let accountRecord = [];
         let accountInfo = [];
         let timestamp = stock.timestamp
-        console.log(stock);
-        console.log(stock.timestamp);
 
         let getAccountRef = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}`);
         await getAccountRef.once('value').then((snapshot) => {
@@ -278,7 +276,6 @@ const api = {
         });
         const deleteRecord = Object.fromEntries(Object.entries(accountRecord).filter(([key]) => key.includes(timestamp)))
         let newRecords = Object.fromEntries(Object.entries(accountRecord).filter(([key]) => !key.includes(timestamp)))
-        console.log(deleteRecord[timestamp])
 
         Object.entries(newRecords).forEach(([key, record]) => {
             if (deleteRecord[timestamp].timestamp < record.timestamp) {

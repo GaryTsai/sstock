@@ -41,7 +41,7 @@ const StyledDiv = styled("div")`
   }
 `;
 
-console.log('44---------------')
+
 const DualColumnChart = ({ chartInfo,  type }) => {
   const [selectTimeRange, setSelectTimeRange] = useState("all");
   const [selectList, setSelectList] = useState([{value:'all', label: 'all'}]);

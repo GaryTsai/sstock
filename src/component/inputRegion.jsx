@@ -113,8 +113,8 @@ const InputRegion = (props) => {
       if(date > inputInfo.endStandardDate){
         Swal.fire({
           icon: 'warning',
-          title: t('alertWarning!'),
-          text: t('startIsGreaterThanEnd!')
+          title: t('alertWarning'),
+          text: t('inputRegion.startIsGreaterThanEnd')
         })
         return
       }
@@ -124,8 +124,8 @@ const InputRegion = (props) => {
       if(date < inputInfo.startStandardDate){
         Swal.fire({
           icon: 'warning',
-          title: t('alertWarning!'),
-          text: t('endIsLessThanStart!')
+          title: t('alertWarning'),
+          text: t('inputRegion.endIsLessThanStart')
         })
         return
       }

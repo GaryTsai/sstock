@@ -91,6 +91,7 @@ const Login = (props) => {
       email: email,
       pwd: password
     };
+
     firebase.auth().createUserWithEmailAndPassword(user.email, user.pwd)
       .then(u => {
         settings.user_id = u.user.uid;
