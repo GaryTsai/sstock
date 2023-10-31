@@ -8,6 +8,8 @@ import { useDispatch } from 'react-redux';
 import { updateQueryData } from '../slices/apiDataSlice';
 import { changeQueryStatus } from '../slices/mutualState';
 import Swal from 'sweetalert2'
+import { useTranslation } from "react-i18next";
+
 const initialState = {
   startStandardDate: '',
   endStandardDate: '',
@@ -25,7 +27,8 @@ const InputRegion = (props) => {
   const dispatch = useDispatch()
   const location = useLocation()
   const isMobile = browserUtils.isMobile();
-  
+  const { t } = useTranslation();
+
   useEffect(() => {
     setInputInfo({...inputInfo, 
       date: utils.dateFormat(new Date()),
@@ -89,8 +92,8 @@ const InputRegion = (props) => {
       } else {
         return Swal.fire({
           icon: 'warning',
-          title: '警告',
-          text: '不許有任何一個為空!'
+          title: t('alertWarning!'),
+          text: t('InputRegion.fieldsEmpty')
         })
       }
     }
@@ -110,8 +113,8 @@ const InputRegion = (props) => {
       if(date > inputInfo.endStandardDate){
         Swal.fire({
           icon: 'warning',
-          title: '警告',
-          text: '起始時間不可大於結束時間!'
+          title: t('alertWarning!'),
+          text: t('startIsGreaterThanEnd!')
         })
         return
       }
@@ -121,8 +124,8 @@ const InputRegion = (props) => {
       if(date < inputInfo.startStandardDate){
         Swal.fire({
           icon: 'warning',
-          title: '警告',
-          text: '結束時間不可小於起始時間!'
+          title: t('alertWarning!'),
+          text: t('endIsLessThanStart!')
         })
         return
       }
@@ -156,55 +159,55 @@ const InputRegion = (props) => {
 
   return (
     <>
-      {isStockHistory && !isQueryOpen && isMobile && <button style={{borderRadius: '0px'}} className="btn btn-success from-group col-sm-2 col-md-12" type="submit" onClick={() => setQueryOpen(true)}>查詢時區</button>}
-      {isStockHistory && isQueryOpen && isMobile && <button style={{borderRadius: '0px'}} className="btn btn-secondary from-group col-sm-2 col-md-12" type="submit" onClick={() => setQueryOpen(false)}>隱藏</button>}
+      {isStockHistory && !isQueryOpen && isMobile && <button style={{borderRadius: '0px'}} className="btn btn-success from-group col-sm-2 col-md-12" type="submit" onClick={() => setQueryOpen(true)}>{t('inputRegion.queryTimePeriod')}</button>}
+      {isStockHistory && isQueryOpen && isMobile && <button style={{borderRadius: '0px'}} className="btn btn-secondary from-group col-sm-2 col-md-12" type="submit" onClick={() => setQueryOpen(false)}>{t('hide')}</button>}
     {isStockHistory && isQueryOpen && <div>
         <div className="form-row" style={{margin:'0 5px', overflowY: isMobile ? 'scroll' : 'unset', whiteSpace: 'nowrap'}}>
-          <button type="button" className={"btn btn-info from-group col-md-1" + (isMobile ? ' show-all-stock-mobile' : ' show-all-stock')}  onClick={()=> dispatch(changeQueryStatus('all'))}>顯示全部 Stock </button>
+          <button type="button" className={"btn btn-info from-group col-md-1" + (isMobile ? ' show-all-stock-mobile' : ' show-all-stock')}  onClick={()=> dispatch(changeQueryStatus('all'))}>{t('inputRegion.allStock')}</button>
           <button type="button"  className={"btn btn-group btn-group-toggle" + (isMobile ? ' from-group col-md-6' : ' from-group' +
             ' col-md-2')} data-toggle="buttons" style={{margin: '0px 10px', zIndex: 0, ...getStyleOfButton()}}>
             <label className="btn btn-secondary active" onClick={getSaleOptions}>
-              <input type="radio" name="saleOption" id="saleOption1" value='all' autoComplete="off" /> 全部
+              <input type="radio" name="saleOption" id="saleOption1" value='all' autoComplete="off" /> {t('inputRegion.all')}
             </label>
             <label className="btn btn-secondary" onClick={getSaleOptions}>
-              <input type="radio" name="saleOption" id="saleOption2" value='sale' autoComplete="off" /> 已賣出
+              <input type="radio" name="saleOption" id="saleOption2" value='sale' autoComplete="off" /> {t('inputRegion.sale')}
             </label>
             <label className="btn btn-secondary" onClick={getSaleOptions}>
-              <input type="radio" name="saleOption" id="saleOption3" value='unsale'  autoComplete="off" /> 未賣出
+              <input type="radio" name="saleOption" id="saleOption3" value='unsale'  autoComplete="off" /> {t('inputRegion.unsale')}
             </label>
           </button>
           <div className={"btn-group btn-group-toggle col-sm-12 col-md-3" + (isMobile ? " query-region-group-mobile": " query-region-group")} data-toggle="buttons">
             <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option1'] = el} >
-              <input type="radio" name="options" id="option1" onClick={()=> setInputInfo({...inputInfo, queryState: 0})} /> Today
+              <input type="radio" name="options" id="option1" onClick={()=> setInputInfo({...inputInfo, queryState: 0})} /> {t('inputRegion.today')}
             </label>
             <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option2'] = el} >
-              <input type="radio" name="options" id="option2" onClick={()=> setInputInfo({...inputInfo, queryState: 7})}/> 前 7 日
+              <input type="radio" name="options" id="option2" onClick={()=> setInputInfo({...inputInfo, queryState: 7})}/> {t('inputRegion.prev7')}
             </label>
             <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option3'] = el} >
-              <input type="radio" name="options" id="option3" onClick={()=> setInputInfo({...inputInfo, queryState: 120})} /> 前三月
+              <input type="radio" name="options" id="option3" onClick={()=> setInputInfo({...inputInfo, queryState: 120})} /> {t('inputRegion.prevThreeMonth')}
             </label>
             <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option4'] = el} >
-            <input type="radio" name="options" id="option4" onClick={()=> setInputInfo({...inputInfo, queryState: 'yearAgo'})}/> 去年
+            <input type="radio" name="options" id="option4" onClick={()=> setInputInfo({...inputInfo, queryState: 'yearAgo'})}/> {t('inputRegion.lastYear')}
             </label>
             <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option5'] = el} >
-            <input type="radio" name="options" id="option5" onClick={()=> setInputInfo({...inputInfo, queryState: 'thisYear'})}/> 今年
+            <input type="radio" name="options" id="option5" onClick={()=> setInputInfo({...inputInfo, queryState: 'thisYear'})}/> {t('inputRegion.thisYear')}
             </label>
           </div>
           <div className="col-sm-6 col-md-2" style={{margin:'3px 0', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
-              <div>起始:</div>
+              <div>{t('inputRegion.start')}</div>
               <div className="col">
-                <input type="date" className="form-control" placeholder="日期" onChange={(c) => handleDateChange(c.target.value, 'start')} value={startStandardDate}/>
+                <input type="date" className="form-control" placeholder={t('inputRegion.date')} onChange={(c) => handleDateChange(c.target.value, 'start')} value={startStandardDate}/>
               </div>
           </div>
           <div  className="col-sm-6 col-md-2" style={{margin:'3px 0', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
-              <div>結束:</div>
+              <div>{t('inputRegion.end')}</div>
               <div className="col">
-                <input type="date" className="form-control" placeholder="日期" onChange={(c) => handleDateChange(c.target.value, 'end')} value={endStandardDate}/>
+                <input type="date" className="form-control" placeholder={t('inputRegion.date')} onChange={(c) => handleDateChange(c.target.value, 'end')} value={endStandardDate}/>
               </div>
           </div>
 
           <button className={"btn btn-primary query-region-submit "+ (isMobile ? ' from-group col-md-2' : ' from-group col-md-2' +
-            ' query-region-submit') } style={{...getStyleOfButton(), margin: '3px 0px'}} onClick={()=> queryRegion(inputInfo.queryState)}>查詢送出</button>
+            ' query-region-submit') } style={{...getStyleOfButton(), margin: '3px 0px'}} onClick={()=> queryRegion(inputInfo.queryState)}>{t('inputRegion.querySubmit')}</button>
         </div>
     </div>}
     </>

@@ -1,20 +1,19 @@
-
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from './../api/api'
 
-export const fetchStock = createAsyncThunk("stock/fetchStock", async () => {
-  console.log('-----------fetchStocks-------------');
-  const response = await api.getAllData();
-  return response;
+export const fetchStock = createAsyncThunk("stock/fetchStock", async() => {
+    console.log('-----------fetchStocks-------------');
+    const response = await api.getAllData();
+    return response;
 });
 
-export const fetchRecords = createAsyncThunk("stock/fetchRecord", async () => {
+export const fetchRecords = createAsyncThunk("stock/fetchRecord", async() => {
     console.log('-----------fetchRecords-------------');
     const response = await api.getAccountRecord();
     return response;
 });
 
-export const fetchAccountSummary = createAsyncThunk("stock/fetchAccountSummary", async () => {
+export const fetchAccountSummary = createAsyncThunk("stock/fetchAccountSummary", async() => {
     console.log('-----------fetchAccountSummary-------------');
     const response = await api.getAccount();
     return response;
@@ -42,36 +41,35 @@ export const apiDataSlice = createSlice({
         acSummary: 0
     },
     reducers: {
-        updateQueryData: (state,action) => {
+        updateQueryData: (state, action) => {
             const updateData = (queryCondition) => {
                 const startRegion = queryCondition.dateRegion1;
                 const endRegion = queryCondition.dateRegion2;
                 let result = '';
-            
-                  if (queryCondition.stockStatus === 'individual') {
+
+                if (queryCondition.stockStatus === 'individual') {
                     switch (queryCondition.saleStatus) {
-                      case 'all':
-                        result = state.allStocks.filter(a => (startRegion <= a.sale_date || startRegion <= a.date) && (a.date <= endRegion || a.sale_date <= endRegion));
-                        break;
-                      case 'sale':
-                        result = state.saleStocks.filter(a => startRegion <= a.sale_date && a.sale_date <= endRegion);
-                        break;
-                      case 'unsale':
-                        result = state.unSaleStocks.filter(a => startRegion <= a.date && a.date <= endRegion);
-                        break;
-                      default:
-                        break;
+                        case 'all':
+                            result = state.allStocks.filter(a => (startRegion <= a.sale_date || startRegion <= a.date) && (a.date <= endRegion || a.sale_date <= endRegion));
+                            break;
+                        case 'sale':
+                            result = state.saleStocks.filter(a => startRegion <= a.sale_date && a.sale_date <= endRegion);
+                            break;
+                        case 'unsale':
+                            result = state.unSaleStocks.filter(a => startRegion <= a.date && a.date <= endRegion);
+                            break;
+                        default:
+                            break;
                     }
                     return result
-                  } else if (queryCondition.stockStatus === 'mutual') {
-                  }
-                };
+                } else if (queryCondition.stockStatus === 'mutual') {}
+            };
             state.showStocks = updateData(action.payload)
         }
     },
     extraReducers: {
         //fetchStock
-        [fetchStock.pending]: (state) => {  
+        [fetchStock.pending]: (state) => {
             state.loading = true;
         },
 
@@ -91,7 +89,7 @@ export const apiDataSlice = createSlice({
             state.loading = false;
         },
         //fetchRecords
-        [fetchRecords.pending]: (state) => {  
+        [fetchRecords.pending]: (state) => {
             state.recordsLoading = true;
         },
         [fetchRecords.fulfilled]: (state, { payload }) => {
@@ -103,8 +101,7 @@ export const apiDataSlice = createSlice({
             state.loading = false;
         },
         //fetchAccountSummary
-        [fetchAccountSummary.pending]: (state) => {  
-        },
+        [fetchAccountSummary.pending]: (state) => {},
         [fetchAccountSummary.fulfilled]: (state, { payload }) => {
             state.acTime = payload.accountTime
             state.acMoney = payload.accountMoney
@@ -112,9 +109,8 @@ export const apiDataSlice = createSlice({
             state.acSummary = payload.summary
         },
 
-        [fetchAccountSummary.rejected]: (state) => {
-        }
-        
+        [fetchAccountSummary.rejected]: (state) => {}
+
     }
 });
 export const { updateQueryData, getRecords } = apiDataSlice.actions

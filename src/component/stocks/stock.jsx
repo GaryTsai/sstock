@@ -6,13 +6,14 @@ import api from '../../api/api';
 import { useDispatch } from 'react-redux';
 import { changeContentLoading } from '../../slices/mutualState';
 import Swal from 'sweetalert2'
+import { useTranslation } from 'react-i18next';
 
 const Stock = (props) =>{
   const priceRef = useRef(null);
   const [isTopBtnShow, setIsTopBtnShow] = useState(false)
   const location = useLocation()
   const dispatch = useDispatch()
-
+  const { t } = useTranslation()
   useEffect(() => {
     window.addEventListener('scroll', () => {
 
@@ -31,8 +32,8 @@ const Stock = (props) =>{
     if(isNaN(salePrice) || !salePrice )
       Swal.fire({
         icon: 'error',
-        title: '錯誤',
-        text: '請輸入數字'
+        title: t("alertError"),
+        text: t("fieldInputWarning_Price")
       })
     else{
             dispatch(changeContentLoading(true))
@@ -93,26 +94,26 @@ const Stock = (props) =>{
         <tr>
           <th scope="row">{index}</th>
           {!isStockHistory && isMerge === false && <td key={stock.timestamp}>
-            {<button type="button" className="btn btn-info" data-toggle="modal" data-target={`#modal-${stock.timestamp}`}>賣出</button>}
+            {<button type="button" className="btn btn-info" data-toggle="modal" data-target={`#modal-${stock.timestamp}`}>{t("sell")}</button>}
             <div>
               <div className="modal fade" id={`modal-${stock.timestamp}`} tabIndex="-1" role="dialog"
                    aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog" role="document">
                   <div className="modal-content">
                     <div className="modal-header">
-                      <h5 className="modal-title" style={{color:'black'}} id="exampleModalLabel">賣出資訊</h5>
+                      <h5 className="modal-title" style={{color:'black'}} id="exampleModalLabel">{t("sellInfo")}</h5>
                       <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
                     <div className="modal-body">
                       <div className="form-group">
-                        <h5 style={{ color: 'black', textAlign: 'left'}} key={'price' + index} htmlFor={`price-name-${index}`} className="col-form-label">賣出單價:</h5>
+                        <h5 style={{ color: 'black', textAlign: 'left'}} key={'price' + index} htmlFor={`price-name-${index}`} className="col-form-label">{t("sellPrice")}:</h5>
                         <input type="text" className="form-control"  id={`price-name-${index}`} ref={priceRef} />
                       </div>
                     </div>
                     <div className="modal-footer">
-                      <button type="button" className="btn btn-primary"  data-dismiss="modal" aria-label="Close"onClick={ updateStockStatus}>確認{stock.name}</button>
+                      <button type="button" className="btn btn-primary"  data-dismiss="modal" aria-label="Close"onClick={ updateStockStatus}>{t("confirm")}{stock.name}</button>
                     </div>
                   </div>
                 </div>
@@ -128,11 +129,11 @@ const Stock = (props) =>{
           <td>{isFloat(stock.sheet) ? stock.sheet.toFixed(3) : stock.sheet}</td>
           <td>{isMerge ? stock.handingFee : Math.floor(handlingFee)}</td>
           <td>{Math.floor(stock.cost)}</td>
-          <td>{stock.status === "unsale" ? '未賣出' : '已賣出'}</td>
+          <td>{stock.status === "unsale" ? t("inputRegion.unsale") : t("inputRegion.sale")}</td>
           <td>{Math.floor(stock.sale_cost)}</td>
           <td style={{ 'color': stock.income < 0 ? '#30ff30' : 'rgb(255 19 19)'}}>{Math.floor(stock.income)}</td>
           { !isStockHistory && isMerge === false && <td>
-            <button type="button" className="btn btn-danger" onClick={handleDeleteStock}>刪除</button>
+            <button type="button" className="btn btn-danger" onClick={handleDeleteStock}>{t("delete")}</button>
           </td>}
           {/* { isStockHistory && stock.status === 'sale' ? <td>
             <button type="button" className="btn btn-danger" onClick={handleDeleteStock}>刪除</button>

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import { styled } from '@mui/material/styles';
+import { useTranslation } from "react-i18next";
 
 const SummaryInfo = styled('div')`
   display: flex;
@@ -24,7 +25,7 @@ const ColumnChart = ({
   type,
   dividend
 }) => {
-
+    const { t } = useTranslation();
     const [yearDividend, setYearDividend] = useState([]);
 
     const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
@@ -34,7 +35,7 @@ const ColumnChart = ({
         type: 'column'
       },
       title: {
-        text: '年損益圖表'
+        text: t("chart.yearIncomeChart")
       },
       xAxis: {
         categories: chartInfo.yearCategories,
@@ -43,13 +44,13 @@ const ColumnChart = ({
       yAxis: [{ // Primary yAxis
         lineWidth: 1,  
         labels: {
-          format: '{value} 元',
+          format: '{value} ' + t("twDollars"),
           style: {
             color: Highcharts.getOptions().colors[1]
           }
         },
         title: {
-          text: '台幣',
+          text: t("twMoney"),
           style: {
             color: Highcharts.getOptions().colors[1]
           }
@@ -58,18 +59,18 @@ const ColumnChart = ({
       
     ],
       series: [
-        { name: '損益',
+        { name: t("income"),
           type: 'column',  
           data: chartInfo.yearValue,
           tooltip: {
-            valueSuffix: ' 元'
+            valueSuffix: ' ' + t("twDollars"), 
           }
         },
-        { name: '股利',
+        { name: t("chart.dividend"),
         type: 'column',  
         data: yearDividend,
         tooltip: {
-          valueSuffix: ' 元'
+          valueSuffix: ' ' + t("twDollars"),
         }
       }
       ],
@@ -90,7 +91,7 @@ const ColumnChart = ({
 
   return (<div style={{ height: '60vh' }}>
     <SummaryInfo >
-    <ChartTitle>總損益:<ChartValue>{getSummary()}</ChartValue></ChartTitle>
+    <ChartTitle>{t("tIncome")}<ChartValue>{getSummary()}</ChartValue></ChartTitle>
     </SummaryInfo>
     <HighchartsReact
         highcharts={Highcharts}

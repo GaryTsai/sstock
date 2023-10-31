@@ -14,6 +14,7 @@ import browserUtils from "./../../utils/browserUtils";
 import { useNavigate } from "react-router-dom";
 import { changeLoginStatus } from './../../slices/mutualState';
 import Swal from 'sweetalert2'
+import { useTranslation } from 'react-i18next';
 
 const initialState = {
   email:'',
@@ -29,7 +30,7 @@ const Login = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loginInfo, setLoginInfo] = useState(initialState)
-
+  const { t } = useTranslation()
   const logInSelect = status => setLoginInfo({...loginInfo, isOpenForgetPWD: false,isLogIn: status});
 
   const actionForSubmit = () =>{
@@ -48,7 +49,7 @@ const Login = (props) => {
   const logInSubmit = (email, password) =>{
     const { logInCallBack } = props;
     if(!email && !password ){
-      setLoginInfo({...loginInfo, error:true, message:'Please input email&password'});
+      setLoginInfo({...loginInfo, error:true, message: t("enterAccountWarning")});
       setTimeout(() =>setLoginInfo({...loginInfo, error:false, message: ''}), 5000)
       return ;
     }
@@ -69,7 +70,7 @@ const Login = (props) => {
       .catch((error) => {
         Swal.fire({
           icon: 'warning',
-          title: '警告',
+          title: t("alertWarning"),
           text: error.message.toString()
         })
         
@@ -82,7 +83,7 @@ const Login = (props) => {
   const registerSubmit = (email, password) =>{
     const {logInCallBack, homePageCallBack} = props;
     if(!email && !password ){
-      setLoginInfo({...loginInfo, error:true, message:'Please input email&password'});
+      setLoginInfo({...loginInfo, error:true, message: t('enterAccountWarning')});
       setTimeout(() => setLoginInfo({...loginInfo, error: false, message: ''}), 5000);
       return ;
     }
@@ -126,7 +127,7 @@ const Login = (props) => {
       setLoginInfo({...loginInfo, exist: true, error:true, message: error.message.toString()});
       Swal.fire({
         icon: 'warning',
-        title: '警告',
+        title: t("alertWarning"),
         text: error.message.toString()
       })
       console.log('register failed');
@@ -148,14 +149,14 @@ const Login = (props) => {
     auth.sendPasswordResetEmail(resetEmail).then(function() {
       Swal.fire({
         icon: 'warning',
-        title: '警告',
-        text: '已發送信件至信箱，請按照信件說明重設密碼'
+        title: t("alertWarning"),
+        text: t("resetPassword")
       })
       closeForgetPWD();
     }).catch(function(error) {
       Swal.fire({
         icon: 'warning',
-        title: '警告',
+        title: t("alertWarning"),
         text: error.message
       })
     });
@@ -168,8 +169,8 @@ const Login = (props) => {
   return (
       <div style={styles.wrapper} >
         <div className="fadeInDown"  style={{ width: isMobile ? '80%' : '40%', display: 'flex', position: 'fixed', top: '5%'}}>
-          <div key='logIn' style={{...styles.logIn, border: isLogIn ? '3px solid white' : ''}} onClick={() => logInSelect(true)}>登入</div>
-          <div key='register' style={{...styles.register, border: isLogIn ? '' : '3px solid white' }} onClick={() => logInSelect(false)}>註冊</div>
+          <div key='logIn' style={{...styles.logIn, border: isLogIn ? '3px solid white' : ''}} onClick={() => logInSelect(true)}>{t('login.login')}</div>
+          <div key='register' style={{...styles.register, border: isLogIn ? '' : '3px solid white' }} onClick={() => logInSelect(false)}>{t('login.register')}</div>
         </div>
       <div className="fadeInDown"  style={{...styles.frameContent, border: isLogIn ? '5px' +
           ' solid #2196f3' : '5px solid rgb(232 88 78)'}}>
@@ -179,17 +180,17 @@ const Login = (props) => {
         </div>
         <div style={{...styles.inputContent}}>
           <input type="text" style={styles.input} id="email"  onChange={(c) => setEmail(c.target.value)} className="fadeIn second" name="login" placeholder="email"/>
-          <input type="password" style={styles.input} id="password" onChange={(c) => setPassword(c.target.value)} className="fadeIn third" name="login" placeholder="password"/>
+          <input type="password" style={styles.input} id="password" onChange={(c) => setPassword(c.target.value)} className="fadeIn third" name="login" placeholder={t('login.password')}/>
         </div>
         <input style={{...styles.submit}}  type="submit" className="fadeIn fourth"
-                value={isLogIn ? 'Log In' : 'Register' } onClick={actionForSubmit}/>
+                value={isLogIn ? t('login.login') : t('login.register') } onClick={actionForSubmit}/>
         {isLogIn && <div id="formFooter"  style={styles.forgetPWD} >
-          <a className="underlineHover" href="#" onClick={openForgetPWD} >Forgot Password?</a>
+          <a className="underlineHover" href="#" onClick={openForgetPWD} >{t("forgotPassword")}</a>
         </div>}
         </div>}
         {isOpenForgetPWD &&
         <div style={{...styles.inputContent}}>
-          <input type="text" style={styles.input} id="email"  onChange={(c) => setResetEmail(c.target.value)} className="fadeIn second" name="login" placeholder="email"/>
+          <input type="text" style={styles.input} id="email"  onChange={(c) => setResetEmail(c.target.value)} className="fadeIn second" name="login" placeholder={t('login.email')}/>
           <input key={'backToLogIn'} style={{...styles.back, margin: '5px', width: '45%'}}  onClick={closeForgetPWD} type="button" className="fadeIn fourth"
                   value={'back'}/>
           <input style={{...styles.submit, margin: '5px',  width: '45%'}}  type="submit" className="fadeIn fourth"

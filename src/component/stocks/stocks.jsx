@@ -9,6 +9,7 @@ import _ from "lodash";
 import { fetchStock, fetchAccountSummary } from "../../slices/apiDataSlice";
 import { changeInitLoading } from "../../slices/mutualState";
 import settings from "../settings/settings";
+import { useTranslation } from "react-i18next";
 
 const Stocks = () => {
   const { queryStatus, isMerge } = useSelector(
@@ -21,6 +22,7 @@ const Stocks = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const isMobile = browserUtils.isMobile();
+  const { t } = useTranslation()
   const isStockHistory = location.pathname === "/stockHistory";
 
   useEffect(() => {
@@ -36,8 +38,7 @@ const Stocks = () => {
       const isNotExist =
         mergeResult && mergeResult.filter((item) => _.trim(item.number) === _.trim(prev.number)).length === 0;
         let handingFee = prev.price * 1000 * prev.sheet * 0.001425 < 20 ? 20 : Math.floor(prev.price * 1000 * prev.sheet * 0.001425);
-        if(prev.number === '00878')
-          console.log(handingFee)
+
       if (isNotExist) {
         mergeResult.push({
           cost: prev.cost,
@@ -99,23 +100,23 @@ const Stocks = () => {
             >
               <th scope="col">#</th>
               {!isStockHistory && isMerge === false && (
-                <th scope="col">賣出</th>
+                <th scope="col">{t("sell")}</th>
               )}
               {!isStockHistory && isMerge === false && (
-                <th scope="col">購買日期</th>
+                <th scope="col">{t("input.buyDate")}</th>
               )}
-              {isStockHistory && <th scope="col">購買日期</th>}
-              {isStockHistory && <th scope="col">賣出日期</th>}
-              <th scope="col">股票名稱</th>
-              <th scope="col">編號</th>
-              <th scope="col">平均單價</th>
-              <th scope="col">張數</th>
-              <th scope="col">手續費</th>
-              <th scope="col">購買成本</th>
-              <th scope="col">狀態</th>
-              <th scope="col">賣出總價</th>
-              <th scope="col">損益</th>
-              {!isStockHistory && <th scope="col">刪除</th>}
+              {isStockHistory && <th scope="col">{t("input.buyDate")}</th>}
+              {isStockHistory && <th scope="col">{t("input.sellDate")}</th>}
+              <th scope="col">{t("input.stockName")}</th>
+              <th scope="col">{t("input.stockNumber")}</th>
+              <th scope="col">{t("input.avgPrice")}</th>
+              <th scope="col">{t("input.stockSheet")}</th>
+              <th scope="col">{t("input.handingFee")}</th>
+              <th scope="col">{t("input.cost")}</th>
+              <th scope="col">{t("state")}</th>
+              <th scope="col">{t("input.sellTotalPrice")}</th>
+              <th scope="col">{t("input.income")}</th>
+              {!isStockHistory && <th scope="col">{t("delete")}</th>}
             </tr>
           </thead>
           <tbody>

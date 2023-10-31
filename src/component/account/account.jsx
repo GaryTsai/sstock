@@ -8,6 +8,7 @@ import { BiSolidArrowToTop } from "react-icons/bi";
 import { useSelector, useDispatch } from 'react-redux';
 import { changeContentLoading, changeLoading } from './../../slices/mutualState';
 import { fetchRecords, fetchAccountSummary} from './../../slices/apiDataSlice';
+import { useTranslation } from 'react-i18next';
 
 const initialState = {
   isAssetTransfer: true
@@ -18,6 +19,7 @@ const Account = () => {
   const [topIconState, setTopIconState] = useState(false)
 
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { contentLoading } = useSelector((state) => state.mutualStateReducer)
   const { records, recordsLoading, acTime, acMoney, acStock, acSummary } = useSelector((state) => state.apiDataReducer)
  
@@ -63,22 +65,22 @@ const Account = () => {
       <nav>
         <div className="nav nav-tabs" id="nav-tab" role="tablist">
           <a className="nav-item nav-link active" style={{width: '100%', border: '0px', display: 'flex', justifyContent: 'center'}} id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
-              aria-controls="nav-home" aria-selected="true">台股資產</a>
+              aria-controls="nav-home" aria-selected="true">{t("twProperty")}</a>
         </div>
       </nav>
       <div className="tab-content" id="nav-tabContent">
         <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-          {browserUtils.isMobile() && !isAssetTransfer && <button className="btn btn-warning from-group col-sm-2 col-md-12 input-sale-frame" type="submit" onClick={() => hideAssetTransfer()}>資產轉移</button>}
-          {browserUtils.isMobile() && isAssetTransfer  && <button className="btn btn-secondary from-group col-sm-2 col-md-12 input-sale-frame" type="submit" onClick={() => hideAssetTransfer()}>隱藏</button>}
+          {browserUtils.isMobile() && !isAssetTransfer && <button className="btn btn-warning from-group col-sm-2 col-md-12 input-sale-frame" type="submit" onClick={() => hideAssetTransfer()}>{t("transferProperty")}</button>}
+          {browserUtils.isMobile() && isAssetTransfer  && <button className="btn btn-secondary from-group col-sm-2 col-md-12 input-sale-frame" type="submit" onClick={() => hideAssetTransfer()}>{t("hide")}</button>}
           {isAssetTransfer && <AccountTransfer/>}
           <div className="container">
             <table className="table table-striped">
               <thead>
               <tr  style={{}}> 
-                <th>創建時間</th>
-                <th>帳戶金額</th>
-                <th>股票帳戶</th>
-                <th>總金額</th>
+                <th>{t("createTime")}</th>
+                <th>{t("accountMoney")}</th>
+                <th>{t("stockAccount")}</th>
+                <th>{t("tMoney")}</th>
               </tr>
               </thead>
               <tbody>
@@ -102,12 +104,12 @@ const Account = () => {
                   color: "#FFFFFF"
                   }}>
                   <th scope="col">#</th>
-                  <th scope="col">帳戶金額</th>
-                  <th scope="col">股票金額</th>
-                  <th scope="col">金額(含損益)</th>
-                  <th scope="col">狀態</th>
-                  <th scope="col">時間</th>
-                  <th scope="col">來源</th>
+                  <th scope="col">{t("accountMoney")}</th>
+                  <th scope="col">{t("stockMoney")}</th>
+                  <th scope="col">{t("price")}({t("iIncome")})</th>
+                  <th scope="col">{t("state")}</th>
+                  <th scope="col">{t("time")}</th>
+                  <th scope="col">{t("source")}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -136,17 +138,17 @@ const Account = () => {
           </div>
         </div>
         <div className="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-          {browserUtils.isMobile() && isAssetTransfer && <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit" onClick={() => hideAssetTransfer()}>資產轉移</button>}
-          {browserUtils.isMobile() && !isAssetTransfer  && <button className="btn btn-secondary from-group col-md-2 input-sale-frame" type="submit" onClick={() => hideAssetTransfer()}>隱藏</button>}
+          {browserUtils.isMobile() && isAssetTransfer && <button className="btn btn-warning from-group col-md-2 input-sale-frame" type="submit" onClick={() => hideAssetTransfer()}>{t("transferProperty")}</button>}
+          {browserUtils.isMobile() && !isAssetTransfer  && <button className="btn btn-secondary from-group col-md-2 input-sale-frame" type="submit" onClick={() => hideAssetTransfer()}>{t("hide")}</button>}
           {isAssetTransfer && <AccountTransfer/>}
           <div className="container">
             <table className="table table-striped">
               <thead>
               <tr>
-                <th>創建時間</th>
-                <th>帳戶金額($)</th>
-                <th>股票帳戶($)</th>
-                <th>總金額($)</th>
+                <th>{t("createTime")}</th>
+                <th>{t("accountMoney")}($)</th>
+                <th>{t("stockAccount")}($)</th>
+                <th>{t("tMoney")}($)</th>
               </tr>
               </thead>
               <tbody>
@@ -164,12 +166,13 @@ const Account = () => {
               <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">帳戶金額</th>
-                <th scope="col">股票金額</th>
-                <th scope="col">金額(含損益)</th>
-                <th scope="col">狀態</th>
-                <th scope="col">時間</th>
-                <th scope="col">來源</th>
+
+                <th>{t("accountMoney")}($)</th>
+                <th>{t("stockAccount")}($)</th>
+                <th scope="col">{t("price")}({t("iIncome")})</th>
+                <th>{t("state")}</th>
+                <th>{t("time")}</th>
+                <th>{t("source")}</th>
               </tr>
               </thead>
               <tbody>

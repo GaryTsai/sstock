@@ -4,6 +4,8 @@ import HighchartsReact from "highcharts-react-official";
 import { TextField, MenuItem } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import browserUtils from '../../utils/browserUtils';
+import { useTheme } from "@emotion/react";
+import { useTranslation } from "react-i18next";
 
 const Container = styled("div")`
   display: flex;
@@ -39,17 +41,15 @@ const StyledDiv = styled("div")`
   }
 `;
 
-const DualColumnChart = ({ chartInfo, type,  dividend }) => {
+console.log('44---------------')
+const DualColumnChart = ({ chartInfo,  type }) => {
   const [selectTimeRange, setSelectTimeRange] = useState("all");
   const [selectList, setSelectList] = useState([{value:'all', label: 'all'}]);
-  const [info, setInfo] = useState({ value: [], rate: [], date: [] });
+  const [info, setInfo] = useState({ value: chartInfo.monthValue, rate: chartInfo.monthRate, date: chartInfo.categories });
   const chartComponentRef = useRef < HighchartsReact.RefObject > null;
+  const { t } = useTranslation();
 
-  const handleChange = (e) => {
-    setSelectTimeRange(e.target.value);
-  };
   const getSummary = () => {
-
     if (!info.value) return;
 
     if (info.value.length === 0) return;
@@ -85,7 +85,6 @@ const DualColumnChart = ({ chartInfo, type,  dividend }) => {
   }, []);
 
   useEffect(() => {
-
     const arrayEquals = (arrOne, arrTwo) => {
       return Array.isArray(arrOne) &&
           Array.isArray(arrTwo) &&
@@ -119,7 +118,7 @@ const DualColumnChart = ({ chartInfo, type,  dividend }) => {
       alignTicks: true
     },
     title: {
-      text: "月損益圖表",
+      text: t("chart.monthIncomeChart"),
     },
     xAxis: [
       {
@@ -143,13 +142,13 @@ const DualColumnChart = ({ chartInfo, type,  dividend }) => {
         lineWidth: 1,
         gridLineWidth: 3,//Set this to zero
         labels: {
-          format: "{value} 元",
+          format: "{value} " + t("twMoney"),
           style: {
             color: Highcharts.getOptions().colors[1],
           },
         },
         title: {
-          text: "台幣",
+          text: t("twMoney"),
           style: {
             color: Highcharts.getOptions().colors[1],
           },
@@ -160,10 +159,10 @@ const DualColumnChart = ({ chartInfo, type,  dividend }) => {
     ],
     series: [
       {
-        name: "損益",
+        name: t("income"),
         data: info.value,
         tooltip: {
-          valueSuffix: " 元",
+          valueSuffix: t("twDollars"),
         },
       },
       // {
@@ -176,22 +175,23 @@ const DualColumnChart = ({ chartInfo, type,  dividend }) => {
       // },
     ]
   };
+
   return (
     
     <div style={{ height: "60vh"}}>
       <Container>
         <ChartTitle>
-          總損益:<ChartValue>{getSummary()}</ChartValue>
+          {t("tIncome")}<ChartValue>{getSummary()}</ChartValue>
         </ChartTitle>
         <DropDownContainer>
           <StyledDiv>
-          {'選擇年份:'}
+          {t("chart.yearSelect")}
           </StyledDiv>
           <TextField
             id="outlined-select-year"
             select
             value={selectTimeRange}
-            onChange={handleChange}
+            onChange={(e) => setSelectTimeRange(e.target.value)}
             sx={{
               height: "30px",
               width: '75%',

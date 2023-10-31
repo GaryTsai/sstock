@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useTransition } from 'react'
 import Grid from '@mui/material/Grid';
 import YearColumnChart from '../../custom/YearColumnChart';
 import DualColumnChart from '../../custom/DulaColumnChart';
@@ -7,6 +7,7 @@ import Report from '../../custom/Report';
 import api from '../../api/api'
 import { useSelector, useDispatch} from 'react-redux';
 import { fetchStock } from '../../slices/apiDataSlice';
+import { useTranslation } from 'react-i18next';
 
 const TwChart = () => {
   
@@ -24,6 +25,7 @@ const TwChart = () => {
   const [chartTab, setChartTab] = useState("monthIncome")
   const { allStocks } = useSelector((state) => state.apiDataReducer)
   const dispatch = useDispatch()
+  const { t } = useTranslation();
 
   const getDate = data => {
     const firstDateYear = data[data.length-1].date.substring(0 ,4)
@@ -131,6 +133,7 @@ const TwChart = () => {
       }
     })
     })
+
     setDividendInfo({
       yearDividend: yearDividendInfo,
       perDividend: perDividendInfo,
@@ -148,13 +151,13 @@ const TwChart = () => {
   return (
     <Grid container style={{justifyContent: "center"}}>
         <div className="btn-group col-sm-12" role="group" aria-label="Basic example" style={{padding: 0}}>
-          <button type="button" className={`btn btn-info ${chartTab === "monthIncome" && 'active'}`} onClick={()=> setChartTab("monthIncome")}>月損益圖</button>
-          <button type="button" className={`btn btn-info ${chartTab === "yearIncome" && 'active'}`} onClick={()=> setChartTab("yearIncome")}>歷年損益圖</button>
-          <button type="button" className={`btn btn-info ${chartTab === "dividend" && 'active'}`} onClick={()=> setChartTab("dividend")} >股息表</button>
-          <button type="button" className={`btn btn-info ${chartTab === "report" && 'active'}`} onClick={()=> setChartTab("report")} >年損益報表</button>
+          <button type="button" className={`btn btn-info ${chartTab === "monthIncome" && 'active'}`} onClick={()=> setChartTab("monthIncome")}>{t("chart.monthIncomeChart")}</button>
+          <button type="button" className={`btn btn-info ${chartTab === "yearIncome" && 'active'}`} onClick={()=> setChartTab("yearIncome")}>{t("chart.yearIncomeChart")}</button>
+          <button type="button" className={`btn btn-info ${chartTab === "dividend" && 'active'}`} onClick={()=> setChartTab("dividend")} >{t("chart.dividendChart")}</button>
+          <button type="button" className={`btn btn-info ${chartTab === "report" && 'active'}`} onClick={()=> setChartTab("report")} >{t("chart.yearIncomeReport")}</button>
         </div>
         {chartTab === "monthIncome" && <Grid item xs={12} md={6}>
-          <DualColumnChart chartInfo={dividendInfo.chartInfo} type={'year'}/>
+          <DualColumnChart chartInfo={dividendInfo.chartInfo} monthValue={dividendInfo.chartInfo.monthValue} type={'year'}/>
         </Grid>}
         {chartTab === "yearIncome" && <Grid item xs={12} md={6}>
           <YearColumnChart chartInfo={dividendInfo.chartInfo} type={'year'} dividend={dividendInfo.yearDividend}/>

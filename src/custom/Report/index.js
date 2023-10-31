@@ -1,6 +1,7 @@
 import React, { useState, useEffect} from 'react'
 import { styled } from "@mui/material/styles";
 import { TextField, MenuItem } from "@mui/material";
+import { useTranslation } from 'react-i18next';
 
 const DropDownContainer = styled("div")`
   display: flex;
@@ -33,7 +34,7 @@ const initialState = {
     totalPercent: 0
 }
 const [reportInfo, setReportInfo] = useState(initialState)
-
+const { t } = useTranslation();
 useEffect(() => {
     let totalIncome = 0
     let totalSaleCost = 0
@@ -81,7 +82,7 @@ const reverseData = Object.assign([], reportInfo.reportData)
     <Container>
     <DropDownContainer>
           <StyledDiv>
-          {'選擇年份:'}
+          {t('chart.yearSelect')}
           </StyledDiv>
           <TextField
             id="outlined-select-year"
@@ -110,7 +111,7 @@ const reverseData = Object.assign([], reportInfo.reportData)
             ))}
           </TextField>
           <StyledDiv>
-          {'至:'}
+          {t('chart.to')}
           </StyledDiv>
           <TextField
             id="outlined-select-year"
@@ -138,17 +139,17 @@ const reverseData = Object.assign([], reportInfo.reportData)
               </MenuItem>
             ))}
           </TextField>
-          <button type="button" className="btn btn-info" style={{ height: '30px', alignItems: 'center', display: 'flex'}} onClick={() => queryReport(reportInfo.startYear, reportInfo.endYear)}>確認</button>
+          <button type="button" className="btn btn-info" style={{ height: '30px', alignItems: 'center', display: 'flex'}} onClick={() => queryReport(reportInfo.startYear, reportInfo.endYear)}>{t("confirm")}</button>
         </DropDownContainer>
     <div className="table-responsive table-striped">
       <table className="table" style={{marginTop: '5rem'}}>
         <thead>
           <tr>
             <th>#</th>
-            <th>年投報率(%)</th>
-            <th>年損益</th>
-            <th>該年投入(已賣出)</th>
-            <th>該年投入(未賣出)</th>
+            <th>{t("chart.yearProfit")}({t("percent")})</th>
+            <th>{t("chart.yearIncome")}</th>
+            <th>{t("chart.yearCost")}({t("chart.sale")})</th>
+            <th>{t("chart.yearCost")}({t("chart.unsale")})</th>
           </tr>
         </thead>
         <tbody>

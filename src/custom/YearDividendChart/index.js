@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { styled } from "@mui/material/styles";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const SummaryInfo = styled("div")`
   display: flex;
@@ -22,6 +24,7 @@ const ChartValue = styled("span")`
 const DividendChart = ({ perDividend }) => {
   const [totalDividend, setTotalDividend] = useState(0)
   const chartComponentRef = useRef(null);
+  const { t } = useTranslation();
   const options = {
     chart: {
       animation: {
@@ -30,7 +33,7 @@ const DividendChart = ({ perDividend }) => {
       marginRight: 50,
     },
     title: {
-      text: "總股利圖表",
+      text: t("chart.dividendChart"),
       align: "left",
     },
     subtitle: {
@@ -131,7 +134,7 @@ const DividendChart = ({ perDividend }) => {
     <div style={{ height: "60vh" }}>
       <SummaryInfo>
         <ChartTitle>
-          總股利:<ChartValue>{totalDividend}</ChartValue>
+          {t("tDividend")}<ChartValue>{totalDividend}</ChartValue>
         </ChartTitle>
       </SummaryInfo>
       <HighchartsReact
