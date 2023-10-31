@@ -1,28 +1,29 @@
 {
   "files": {
-    "main.css": "/sstock/static/css/main.d4dc31ef.chunk.css",
-    "main.js": "/sstock/static/js/main.b46d8b4c.chunk.js",
-    "main.js.map": "/sstock/static/js/main.b46d8b4c.chunk.js.map",
+    "main.css": "/sstock/static/css/main.c6b88fe1.chunk.css",
+    "main.js": "/sstock/static/js/main.a027445d.chunk.js",
+    "main.js.map": "/sstock/static/js/main.a027445d.chunk.js.map",
     "runtime-main.js": "/sstock/static/js/runtime-main.ce3411f0.js",
     "runtime-main.js.map": "/sstock/static/js/runtime-main.ce3411f0.js.map",
     "static/css/2.db713b68.chunk.css": "/sstock/static/css/2.db713b68.chunk.css",
-    "static/js/2.3a8d9ebf.chunk.js": "/sstock/static/js/2.3a8d9ebf.chunk.js",
-    "static/js/2.3a8d9ebf.chunk.js.map": "/sstock/static/js/2.3a8d9ebf.chunk.js.map",
+    "static/js/2.3675e39e.chunk.js": "/sstock/static/js/2.3675e39e.chunk.js",
+    "static/js/2.3675e39e.chunk.js.map": "/sstock/static/js/2.3675e39e.chunk.js.map",
     "index.html": "/sstock/index.html",
-    "precache-manifest.81190daae7f73bbca822cacc4ce9144b.js": "/sstock/precache-manifest.81190daae7f73bbca822cacc4ce9144b.js",
+    "precache-manifest.b7ffc85d23f14affac77cb915dc3bf7a.js": "/sstock/precache-manifest.b7ffc85d23f14affac77cb915dc3bf7a.js",
     "service-worker.js": "/sstock/service-worker.js",
     "static/css/2.db713b68.chunk.css.map": "/sstock/static/css/2.db713b68.chunk.css.map",
-    "static/css/main.d4dc31ef.chunk.css.map": "/sstock/static/css/main.d4dc31ef.chunk.css.map",
-    "static/js/2.3a8d9ebf.chunk.js.LICENSE.txt": "/sstock/static/js/2.3a8d9ebf.chunk.js.LICENSE.txt",
-    "static/js/main.b46d8b4c.chunk.js.LICENSE.txt": "/sstock/static/js/main.b46d8b4c.chunk.js.LICENSE.txt",
+    "static/css/main.c6b88fe1.chunk.css.map": "/sstock/static/css/main.c6b88fe1.chunk.css.map",
+    "static/js/2.3675e39e.chunk.js.LICENSE.txt": "/sstock/static/js/2.3675e39e.chunk.js.LICENSE.txt",
+    "static/js/main.a027445d.chunk.js.LICENSE.txt": "/sstock/static/js/main.a027445d.chunk.js.LICENSE.txt",
+    "static/media/contentLoading.png": "/sstock/static/media/contentLoading.aee8afdb.png",
     "static/media/loading.gif": "/sstock/static/media/loading.a57e7c9a.gif",
     "static/media/logo.png": "/sstock/static/media/logo.e27c8735.png"
   },
   "entrypoints": [
     "static/js/runtime-main.ce3411f0.js",
     "static/css/2.db713b68.chunk.css",
-    "static/js/2.3a8d9ebf.chunk.js",
-    "static/css/main.d4dc31ef.chunk.css",
-    "static/js/main.b46d8b4c.chunk.js"
+    "static/js/2.3675e39e.chunk.js",
+    "static/css/main.c6b88fe1.chunk.css",
+    "static/js/main.a027445d.chunk.js"
   ]
 }
