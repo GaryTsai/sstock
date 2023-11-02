@@ -15,6 +15,7 @@ const Navbar = () => {
   const { isMerge } = useSelector((state) => state.mutualStateReducer)
   const { totalCost, saleCost, profit, profitAndLoss, lastYearROI} = useSelector((state) => state.apiDataReducer)
   const { t } = useTranslation();
+
   const currentStockPage = location.pathname === '/sstock'
   const isStockHistory = location.pathname === '/stockHistory'
   const summaryTitle = {
