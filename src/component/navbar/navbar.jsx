@@ -17,7 +17,7 @@ const Navbar = () => {
   const { t } = useTranslation();
 
   const currentStockPage = location.pathname === '/sstock' || location.pathname === '/sstock/'
-  const isStockHistory = location.pathname === '/stockHistory'
+  const isStockHistory = location.pathname === '/sstock/stockHistory'
   const summaryTitle = {
     [t("navBar.totalCost")]: totalCost + t("twDollars"),
     [t("navBar.profitAndLoss")]: profitAndLoss + t("twDollars"),

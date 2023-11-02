@@ -66,7 +66,7 @@ const Stock = (props) =>{
   const { stock, index, isMerge } = props;
   const averagePrice = parseFloat((stock.price * 1.001425).toFixed(2));
   const handlingFee = stock.price * 1000 * stock.sheet * 0.001424 < 20 ? 20 : Math.round(stock.price * 1000 * stock.sheet * 0.001424);
-  const isStockHistory = location.pathname === '/stockHistory'
+  const isStockHistory = location.pathname === '/sstock/stockHistory'
   
   return (
     <>

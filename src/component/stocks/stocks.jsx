@@ -23,7 +23,7 @@ const Stocks = () => {
   const dispatch = useDispatch();
   const isMobile = browserUtils.isMobile();
   const { t } = useTranslation()
-  const isStockHistory = location.pathname === "/stockHistory";
+  const isStockHistory = location.pathname === "/sstock/stockHistory";
 
   useEffect(() => {
     console.log('1.', settings.isFirst)
