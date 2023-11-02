@@ -16,7 +16,7 @@ const Navbar = () => {
   const { totalCost, saleCost, profit, profitAndLoss, lastYearROI} = useSelector((state) => state.apiDataReducer)
   const { t } = useTranslation();
 
-  const currentStockPage = location.pathname === '/sstock'
+  const currentStockPage = location.pathname === '/sstock' || location.pathname === '/sstock/'
   const isStockHistory = location.pathname === '/stockHistory'
   const summaryTitle = {
     [t("navBar.totalCost")]: totalCost + t("twDollars"),
