@@ -13,22 +13,22 @@ const routes = [
         children: [],
     },
     {
-        path: "/login",
+        path: "/sstock/login",
         element: <Login/>,
         children: [],
     },
     {
-        path: "/stockHistory",
+        path: "/sstock/stockHistory",
         element: <WrapLayout children={<Stocks/>}></WrapLayout>,
         children: [],
     },
     {
-        path: "/account",
+        path: "/sstock/account",
         element: <WrapLayout children={<Account/>}></WrapLayout>,
         children: [],
     },
     {
-        path: "/chart",
+        path: "/sstock/chart",
         element: <WrapLayout children={<TwChart/>}></WrapLayout>,
         children: [],
     },
