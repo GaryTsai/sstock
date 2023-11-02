@@ -155,7 +155,7 @@ const InputRegion = (props) => {
   const setQueryOpen = status => setInputInfo({ ...inputInfo ,isQueryOpen:status });
 
   const { startStandardDate, endStandardDate, isQueryOpen } = inputInfo;
-  const isStockHistory = location.pathname === '/sstock//stockHistory';
+  const isStockHistory = location.pathname === '/sstock/stockHistory';
 
   return (
     <>

@@ -97,7 +97,7 @@ const Input = () => {
   
   const {datePickerDate, name, number, price, sheet, isSaleOpen} = inputInfo;
   const isMobile = browserUtils.isMobile();
-  const isStockHistory = location.pathname === '/stockHistory'
+  const isStockHistory = location.pathname === '/sstock/stockHistory'
 
   return (
     <>
