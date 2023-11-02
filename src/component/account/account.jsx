@@ -6,9 +6,9 @@ import api from '../../api/api'
 import browserUtils from "../../utils/browserUtils";
 import { BiSolidArrowToTop } from "react-icons/bi";
 import { useSelector, useDispatch } from 'react-redux';
-import { changeContentLoading, changeLoading } from './../../slices/mutualState';
 import { fetchRecords, fetchAccountSummary} from './../../slices/apiDataSlice';
 import { useTranslation } from 'react-i18next';
+import { styled } from "@mui/material";
 
 const initialState = {
   isAssetTransfer: true
@@ -17,12 +17,13 @@ const initialState = {
 const Account = () => {
   const [accountInfo, setAccountInfo] = useState(initialState)
   const [topIconState, setTopIconState] = useState(false)
+  const [dividendBtn, setDividendBtn] = useState(false)
+
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const { contentLoading } = useSelector((state) => state.mutualStateReducer)
   const { records, recordsLoading, acTime, acMoney, acStock, acSummary } = useSelector((state) => state.apiDataReducer)
- 
+  const [dividendRecords, setDividendRecords] = useState(records)
   useEffect(() => {
 
     dispatch(fetchRecords())
@@ -36,9 +37,33 @@ const Account = () => {
     })
   }, [])
 
+  useEffect(() => {
+    setDividendRecords(()=> dividendBtn ? records.filter((record)=>{
+      return (/股利/).test(record.source)
+    }) : records)
+  }, [dividendBtn, records])
+  
   const hideAssetTransfer = () => setAccountInfo({...accountInfo, isAssetTransfer: !isAssetTransfer});
 
   const { isAssetTransfer} = accountInfo;
+
+  const Dividend = styled('div')`
+    position: relative;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
+    text-align: right;
+  `
+  const DividendButton = () => (
+    <button type="button" style={{ 
+      marginRight: "0.5rem", 
+      backgroundColor: dividendBtn ? "rgb(200, 35, 10)" : "transparent",
+      color: dividendBtn ? "white": "black",
+      border: "1px solid rgb(200, 35, 10)"
+    }} class="btn" onClick={()=> setDividendBtn(!dividendBtn)}>
+      {t('dividend')}
+    </button>
+  );
 
   return (
     <div>
@@ -93,6 +118,9 @@ const Account = () => {
               </tbody>
             </table>
           </div>
+          <Dividend>
+              <DividendButton/>
+          </Dividend>
           <div>
             <div className="table-responsive" style={{ overflowX: 'unset' }}>
               <table className="table">
@@ -114,7 +142,7 @@ const Account = () => {
                 </thead>
                 <tbody>
                 {
-                  !recordsLoading && records.map((record, index) => (
+                  !recordsLoading && dividendRecords.map((record, index) => (
                     <Record key={index} record={record} index={index}/>
                   ))
                 }

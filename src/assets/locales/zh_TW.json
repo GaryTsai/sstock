@@ -101,5 +101,6 @@
       "delete": "刪除",
       "sell": "賣出",
       "sellInfo": "賣出資訊",
-      "sellPrice": "賣出單價"
+      "sellPrice": "賣出單價",
+      "dividend": "股利"
 }

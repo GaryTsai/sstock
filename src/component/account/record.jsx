@@ -6,7 +6,7 @@ const sourceMapping = {
 '手續費折': 3
 }
 
-const sourceColor = ({source}) => {
+const sourceStyle = ({source}) => {
   let colorNumber = null 
   if(!source) {
     return 
@@ -18,19 +18,19 @@ const sourceColor = ({source}) => {
 
   switch (colorNumber) {
     case 1:
-      return 'red'
+      return { color: 'red'}
     case 2:
-      return 'green'
+      return { color: 'green' }
     case 3:
-      return 'purple'
+      return { color: 'purple' }
     default:
-      return 'black'
+      return { color: 'black' }
   }
 }
 
-const Td = styled('td')((source) => ({
-  color: sourceColor(source),
-}));
+const Td = styled('td')((source) => (
+   sourceStyle(source)
+));
 
 const Record = (props) => {
   const {record, index} = props;
@@ -39,7 +39,7 @@ const Record = (props) => {
       <th scope="row">{index}</th>
       <td>{record.account_record_Money}</td>
       <td>{record.account_record_Stock}</td>
-      <td>{record.transfer}</td>
+      <Td source={record.source}>{record.transfer}</Td>
       <td>{record.transferStatus}</td>
       <td>{record.transferTime}</td>
       <Td source={record.source}>{record.source}</Td>
