@@ -92,14 +92,14 @@ const Navbar = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarCollapse" style={{ flexBasis: "100%" }}>
           <ul className="navbar-nav mr-auto" style={{alignItems: isMobile ? "unset" : "center"}}>
-            <li className={`nav-item`} data-toggle="collapse" data-target=".navbar-collapse.show" style={location.pathname === '/stockHistory' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available', cursor: 'pointer'}}>
-              <div className="nav-link"  onClick={e => navigate('/stockHistory')}>{t("navBar.twStockHistory")} <span className="sr-only"></span></div>
+            <li className={`nav-item`} data-toggle="collapse" data-target=".navbar-collapse.show" style={location.pathname === '/sstock/stockHistory' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available', cursor: 'pointer'}}>
+              <div className="nav-link"  onClick={e => navigate('/sstock/stockHistory')}>{t("navBar.twStockHistory")} <span className="sr-only"></span></div>
             </li>
-            <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={location.pathname === '/account' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available', cursor: 'pointer'}} >
-              <div className="nav-link" onClick={e => navigate('/account')} >{t("navBar.myAccount")}</div>
+            <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={location.pathname === '/sstock/account' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available', cursor: 'pointer'}} >
+              <div className="nav-link" onClick={e => navigate('/sstock/account')} >{t("navBar.myAccount")}</div>
             </li>
-            <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={location.pathname === '/chart' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available', cursor: 'pointer'}} >
-              <div className="nav-link" onClick={e => navigate('/chart')} >{t("navBar.incomeChart")}</div>
+            <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={location.pathname === '/sstock/chart' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available', cursor: 'pointer'}} >
+              <div className="nav-link" onClick={e => navigate('/sstock/chart')} >{t("navBar.incomeChart")}</div>
             </li>
             {currentStockPage && <FormGroup sx={{whiteSpace: "nowrap", width: '-webkit-fill-available'}}>
               <FormControlLabel sx={{marginBottom: 0}}control={<Switch checked={isMerge} onChange={() => handleMerge()} color="warning"/>} label={t("navBar.stockMerge")} />
