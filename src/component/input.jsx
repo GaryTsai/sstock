@@ -98,7 +98,7 @@ const Input = () => {
   const {datePickerDate, name, number, price, sheet, isSaleOpen} = inputInfo;
   const isMobile = browserUtils.isMobile();
   const isStockHistory = location.pathname === '/sstock/stockHistory'
-
+  console.log(isStockHistory);
   return (
     <>
     {!isStockHistory && <div style={{margin: isMobile ?  '0px 5px 0px 5px' : '0 5px'}}> 
@@ -128,9 +128,9 @@ const Input = () => {
         </button>
       </div>}
     </div>}
-    {isMobile && !isSaleOpen && <button className="btn btn-warning from-group col-sm-2 col-md-12 input-sale-frame" type="submit"
+    {isMobile && !isSaleOpen && !isStockHistory && <button className="btn btn-warning from-group col-sm-2 col-md-12 input-sale-frame" type="submit"
               onClick={() => saleIsOpen()}>{t('input.buy')}</button>}
-    {isMobile && isSaleOpen &&
+    {isMobile && isSaleOpen && !isStockHistory &&
     <button className="btn btn-secondary from-group col-sm-2 col-md-12 input-sale-frame" type="submit"
               onClick={() => saleIsOpen(false)}>{t('hide')}</button>}  
     </>

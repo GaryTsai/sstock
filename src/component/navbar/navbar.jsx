@@ -28,10 +28,11 @@ const Navbar = () => {
     if(browserUtils.isMobile()){
       return {
         fontSize: '16px',
-        marginLeft: '5px',
+        textAlign: 'center',
         background:'rgb(232 232 232)',
         borderRadius: '10px',
-        whiteSpace: "nowrap"
+        whiteSpace: "nowrap",
+        padding: '0px 10px'
       }
     } else {
       return {
@@ -85,7 +86,7 @@ const Navbar = () => {
   return (
     <div>
       <nav className="navbar navbar-expand-md navbar-light " style={{backgroundColor: 'rgb(52 149 220)'}}>
-        <div className="navbar-brand"  style={currentStockPage ? {...getActiveStyle(), padding: '5px'} : {cursor: 'pointer'}} onClick={e => navigate('/sstock')}>{t("navBar.twStock")}</div>
+        <div className="navbar-brand"  style={currentStockPage ? {...getActiveStyle(), padding: '5px'} : {cursor: 'pointer', fontSize: '16px'}} onClick={e => navigate('/sstock')}>{t("navBar.twStock")}</div>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
@@ -104,12 +105,12 @@ const Navbar = () => {
             {currentStockPage && <FormGroup sx={{whiteSpace: "nowrap", width: '-webkit-fill-available'}}>
               <FormControlLabel sx={{marginBottom: 0}}control={<Switch checked={isMerge} onChange={() => handleMerge()} color="warning"/>} label={t("navBar.stockMerge")} />
             </FormGroup>}
-            {isMobile &&<li className="nav-item"  data-toggle="collapse" data-target=".navbar-collapse.show" style={{marginTop: isMobile ? "5px": "0px", marginLeft: '5px', position: isMobile ? "unset": "absolute" , right: isMobile ? "unset" : "5px"}}>
+            {isMobile &&<li className="nav-item"  data-toggle="collapse" data-target=".navbar-collapse.show" style={{marginTop: isMobile ? "5px": "0px", position: isMobile ? "unset": "absolute" , right: isMobile ? "unset" : "5px", textAlign: 'center'}}>
               <div className="nav-link" style={styles.logOutButtonMobile} onClick={() => logOut()} >{t("logout")}</div>
             </li>}
           </ul>
         </div>
-        { currentStockPage && <div style={{ padding: '5px 0px',...getComputeStyleForMobile()}}>
+        { currentStockPage && <div style={{ padding: '0px',...getComputeStyleForMobile()}}>
               <SummaryList title={t("navBar.currentTotalcost")} value={totalCost + t("twDollars")}/>
             </div>}
         { isStockHistory && <div style={{display: 'inherit',...getComputeStyleForMobile()}}>
