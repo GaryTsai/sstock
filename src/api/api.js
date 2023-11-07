@@ -56,6 +56,7 @@ const api = {
                     saleCost += items[item].status === "sale" ? items[item].cost : 0;
                 }
                 let lastYearROI = await this.getLastYearROI(items);
+
                 stockData = {
                     lastYearROI: lastYearROI,
                     showStocks: items,
@@ -65,7 +66,7 @@ const api = {
                     totalCost: total,
                     profitAndLoss: profitAndLoss,
                     saleCost: saleCost,
-                    profit: Math.floor(profitAndLoss / saleCost * 100)
+                    profit: ((profitAndLoss / saleCost) * 100).toFixed(2)
                 }
             }
         });
@@ -232,34 +233,19 @@ const api = {
     },
 
     async getLastYearROI(items) {
-        let accountInfo = await this.getAccount();
-        let summary = accountInfo.summary;
         let lastYearStartDate = d.dateFormat(new Date(new Date().getFullYear() - 1, 0, 1));
         let lastYearEndDate = d.dateFormat(new Date(new Date().getFullYear() - 1, 11, 31));
-        let thisYearStartDate = d.dateFormat(new Date(new Date().getFullYear(), 0, 1));
-        let thisYearEndDate = d.dateFormat(new Date(new Date().getFullYear(), 11, 31));
         let lastYearItems = items.filter(a => (lastYearStartDate <= a.sale_date && a.sale_date <= lastYearEndDate));
-        let thisYearItems = items.filter(a => (thisYearStartDate <= a.sale_date && a.sale_date <= thisYearEndDate));
         let incomeOfLastYear = 0;
-        let incomeOfThisYear = 0;
-        let inAccountOfThisYear = 0;
+        let lastYearCost = 0;
 
         for (let item in lastYearItems) {
             incomeOfLastYear += lastYearItems[item].income;
+            lastYearCost += lastYearItems[item].cost;
         }
 
-        for (let item in thisYearItems) {
-            incomeOfThisYear += thisYearItems[item].income;
-        }
-
-        let accountRecords = await this.getAccountRecord();
-        let thisYearAccountRecords = accountRecords.filter(a => (thisYearStartDate <= a.transferTime && a.transferTime <= thisYearEndDate));
-        for (let record in thisYearAccountRecords) {
-            inAccountOfThisYear += thisYearAccountRecords[record].source !== '股票' ? thisYearAccountRecords[record].transfer : 0;
-        }
-
-        let ROI = (incomeOfLastYear / (summary - incomeOfThisYear - inAccountOfThisYear));
-        return ROI.toFixed(4)
+        let ROI = (incomeOfLastYear * 100/ lastYearCost );
+        return ROI.toFixed(2)
     },
     async updateDataForDeleteStock(stock) {
         //get all account data
