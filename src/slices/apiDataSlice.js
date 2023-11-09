@@ -19,6 +19,11 @@ export const fetchAccountSummary = createAsyncThunk("stock/fetchAccountSummary",
     return response;
 });
 
+export const fetchStockComment = createAsyncThunk("stock/fetchStockComment", async() => {
+    console.log('-----------fetchStockComment-------------');
+    const response = await api.getStockComment();
+    return response;
+});
 
 export const apiDataSlice = createSlice({
     name: "stock",
@@ -38,7 +43,8 @@ export const apiDataSlice = createSlice({
         acTime: '',
         acMoney: 0,
         acStock: 0,
-        acSummary: 0
+        acSummary: 0,
+        stockComment: '',
     },
     reducers: {
         updateQueryData: (state, action) => {
@@ -108,11 +114,16 @@ export const apiDataSlice = createSlice({
             state.acStock = payload.accountStock
             state.acSummary = payload.summary
         },
+        [fetchAccountSummary.rejected]: (state) => {},
+        //fetchStockComment
+        [fetchStockComment.pending]: (state) => {},
+        [fetchStockComment.fulfilled]: (state, { payload }) => {
+            state.stockComment = payload.stockComment ? payload.stockComment : state.stockComment
+        },
 
-        [fetchAccountSummary.rejected]: (state) => {}
-
+        [fetchStockComment.rejected]: (state) => {}
     }
 });
-export const { updateQueryData, getRecords } = apiDataSlice.actions
+export const { updateQueryData } = apiDataSlice.actions
 
 export default apiDataSlice.reducer;

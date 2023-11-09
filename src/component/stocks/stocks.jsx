@@ -26,7 +26,6 @@ const Stocks = () => {
   const isStockHistory = location.pathname === "/sstock/stockHistory";
 
   useEffect(() => {
-    console.log('1.', settings.isFirst)
     if(settings.isFirst){
       dispatch(changeInitLoading(true));
     }

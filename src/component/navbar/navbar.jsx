@@ -1,19 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import browserUtils from '../../utils/browserUtils';
 import styles from './style';
 import { FormGroup, FormControlLabel, Switch } from '@mui/material'
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { changeLoginStatus, changeStockMergeState } from './../../slices/mutualState';
-import SummaryList from './summaryList'
+import SummaryList from './components/summaryList'
 import { useTranslation } from "react-i18next";
+import StockComment from './components/stockComment';
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation()
   const { isMerge } = useSelector((state) => state.mutualStateReducer)
-  const { totalCost, saleCost, profit, profitAndLoss, lastYearROI} = useSelector((state) => state.apiDataReducer)
+  const { totalCost, saleCost, profit, profitAndLoss, lastYearROI, stockComment} = useSelector((state) => state.apiDataReducer)
   const { t } = useTranslation();
 
   const currentStockPage = location.pathname === '/sstock' || location.pathname === '/sstock/'
@@ -24,6 +25,7 @@ const Navbar = () => {
     [t("navBar.profit")]: profit + t("percent"),
     [t("navBar.lastYearROI")]: lastYearROI + t("percent")
   };
+  
   const getActiveStyle = () =>{
     if(browserUtils.isMobile()){
       return {
@@ -93,18 +95,19 @@ const Navbar = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarCollapse" style={{ flexBasis: "100%" }}>
           <ul className="navbar-nav mr-auto" style={{alignItems: isMobile ? "unset" : "center"}}>
-            <li className={`nav-item`} data-toggle="collapse" data-target=".navbar-collapse.show" style={location.pathname === '/sstock/stockHistory' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available', cursor: 'pointer'}}>
+            <li className={`nav-item`} data-toggle="collapse" data-target=".navbar-collapse.show" style={location.pathname === '/sstock/stockHistory' ? getActiveStyle() : {whiteSpace: "nowrap", cursor: 'pointer'}}>
               <div className="nav-link"  onClick={e => navigate('/sstock/stockHistory')}>{t("navBar.twStockHistory")} <span className="sr-only"></span></div>
             </li>
-            <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={location.pathname === '/sstock/account' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available', cursor: 'pointer'}} >
+            <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={location.pathname === '/sstock/account' ? getActiveStyle() : {whiteSpace: "nowrap", cursor: 'pointer'}} >
               <div className="nav-link" onClick={e => navigate('/sstock/account')} >{t("navBar.myAccount")}</div>
             </li>
-            <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={location.pathname === '/sstock/chart' ? getActiveStyle() : {whiteSpace: "nowrap", width: '-webkit-fill-available', cursor: 'pointer'}} >
+            <li className="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" style={location.pathname === '/sstock/chart' ? getActiveStyle() : {whiteSpace: "nowrap", cursor: 'pointer'}} >
               <div className="nav-link" onClick={e => navigate('/sstock/chart')} >{t("navBar.incomeChart")}</div>
             </li>
-            {currentStockPage && <FormGroup sx={{whiteSpace: "nowrap", width: '-webkit-fill-available'}}>
+            {currentStockPage && <FormGroup sx={{whiteSpace: "nowrap"}}>
               <FormControlLabel sx={{marginBottom: 0}}control={<Switch checked={isMerge} onChange={() => handleMerge()} color="warning"/>} label={t("navBar.stockMerge")} />
             </FormGroup>}
+            <StockComment/>
             {isMobile &&<li className="nav-item"  data-toggle="collapse" data-target=".navbar-collapse.show" style={{marginTop: isMobile ? "5px": "0px", position: isMobile ? "unset": "absolute" , right: isMobile ? "unset" : "5px", textAlign: 'center'}}>
               <div className="nav-link" style={styles.logOutButtonMobile} onClick={() => logOut()} >{t("logout")}</div>
             </li>}

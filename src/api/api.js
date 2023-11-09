@@ -306,7 +306,20 @@ const api = {
             });
         }
         return stock
-    }
+    },
+    async getStockComment() {
+        let stockComment = [];
+        let getStockComment = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stock_comment`);
+        await getStockComment.once('value').then((snapshot) => {
+            stockComment = snapshot.val();
+        });
+        return { stockComment };
+    },
+    async updateStockComment(stockComment) {
+        console.log(stockComment)
+
+        firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}`).update({ 'stock_comment': stockComment })
+    },
 };
 
 export default api;

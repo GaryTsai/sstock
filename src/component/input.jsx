@@ -98,7 +98,7 @@ const Input = () => {
   const {datePickerDate, name, number, price, sheet, isSaleOpen} = inputInfo;
   const isMobile = browserUtils.isMobile();
   const isStockHistory = location.pathname === '/sstock/stockHistory'
-  console.log(isStockHistory);
+
   return (
     <>
     {!isStockHistory && <div style={{margin: isMobile ?  '0px 5px 0px 5px' : '0 5px'}}> 
