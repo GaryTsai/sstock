@@ -87,7 +87,7 @@ const Navbar = () => {
 
   return (
     <div>
-      <nav className="navbar navbar-expand-md navbar-light " style={{backgroundColor: 'rgb(52 149 220)'}}>
+      <nav className="navbar navbar-expand-md navbar-light " style={{background: 'linear-gradient(-180deg, rgb(3 121 215), rgb(98 162 211))'}}>
         <div className="navbar-brand"  style={currentStockPage ? {...getActiveStyle(), padding: '5px'} : {cursor: 'pointer', fontSize: '16px'}} onClick={e => navigate('/sstock')}>{t("navBar.twStock")}</div>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">

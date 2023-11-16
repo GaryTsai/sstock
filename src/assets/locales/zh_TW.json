@@ -58,6 +58,7 @@
             "monthIncomeChart": "月損益圖", 
             "yearIncomeChart": "歷年損益圖",
             "dividendChart": "股利圖表",
+            "yearDividendChart": "該年總股利",
             "yearIncomeReport": "年損益報表",
             "yearSelect": "選擇年份:",
             "to": "至:",
@@ -66,7 +67,8 @@
             "yearProfit": "年投報率",
             "dividend": "股利",
             "sale": "已賣出",
-            "unsale": "未賣出"
+            "unsale": "未賣出",
+            "back": "回總損益圖"
       },
       "resetPassword": "已發送信件至信箱，請按照信件說明重設密碼",
       "enterAccountWarning": "Please input email&password",

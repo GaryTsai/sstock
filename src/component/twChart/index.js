@@ -22,8 +22,9 @@ const TwChart = () => {
       yearValue: []
     }
   })
+  
   const [chartTab, setChartTab] = useState("monthIncome")
-  const { allStocks } = useSelector((state) => state.apiDataReducer)
+  const { allStocks , loading} = useSelector((state) => state.apiDataReducer)
   const dispatch = useDispatch()
   const { t } = useTranslation();
 
@@ -158,16 +159,30 @@ const TwChart = () => {
           <button type="button" className={`btn btn-info ${chartTab === "dividend" && 'active'}`} onClick={()=> setChartTab("dividend")} >{t("chart.dividendChart")}</button>
           <button type="button" className={`btn btn-info ${chartTab === "report" && 'active'}`} onClick={()=> setChartTab("report")} >{t("chart.yearIncomeReport")}</button>
         </div>
-        {chartTab === "monthIncome" && <Grid item xs={12} md={6}>
+        {loading && <div style={{position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  height: '100%',
+                  width: '100%',
+                  display: 'block',
+                  zIndex: 7}}><img  alt="" style={{display:'flex',
+                  width: '64px',
+                  height: '64px',
+                  position: 'relative',
+                  margin: '0px auto',
+                  backgroundSize: '100%',
+                  top: 'calc(50% - 50px)'
+                }} src={require('./../../assets/img/contentLoading.png')}/></div>}
+        { !loading && chartTab === "monthIncome" && <Grid item xs={12} md={6}>
           <DualColumnChart chartInfo={dividendInfo.chartInfo} monthValue={dividendInfo.chartInfo.monthValue} type={'year'}/>
         </Grid>}
-        {chartTab === "yearIncome" && <Grid item xs={12} md={6}>
-          <YearColumnChart chartInfo={dividendInfo.chartInfo} type={'year'} dividend={dividendInfo.yearDividend}/>
+        { !loading && chartTab === "yearIncome" && <Grid item xs={12} md={6}>
+          <YearColumnChart chartInfo={dividendInfo.chartInfo} type={'year'} dividend={dividendInfo.yearDividend} perDividend={dividendInfo.perDividend}/>
         </Grid>}
-        {chartTab === "dividend" && <Grid item xs={12} md={6}>
+        { !loading && chartTab === "dividend" && <Grid item xs={12} md={6}>
           <DividendChart perDividend={dividendInfo.perDividend}/>
         </Grid>}
-        {chartTab === "report" && <Grid item xs={12} md={6}>
+        { !loading && chartTab === "report" && <Grid item xs={12} md={6}>
           <Report allStocks={allStocks} chartInfo={dividendInfo.chartInfo}/>
         </Grid>}
     </Grid>

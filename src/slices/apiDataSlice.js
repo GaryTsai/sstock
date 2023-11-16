@@ -40,6 +40,7 @@ export const apiDataSlice = createSlice({
         totalCost: 0,
         records: [],
         recordsLoading: false,
+        chartLoading: false,
         acTime: '',
         acMoney: 0,
         acStock: 0,
@@ -77,10 +78,12 @@ export const apiDataSlice = createSlice({
         //fetchStock
         [fetchStock.pending]: (state) => {
             state.loading = true;
+            state.chartLoading = true;
         },
 
         [fetchStock.fulfilled]: (state, { payload }) => {
             state.loading = false;
+            state.chartLoading = false;
             state.allStocks = payload.allStocks;
             state.lastYearROI = payload.lastYearROI;
             state.profit = payload.profit;
@@ -93,6 +96,7 @@ export const apiDataSlice = createSlice({
         },
         [fetchStock.rejected]: (state) => {
             state.loading = false;
+            state.chartLoading = false;
         },
         //fetchRecords
         [fetchRecords.pending]: (state) => {
