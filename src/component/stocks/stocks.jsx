@@ -1,27 +1,28 @@
 import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import _ from "lodash";
+import { useTranslation } from "react-i18next";
+
 import Stock from "./stock";
 import InputRegion from "../inputRegion";
 import Input from "../input";
 import browserUtils from "../../utils/browserUtils";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
-import _ from "lodash";
 import { fetchStock, fetchAccountSummary } from "../../slices/apiDataSlice";
 import { changeInitLoading } from "../../slices/mutualState";
 import settings from "../settings/settings";
-import { useTranslation } from "react-i18next";
+import './style.css'
 
 const Stocks = () => {
   const { queryStatus, isMerge } = useSelector(
     (state) => state.mutualStateReducer
   );
-  const { allStocks, unSaleStocks, showStocks, loading, initLoading } = useSelector(
+  const { allStocks, unSaleStocks, showStocks, loading } = useSelector(
     (state) => state.apiDataReducer
   );
 
   const location = useLocation();
   const dispatch = useDispatch();
-  const isMobile = browserUtils.isMobile();
   const { t } = useTranslation()
   const isStockHistory = location.pathname === "/sstock/stockHistory";
 
@@ -90,16 +91,10 @@ const Stocks = () => {
     <div>
       <Input />
       {<InputRegion />}
-      <div style={{ overflowY: isMobile ? "scroll" : "unset" }}>
+      <div style={{ overflowY: "unset" }}>
         <table className="table table-dark" style={{ whiteSpace: "nowrap" }}>
           <thead>
-            <tr
-              style={{
-                position: "sticky",
-                top: "0px",
-                backgroundColor: "black",
-              }}
-            >
+            <tr className="sticky-tr">
               <th scope="col">#</th>
               {!isStockHistory && isMerge === false && (
                 <th scope="col">{t("sell")}</th>
@@ -134,53 +129,13 @@ const Stocks = () => {
                 />
               ))}
             {!settings.isFirst && loading && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  height: "100%",
-                  width: "100%",
-                  display: "block",
-                  zIndex: 7,
-                }}
-              >
-                <img
-                  alt=""
-                  style={{
-                    display: "flex",
-                    width: "64px",
-                    height: "64px",
-                    position: "relative",
-                    margin: "0px auto",
-                    backgroundSize: "100%",
-                    top: "calc(50% - 50px)",
-                  }}
-                  src={require("./../../assets/img/contentLoading.png")}
-                />
+              <div className="content-loading">
+                <img alt="" className="content-loading-img" src={require("./../../assets/img/contentLoading.png")} />
               </div>
             )}
             {stocks === "No Data" && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: 0,
-                  height: "50%",
-                  width: "100%",
-                  display: "block",
-                  zIndex: 7,
-                }}
-              >
-                <div
-                  alt=""
-                  style={{
-                    position: "relative",
-                    margin: "0px auto",
-                    color: "black",
-                    fontSize: 32,
-                  }}
-                >
+              <div className="stock-noData">
+                <div className="stock-noData-content" alt="">
                   No Data
                 </div>
               </div>

@@ -1,0 +1,90 @@
+.nav-item.nav-link.active{
+    color: #495057;
+    background-color: #ff4845;
+    border-color: #dee2e6 #dee2e6 #fff;
+}
+.table th {
+    padding: 0.25rem;
+    vertical-align: middle;
+    text-align: center;
+}
+.table td {
+    padding: 0.75rem;
+    vertical-align: middle;
+    text-align: center;
+}
+.account-confirm {
+    border-radius: 5px; 
+    margin: auto 5px;
+}
+.account-transfer-frame {
+    margin: 5px;
+}
+.account-input-frame {
+    margin: 4px  0px;
+}
+.dividend {
+    margin-right: 0.5rem;
+    border: 1px solid rgb(200, 35, 10);
+}
+.arrowToTop {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 50px;
+    height: 50px;
+    font-size: 40px;
+    background-color: cornflowerblue;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.nav-link.tw-property {
+    width: 100%;
+    border: 0px;
+    display: flex;
+    justify-content: center;
+    border-radius: 0px;
+}
+.account-table-tr {
+    position: sticky;
+    top: 0px;
+    background-color: black;
+    color: #FFFFFF;
+}
+.content-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: block;
+    z-index: 7;
+}
+
+.content-loading-img {
+    display:flex;
+    width: 64px;
+    height: 64px;
+    position: relative;
+    margin: 0px auto;
+    background-size: 100%;
+    top: calc(50% - 50px);
+}
+.source-comment {
+    vertical-align: bottom;
+    font-size: small;
+    margin-right: 5px;
+}
+@media (min-width: 768px){
+    .account-input-frame {
+        margin: 3px auto;
+    }
+}
+@media (max-width: 768px){
+    .content-loading {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+}

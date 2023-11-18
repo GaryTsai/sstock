@@ -1,20 +1,20 @@
 import styled from '@emotion/styled'
 import React, { useState, useEffect, useCallback, useRef } from 'react'
-import browserUtils from "./../../../utils/browserUtils";
 import api from '../../../api/api';
 import _ from "lodash";
 import { useSelector } from 'react-redux';
 import { fetchStockComment } from '../../../slices/apiDataSlice';
 import { useDispatch } from 'react-redux';
+import './style.css';
+import { useTranslation } from 'react-i18next';
 
 const StockComment = () => {
   const { stockComment } = useSelector((state) => state.apiDataReducer)
   const [isShowComment, setIsShowComment] = useState(false)
-  const isMobile = browserUtils.isMobile()
   const [comment, setComment] = useState(stockComment)
   const textareaInput = useRef();
   const dispatch = useDispatch()
-
+  const {t} = useTranslation()
 
   useEffect(() => {
     dispatch(fetchStockComment())
@@ -37,10 +37,11 @@ const StockComment = () => {
       </>
   }
 
-  const ImgCommentStyle = styled("img")(({ isShowComment, isMobile}) => ({
+  const ImgCommentStyle = styled("img")(({ isShowComment }) => ({
     boxShadow: isShowComment ? "0 0 20px #d71313" : 'unset',
     cursor: "pointer",
     width: "32px",
+    height: "32px",
     borderRadius: "1rem",
     marginLeft: "0.5rem"
   }));
@@ -73,25 +74,6 @@ const StockComment = () => {
       background-color: #17871b;
     }
   `
-  const textAreaStyle = {
-    height: "200px",
-    width: isMobile ? "100%" : "360px",
-    border: "0px",
-    overflowY: "hidden",
-    "&:focus": {
-        outline: "none !important",
-        boxShadow: "0px 12px 20px rgba(0,0,0,0.8)"
-    }};
-
-  const commentWrapperStyle = {
-    display: "inline-block",
-    position: "relative",
-    zIndex: 2,
-    width: "100%",
-    height: isMobile ? "auto" : "0px",
-    marginLeft: isMobile ? "auto" : "0.5rem",
-    marginTop: isMobile ? "0.5rem" : "auto",
-  }
 
   const debounce = useCallback(
     _.debounce((stockComment) => {
@@ -109,13 +91,12 @@ const StockComment = () => {
     <>
         <ImgComment/>
         {
-            isShowComment && <div 
-            style={commentWrapperStyle}>
-              <CommentTitle for="exampleFormControlTextarea1" class="form-label">股票記事</CommentTitle>
-                <textarea type="text" class="form-control" id="exampleFormControlTextarea1" rows="3" style={{...textAreaStyle}}onChange={(e)=> handleTextarea(e.target.value)}>{comment}</textarea>
+            isShowComment && <div  className="comment-wrapper">
+              <CommentTitle htmlFor="exampleFormControlTextarea1" className="form-label">{t('comment')}</CommentTitle>
+                <textarea type="text" className="form-control width-range" id="exampleFormControlTextarea1" rows="3" onChange={(e)=> handleTextarea(e.target.value)}>{comment}</textarea>
               <CommentConfirm onClick={()=> {
                 debounce(comment)
-                setIsShowComment(!isShowComment)}}>確認
+                setIsShowComment(!isShowComment)}}>{t('confirm')}
               </CommentConfirm>
           </div>
         }
@@ -124,13 +105,3 @@ const StockComment = () => {
 }
 
 export default StockComment
-
-{/* 
-
-          <CommentTitle for="exampleFormControlTextarea1" class="form-label">股票記事</CommentTitle>
-            <CommentTextArea type="text" class="form-control" id="exampleFormControlTextarea1" rows="3" isMobile={isMobile} ref={textareaInput} 
-            onChange={(e)=> handleTextarea(e.target.value)}
-            >{comment}</CommentTextArea>
-            <CommentConfirm onClick={()=> {
-             debounce(comment)
-             setIsShowComment(!isShowComment)}}>確認</CommentConfirm> */}

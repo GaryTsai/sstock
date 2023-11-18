@@ -77,11 +77,58 @@
     margin: 3px 0px;
 }
 
+.mobile-show {
+    display: none;
+}
+
+.input-frame {
+    margin: 0 5px;
+}
+
+.input-confirm {
+    border-radius: 5px;
+    margin: 3px 0px;
+}
+.loading-image {
+    display: flex;
+    width: 128px;
+    height: 128px;
+    position: relative;
+    margin: 0px auto;
+    background-size: 100%;
+    top: calc(50% - 50px);
+}
+.loading-image-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: block;
+    z-index: 7;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.query-time-fields {
+    margin:3px 0;
+    float: left;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
 @media (min-width: 768px){
     .navbar-expand-md .navbar-nav {
         flex: none;
     }
     .query-region-submit {
-        padding: '0'
+        padding: 0
+    }
+}@media (max-width: 768px){
+    .mobile-show {
+        display: block;
+    }
+    .input-confirm {
+        margin: 3px 5px;
+        max-width: calc(100% - 10px);
     }
 }

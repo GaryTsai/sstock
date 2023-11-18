@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import browserUtils from "../../utils/browserUtils";
 import api from "../../api/api";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch } from 'react-redux';
 import { fetchAccountSummary, fetchRecords } from '../../slices/apiDataSlice';
 import Swal from 'sweetalert2'
 import { useTranslation } from 'react-i18next';
+import './style.css'
 
 const initialState = {
   date: new Date(),
@@ -51,35 +51,20 @@ const AccountTransfer = (props) => {
     }
   };
 
-  const getStyleOfButton = () =>{
-    if(browserUtils.isMobile()){
-      return {
-        margin: '4px  0px'
-      }
-    }else{
-      return {
-        margin: '3px auto'
-      }
-    }
-  };
-
   const handleChange = price => setAccountInfo({...accountInfo, price: price.trim()})
 
   const getTransferOptions = (e) => setAccountInfo({...accountInfo, transferStatus: e.target.value});
 
   return (
-    <div style={{margin: '5px 5px'}}>
+    <div className="account-transfer-frame">
       <div className="form-row">
         <div className="col">
-          <input type="text" className="form-control input-sale-info-frame" placeholder={t("price")}
-                  onChange={(c) => handleChange(c.target.value)} value={accountInfo.price}/>
+          <input type="text" className="form-control input-sale-info-frame" placeholder={t("price")} onChange={(c) => handleChange(c.target.value)} value={accountInfo.price}/>
         </div>
         <div className="from-group col-md-2 input-sale-info-frame">
-          <input type="text" className="form-control" placeholder={t("source")}
-                  onChange={(c) => inputSource(c.target.value)} value={accountInfo.source}/>
+          <input type="text" className="form-control" placeholder={t("source")} onChange={(c) => inputSource(c.target.value)} value={accountInfo.source}/>
         </div>
-        <div className="btn-group btn-group-toggle from-group col-md-2" data-toggle="buttons"
-              style={{...getStyleOfButton()}}>
+        <div className="btn-group btn-group-toggle from-group col-md-2 account-input-frame" data-toggle="buttons" >
           <label className="btn btn-warning active" onClick={getTransferOptions}>
             <input type="radio" name="stockOption" id="individual" value='transferIn' autoComplete="off"/> {t("deposit")}
           </label>
@@ -87,8 +72,7 @@ const AccountTransfer = (props) => {
             <input type="radio" name="stockOption" id="mutual" value='transferOut' autoComplete="off"/> {t("transfer")}
           </label>
         </div>
-        <button style={{borderRadius: '5px', margin: 'auto 5px'}} className="btn btn-primary from-group col-md-2 input-sale-frame" type="submit"
-                onClick={submitTrade}>{t("confirm")}
+        <button className="btn btn-primary from-group col-md-2 input-sale-frame account-confirm" type="submit" onClick={submitTrade}>{t("confirm")}
         </button>
       </div>
     </div>

@@ -1,12 +1,14 @@
 import React, {useRef, useEffect, useState} from 'react';
-import { BiSolidArrowToTop } from "react-icons/bi";
 import { useLocation } from 'react-router-dom';
-import { fetchStock } from '../../slices/apiDataSlice';
-import api from '../../api/api';
 import { useDispatch } from 'react-redux';
-import { changeContentLoading } from '../../slices/mutualState';
 import Swal from 'sweetalert2'
 import { useTranslation } from 'react-i18next';
+import { BiSolidArrowToTop } from "react-icons/bi";
+
+import { fetchStock } from '../../slices/apiDataSlice';
+import api from '../../api/api';
+import { changeContentLoading } from '../../slices/mutualState';
+import './style.css'
 
 const Stock = (props) =>{
   const priceRef = useRef(null);
@@ -73,20 +75,7 @@ const Stock = (props) =>{
         {
           isTopBtnShow && 
           <div style={{position: "absolute"}}>
-            <div style={{
-              position: "fixed",
-              right: "25px",
-              bottom: "25px",
-              width: "50px",
-              height: "50px",
-              fontSize: "40px",
-              backgroundColor: "cornflowerblue",
-              borderRadius: "50%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              color: "black"}} onClick={() =>  window.scrollTo({top: 0, behavior: 'smooth'})}>
+            <div className='arrowToTop' onClick={() =>  window.scrollTo({top: 0, behavior: 'smooth'})}>
                 <BiSolidArrowToTop />
               </div>
           </div>

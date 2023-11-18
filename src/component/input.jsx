@@ -3,30 +3,32 @@ import { useSelector, useDispatch } from 'react-redux';
 import utils from "./../utils/dateFormat";
 import api from './../api/api'
 import "react-datepicker/dist/react-datepicker.css";
-import browserUtils from "./../utils/browserUtils";
-import { changeContentLoading } from '../slices/mutualState';
 import { fetchStock } from '../slices/apiDataSlice';
 import { useLocation } from 'react-router';
 import Swal from 'sweetalert2'
 import { useTranslation } from "react-i18next";
-
-const initialState = {
-  date: new Date(),
-  name: '',
-  number: '',
-  code_name:'',
-  price: '',
-  sheet: '',
-  isSaleOpen: true,
-  datePickerDate: new Date()
-};
+import { useMediaQuery } from '@mui/material';
 
 const Input = () => {
-  const [inputInfo, setInputInfo] = useState(initialState)
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const [inputInfo, setInputInfo] = useState({
+    date: new Date(),
+    name: '',
+    number: '',
+    code_name:'',
+    price: '',
+    sheet: '',
+    isSaleOpen: isMobile ? false : true,
+    datePickerDate: new Date()
+  })
   const dispatch = useDispatch()
   const location = useLocation()
   const { acMoney } = useSelector((state) => state.apiDataReducer);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    !isMobile && setInputInfo({...inputInfo, isSaleOpen: true})
+  }, [isMobile])
 
   useEffect(() => {
     setInputInfo({...inputInfo, date: utils.dateFormat(new Date()), datePickerDate: utils.dateFormat(new Date())})
@@ -96,12 +98,16 @@ const Input = () => {
   const saleIsOpen = () => setInputInfo({...inputInfo, isSaleOpen: !inputInfo.isSaleOpen});
   
   const {datePickerDate, name, number, price, sheet, isSaleOpen} = inputInfo;
-  const isMobile = browserUtils.isMobile();
+
   const isStockHistory = location.pathname === '/sstock/stockHistory'
 
   return (
     <>
-    {!isStockHistory && <div style={{margin: isMobile ?  '0px 5px 0px 5px' : '0 5px'}}> 
+    {!isSaleOpen && !isStockHistory && <button className="btn btn-warning from-group col-sm-12 col-md-12 input-sale-frame mobile-show" type="submit"
+        onClick={() => saleIsOpen()}>{t('input.buy')}</button>}
+    {isSaleOpen && !isStockHistory && <button className="btn btn-secondary from-group col-sm-12 col-md-12 input-sale-frame mobile-show" type="submit"
+        onClick={() => saleIsOpen(false)}>{t('hide')}</button>}  
+    {!isStockHistory && <div className="input-frame" > 
       {isSaleOpen && <div className="form-row">
         <div className="col-md-2 stock-input-fields" >
           <input type="date" className="form-control" placeholder={t('input.date')}
@@ -123,16 +129,11 @@ const Input = () => {
           <input type="text" className="form-control" placeholder={t('input.stockSheet')}
                   onChange={(c) => inputSheet(c.target.value)} value={sheet} autoComplete="on"/>
         </div>
-        <button className="btn btn-primary from-group col-sm-12 col-md-2 input-sale-frame" type="submit" style={{borderRadius: '5px', margin: '3px 0px'}}
+        <button className="btn btn-primary from-group col-sm-12 col-md-2 input-sale-frame input-confirm" type="submit"
                 onClick={() => submitStock()}>{t('input.buyConfirm')}
         </button>
       </div>}
     </div>}
-    {isMobile && !isSaleOpen && !isStockHistory && <button className="btn btn-warning from-group col-sm-2 col-md-12 input-sale-frame" type="submit"
-              onClick={() => saleIsOpen()}>{t('input.buy')}</button>}
-    {isMobile && isSaleOpen && !isStockHistory &&
-    <button className="btn btn-secondary from-group col-sm-2 col-md-12 input-sale-frame" type="submit"
-              onClick={() => saleIsOpen(false)}>{t('hide')}</button>}  
     </>
   )
 }

@@ -14,7 +14,7 @@ const routes = [
     },
     {
         path: "/sstock/login",
-        element: <Login/>,
+        element: <WrapLayout children={<Login/>}></WrapLayout>,
         children: [],
     },
     {

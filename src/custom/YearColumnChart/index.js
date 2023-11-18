@@ -3,7 +3,6 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import { styled } from '@mui/material/styles';
 import { useTranslation } from "react-i18next";
-import { Button } from "@mui/material";
 
 const SummaryInfo = styled('div')`
   display: flex;
@@ -96,6 +95,7 @@ const ColumnChart = ({
                           }
                         }) 
                       }
+                      return {};
                     })
                     setDividendMap(dividendMap)
                     setYear(event.point.category)
@@ -214,7 +214,10 @@ const ColumnChart = ({
 
   return (<div style={{ height: '60vh' }}>
     <SummaryInfo >
-    <ChartTitle>{t("tIncome")}<ChartValue>{getSummary()}</ChartValue></ChartTitle>
+    <ChartTitle>{t("tIncome")}<ChartValue>{getSummary() + t('twDollars')}</ChartValue></ChartTitle>
+    <ChartTitle > 
+                { t("tDividend") } < ChartValue > { yearDividend.reduce((previousValue, currentValue) => previousValue + currentValue, 0)  + t('twDollars')} </ChartValue> 
+                </ChartTitle > 
     </SummaryInfo>
     {showPerDividend && <> <button type="button" className="btn btn-warning"  style={{display: "flex",alignItems: "center", position: "absolute", zIndex: 1}} 
     onClick={()=> {

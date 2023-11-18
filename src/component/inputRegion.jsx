@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef} from 'react';
 import utils from "./../utils/dateFormat";
-import browserUtils from "./../utils/browserUtils";
 import "./styles.css";
 import { useLocation } from 'react-router-dom';
 import "react-datepicker/dist/react-datepicker.css";
@@ -9,25 +8,28 @@ import { updateQueryData } from '../slices/apiDataSlice';
 import { changeQueryStatus } from '../slices/mutualState';
 import Swal from 'sweetalert2'
 import { useTranslation } from "react-i18next";
+import { useMediaQuery } from '@mui/material';
 
-const initialState = {
-  startStandardDate: '',
-  endStandardDate: '',
-  dateRegion1: '',
-  dateRegion2: '',
-  saleStatus: 'all',
-  stockStatus: 'individual',
-  queryState: '',
-  isQueryOpen: true
-};
-
-const InputRegion = (props) => {
-  const [inputInfo, setInputInfo] = useState(initialState)
+const InputRegion = () => {
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const [inputInfo, setInputInfo] = useState({
+    startStandardDate: '',
+    endStandardDate: '',
+    dateRegion1: '',
+    dateRegion2: '',
+    saleStatus: 'all',
+    stockStatus: 'individual',
+    queryState: '',
+    isQueryOpen: isMobile ? false : true,
+  })
   const timeRegionInputRef = useRef({})
   const dispatch = useDispatch()
   const location = useLocation()
-  const isMobile = browserUtils.isMobile();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    !isMobile && setInputInfo({...inputInfo, isQueryOpen: true})
+  }, [isMobile])
 
   useEffect(() => {
     setInputInfo({...inputInfo, 
@@ -35,8 +37,7 @@ const InputRegion = (props) => {
       dateRegion1: utils.dateFormat(new Date()),
       dateRegion2: utils.dateFormat(new Date()), 
       startStandardDate: utils.dateFormat(new Date()), 
-      endStandardDate: utils.dateFormat(new Date()),
-      isQueryOpen: true})
+      endStandardDate: utils.dateFormat(new Date())})
   }, [])
 
   const queryRegion = (region = '') => {
@@ -146,7 +147,7 @@ const InputRegion = (props) => {
     }else{
       return {
         margin: '3px 0px',
-        padding: 0,
+        padding: '0px',
         whiteSpace: 'nowrap'
       }
     }
@@ -159,13 +160,12 @@ const InputRegion = (props) => {
 
   return (
     <>
-      {isStockHistory && !isQueryOpen && isMobile && <button style={{borderRadius: '0px'}} className="btn btn-success from-group col-sm-2 col-md-12" type="submit" onClick={() => setQueryOpen(true)}>{t('inputRegion.queryTimePeriod')}</button>}
-      {isStockHistory && isQueryOpen && isMobile && <button style={{borderRadius: '0px'}} className="btn btn-secondary from-group col-sm-2 col-md-12" type="submit" onClick={() => setQueryOpen(false)}>{t('hide')}</button>}
+      {isStockHistory && !isQueryOpen && <button style={{borderRadius: '0px'}} className="btn btn-success from-group col-sm-12 col-md-12 mobile-show" type="submit" onClick={() => setQueryOpen(true)}>{t('inputRegion.queryTimePeriod')}</button>}
+      {isStockHistory && isQueryOpen && <button style={{borderRadius: '0px'}} className="btn btn-secondary from-group col-sm-12 col-md-12 mobile-show" type="submit" onClick={() => setQueryOpen(false)}>{t('hide')}</button>}
     {isStockHistory && isQueryOpen && <div>
-        <div className="form-row" style={{margin:'0 5px', overflowY: isMobile ? 'scroll' : 'unset', whiteSpace: 'nowrap'}}>
+        <div className="form-row" style={{margin:'0 5px', overflowY: 'unset', whiteSpace: 'nowrap'}}>
           <button type="button" className={"btn btn-info from-group col-md-1" + (isMobile ? ' show-all-stock-mobile' : ' show-all-stock')}  onClick={()=> dispatch(changeQueryStatus('all'))}>{t('inputRegion.allStock')}</button>
-          <button type="button"  className={"btn btn-group btn-group-toggle" + (isMobile ? ' from-group col-md-6' : ' from-group' +
-            ' col-md-2')} data-toggle="buttons" style={{margin: '0px 10px', zIndex: 0, ...getStyleOfButton()}}>
+          <button type="button"  className={"btn btn-group btn-group-toggle" + (isMobile ? ' from-group col-md-6' : ' from-group' +' col-md-2')} data-toggle="buttons" style={{margin: '0px 10px', zIndex: 0, ...getStyleOfButton()}}>
             <label className="btn btn-secondary active" onClick={getSaleOptions}>
               <input type="radio" name="saleOption" id="saleOption1" value='all' autoComplete="off" /> {t('inputRegion.all')}
             </label>
@@ -193,21 +193,21 @@ const InputRegion = (props) => {
             <input type="radio" name="options" id="option5" onClick={()=> setInputInfo({...inputInfo, queryState: 'thisYear'})}/> {t('inputRegion.thisYear')}
             </label>
           </div>
-          <div className="col-sm-6 col-md-2" style={{margin:'3px 0', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
+          <div className="col-sm-6 col-md-2 col-xs-12 query-time-fields" >
               <div>{t('inputRegion.start')}</div>
               <div className="col">
                 <input type="date" className="form-control" placeholder={t('inputRegion.date')} onChange={(c) => handleDateChange(c.target.value, 'start')} value={startStandardDate}/>
               </div>
           </div>
-          <div  className="col-sm-6 col-md-2" style={{margin:'3px 0', float: 'left', display: 'flex', alignItems: 'center', width: browserUtils.isMobile() ? '100%' : 'auto'}}>
+          <div  className="col-sm-6 col-md-2 col-xs-12 query-time-fields" >
               <div>{t('inputRegion.end')}</div>
               <div className="col">
                 <input type="date" className="form-control" placeholder={t('inputRegion.date')} onChange={(c) => handleDateChange(c.target.value, 'end')} value={endStandardDate}/>
               </div>
           </div>
 
-          <button className={"btn btn-primary query-region-submit "+ (isMobile ? ' from-group col-md-2' : ' from-group col-md-2' +
-            ' query-region-submit') } style={{...getStyleOfButton(), margin: '3px 0px'}} onClick={()=> queryRegion(inputInfo.queryState)}>{t('inputRegion.querySubmit')}</button>
+          <button className={"btn btn-primary "+ (isMobile ? ' from-group col-md-2' : ' from-group col-md-2' +
+            ' query-region-submit') } style={{...getStyleOfButton()}} onClick={()=> queryRegion(inputInfo.queryState)}>{t('inputRegion.querySubmit')}</button>
         </div>
     </div>}
     </>

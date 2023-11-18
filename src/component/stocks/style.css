@@ -1,0 +1,55 @@
+.arrowToTop {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 50px;
+    height: 50px;
+    font-size: 40px;
+    background-color: cornflowerblue;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: black !important;
+}
+.content-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: block;
+    z-index: 7;
+}
+
+.content-loading-img {
+    display:flex;
+    width: 64px;
+    height: 64px;
+    position: relative;
+    margin: 0px auto;
+    background-size: 100%;
+    top: calc(50% - 50px);
+}
+.sticky-tr{
+    position: sticky;
+    top: 0px;
+    background-color: black;
+}
+.stock-noData {
+    position: absolute;
+    top: 50%;
+    left: 0,;
+    height: 50%;
+    width: 100%;
+    display: block;
+    z-index: 7,
+}
+.stock-noData-content {
+    position: relative;
+    margin: 0px auto;
+    color: black;
+    font-size: 32px;
+    text-align: center;
+}

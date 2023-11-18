@@ -3,8 +3,6 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { TextField, MenuItem } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import browserUtils from '../../utils/browserUtils';
-import { useTheme } from "@emotion/react";
 import { useTranslation } from "react-i18next";
 
 const Container = styled("div")`
@@ -14,10 +12,13 @@ const Container = styled("div")`
 `;
 const ChartTitle = styled("div")`
   display: flex;
-  flex-basis: 25%;;
+  /* flex-basis: 25%;; */
   text-align: left;
   font-size: 20px;
   color: #6495ed;
+  @media (max-width: 768px){
+    justify-content: space-between;
+  }
 `;
 const ChartValue = styled("span")`
   text-align: left;
@@ -29,6 +30,9 @@ const DropDownContainer = styled("div")`
   display: flex;
   flex-grow: 1;  
   align-items: center;
+  @media (max-width: 768px){
+    justify-content: space-between;
+  }
 `;
 
 const StyledDiv = styled("div")`
@@ -46,7 +50,7 @@ const DualColumnChart = ({ chartInfo,  type }) => {
   const [selectTimeRange, setSelectTimeRange] = useState("all");
   const [selectList, setSelectList] = useState([{value:'all', label: 'all'}]);
   const [info, setInfo] = useState({ value: chartInfo.monthValue, rate: chartInfo.monthRate, date: chartInfo.categories });
-  const chartComponentRef = useRef < HighchartsReact.RefObject > null;
+  const chartComponentRef = useRef(null);
   const { t } = useTranslation();
 
   const getSummary = () => {
@@ -179,11 +183,11 @@ const DualColumnChart = ({ chartInfo,  type }) => {
   return (
     
     <div style={{ height: "60vh"}}>
-      <Container>
-        <ChartTitle>
-          {t("tIncome")}<ChartValue>{getSummary()}</ChartValue>
+      <Container className="row">
+        <ChartTitle className="col-sm-12 col-md-6">
+          {t("tIncome")}<ChartValue>{ getSummary() + t('twDollars')}</ChartValue>
         </ChartTitle>
-        <DropDownContainer>
+        <DropDownContainer className="col-sm-12 col-md-6">
           <StyledDiv>
           {t("chart.yearSelect")}
           </StyledDiv>
@@ -201,6 +205,9 @@ const DualColumnChart = ({ chartInfo,  type }) => {
               },
               '& legend':{
                 width: 0,
+              },
+              '@media (max-width: 768px)': {
+                width: '25%',
               }
             }}
           >
@@ -215,7 +222,7 @@ const DualColumnChart = ({ chartInfo,  type }) => {
       <HighchartsReact
         highcharts={Highcharts}
         options={options}
-        usRef={chartComponentRef}
+        ref={chartComponentRef}
       />
     </div>
   );

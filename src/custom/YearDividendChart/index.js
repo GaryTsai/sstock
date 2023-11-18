@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { styled } from "@mui/material/styles";
-import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 
 const SummaryInfo = styled("div")
@@ -133,7 +132,7 @@ const DividendChart = ({ perDividend }) => {
         <div style = {{ height: "60vh" }} >
             <SummaryInfo >
                 <ChartTitle > 
-                    { t("tDividend") } < ChartValue > { totalDividend } </ChartValue> 
+                    { t("tDividend") } < ChartValue > { totalDividend  + t('twDollars')} </ChartValue> 
                 </ChartTitle > 
             </SummaryInfo> 
         <HighchartsReact 

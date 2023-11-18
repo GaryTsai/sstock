@@ -1,11 +1,14 @@
 import React from "react"
-import style from "../style"
-import browserUtils from '../../../utils/browserUtils'
-const { reportFormat, reportFormatMobile, summaryTitle, summaryFontSize } = style
+import "./style.css"
 
+const summaryTitle = {
+    color: 'black'
+}
+const summaryFontSize = {
+    fontSize: '24px'
+}
 const SummaryList = ({ title, value }) => {
-    const isMobile = browserUtils.isMobile()
-    return (<div style={isMobile ? reportFormatMobile : reportFormat}>
+    return (<div className="report-item" >
         <div style={summaryTitle}> {title} </div>
         <div style={summaryFontSize}> {value} </div>
     </div>)
