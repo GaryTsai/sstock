@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch} from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import Grid from '@mui/material/Grid';
+
 import YearColumnChart from '../../custom/YearColumnChart';
 import DualColumnChart from '../../custom/DulaColumnChart';
 import DividendChart from '../../custom/YearDividendChart';
 import Report from '../../custom/Report';
 import api from '../../api/api'
-import { useSelector, useDispatch} from 'react-redux';
 import { fetchStock } from '../../slices/apiDataSlice';
-import { useTranslation } from 'react-i18next';
 
 const TwChart = () => {
   
@@ -156,8 +157,8 @@ const TwChart = () => {
         <div className="btn-group col-sm-12" role="group" aria-label="Basic example" style={{padding: 0}}>
           <button type="button" className={`btn btn-info ${chartTab === "monthIncome" && 'active'}`} onClick={()=> setChartTab("monthIncome")}>{t("chart.monthIncomeChart")}</button>
           <button type="button" className={`btn btn-info ${chartTab === "yearIncome" && 'active'}`} onClick={()=> setChartTab("yearIncome")}>{t("chart.yearIncomeChart")}</button>
-          <button type="button" className={`btn btn-info ${chartTab === "dividend" && 'active'}`} onClick={()=> setChartTab("dividend")} >{t("chart.dividendChart")}</button>
-          <button type="button" className={`btn btn-info ${chartTab === "report" && 'active'}`} onClick={()=> setChartTab("report")} >{t("chart.yearIncomeReport")}</button>
+          <button type="button" className={`btn btn-info ${chartTab === "dividend" && 'active'}`} onClick={()=> setChartTab("dividend")}>{t("chart.dividendChart")}</button>
+          <button type="button" className={`btn btn-info ${chartTab === "report" && 'active'}`} onClick={()=> setChartTab("report")}>{t("chart.yearIncomeReport")}</button>
         </div>
         {loading && <div style={{position: 'absolute',
                   top: 0,

@@ -1,12 +1,15 @@
 import React, { useState, useEffect} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { BiSolidArrowToTop } from "react-icons/bi";
+import { styled, useMediaQuery } from "@mui/material"
+import { useTranslation } from 'react-i18next';
+
 import Record from './record'
 import AccountTransfer from './AccountTransfer'
 import './style.css'
-import { BiSolidArrowToTop } from "react-icons/bi";
-import { useSelector, useDispatch } from 'react-redux';
 import { fetchRecords, fetchAccountSummary} from './../../slices/apiDataSlice';
-import { useTranslation } from 'react-i18next';
-import { styled, useMediaQuery } from "@mui/material";
+
+
 
 const Account = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');

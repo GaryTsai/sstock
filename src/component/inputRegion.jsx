@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef} from 'react';
-import utils from "./../utils/dateFormat";
-import "./styles.css";
 import { useLocation } from 'react-router-dom';
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch } from 'react-redux';
-import { updateQueryData } from '../slices/apiDataSlice';
-import { changeQueryStatus } from '../slices/mutualState';
-import Swal from 'sweetalert2'
 import { useTranslation } from "react-i18next";
 import { useMediaQuery } from '@mui/material';
+import Swal from 'sweetalert2'
+
+import { updateQueryData } from '../slices/apiDataSlice';
+import { changeQueryStatus } from '../slices/mutualState';
+import utils from "./../utils/dateFormat";
+import "./styles.css";
 
 const InputRegion = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
@@ -177,29 +178,29 @@ const InputRegion = () => {
             </label>
           </button>
           <div className={"btn-group btn-group-toggle col-sm-12 col-md-3" + (isMobile ? " query-region-group-mobile": " query-region-group")} data-toggle="buttons">
-            <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option1'] = el} >
+            <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option1'] = el}>
               <input type="radio" name="options" id="option1" onClick={()=> setInputInfo({...inputInfo, queryState: 0})} /> {t('inputRegion.today')}
             </label>
-            <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option2'] = el} >
+            <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option2'] = el}>
               <input type="radio" name="options" id="option2" onClick={()=> setInputInfo({...inputInfo, queryState: 7})}/> {t('inputRegion.prev7')}
             </label>
-            <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option3'] = el} >
+            <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option3'] = el}>
               <input type="radio" name="options" id="option3" onClick={()=> setInputInfo({...inputInfo, queryState: 120})} /> {t('inputRegion.prevThreeMonth')}
             </label>
-            <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option4'] = el} >
+            <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option4'] = el}>
             <input type="radio" name="options" id="option4" onClick={()=> setInputInfo({...inputInfo, queryState: 'yearAgo'})}/> {t('inputRegion.lastYear')}
             </label>
-            <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option5'] = el} >
+            <label className="btn btn-outline-success" ref={el => timeRegionInputRef.current['option5'] = el}>
             <input type="radio" name="options" id="option5" onClick={()=> setInputInfo({...inputInfo, queryState: 'thisYear'})}/> {t('inputRegion.thisYear')}
             </label>
           </div>
-          <div className="col-sm-6 col-md-2 col-xs-12 query-time-fields" >
+          <div className="col-sm-6 col-md-2 col-xs-12 query-time-fields">
               <div>{t('inputRegion.start')}</div>
               <div className="col">
                 <input type="date" className="form-control" placeholder={t('inputRegion.date')} onChange={(c) => handleDateChange(c.target.value, 'start')} value={startStandardDate}/>
               </div>
           </div>
-          <div  className="col-sm-6 col-md-2 col-xs-12 query-time-fields" >
+          <div  className="col-sm-6 col-md-2 col-xs-12 query-time-fields">
               <div>{t('inputRegion.end')}</div>
               <div className="col">
                 <input type="date" className="form-control" placeholder={t('inputRegion.date')} onChange={(c) => handleDateChange(c.target.value, 'end')} value={endStandardDate}/>

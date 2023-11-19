@@ -1,13 +1,16 @@
 import React, { useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import utils from "./../utils/dateFormat";
-import api from './../api/api'
-import "react-datepicker/dist/react-datepicker.css";
-import { fetchStock } from '../slices/apiDataSlice';
 import { useLocation } from 'react-router';
-import Swal from 'sweetalert2'
 import { useTranslation } from "react-i18next";
 import { useMediaQuery } from '@mui/material';
+import Swal from 'sweetalert2'
+import "react-datepicker/dist/react-datepicker.css";
+
+import utils from "./../utils/dateFormat";
+import api from './../api/api'
+import { fetchStock } from '../slices/apiDataSlice';
+
+
 
 const Input = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
@@ -107,9 +110,9 @@ const Input = () => {
         onClick={() => saleIsOpen()}>{t('input.buy')}</button>}
     {isSaleOpen && !isStockHistory && <button className="btn btn-secondary from-group col-sm-12 col-md-12 input-sale-frame mobile-show" type="submit"
         onClick={() => saleIsOpen(false)}>{t('hide')}</button>}  
-    {!isStockHistory && <div className="input-frame" > 
+    {!isStockHistory && <div className="input-frame"> 
       {isSaleOpen && <div className="form-row">
-        <div className="col-md-2 stock-input-fields" >
+        <div className="col-md-2 stock-input-fields">
           <input type="date" className="form-control" placeholder={t('input.date')}
                   onChange={(c) => handleChange(c.target.value)} value={datePickerDate}/>
         </div>

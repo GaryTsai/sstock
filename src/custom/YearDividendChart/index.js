@@ -129,11 +129,11 @@ const DividendChart = ({ perDividend }) => {
     }, [])
 
     return ( 
-        <div style = {{ height: "60vh" }} >
-            <SummaryInfo >
-                <ChartTitle > 
-                    { t("tDividend") } < ChartValue > { totalDividend  + t('twDollars')} </ChartValue> 
-                </ChartTitle > 
+        <div style = {{ height: "60vh" }}>
+            <SummaryInfo>
+                <ChartTitle> 
+                    { t("tDividend") } < ChartValue> { totalDividend  + t('twDollars')} </ChartValue> 
+                </ChartTitle> 
             </SummaryInfo> 
         <HighchartsReact 
         highcharts = { Highcharts }

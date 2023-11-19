@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import Radium from "radium";
 import { useDispatch } from 'react-redux';
-// Firebase App (the core Firebase SDK) is always required and must be listed first
+import Swal from 'sweetalert2'
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
+
 import * as firebase from "firebase/app";
-// If you enabled Analytics in your project, add the Firebase SDK for Analytics
 import "firebase/analytics";
 import "firebase/database";
-// Add the Firebase products that you want to use
+
 import settings from './../settings/settings'
 import utils from './../../utils/dateFormat'
-import { useNavigate } from "react-router-dom";
 import { changeLoginStatus } from './../../slices/mutualState';
-import Swal from 'sweetalert2'
-import { useTranslation } from 'react-i18next';
 import './style.css'
 
 const initialState = {
@@ -167,7 +166,7 @@ const Login = (props) => {
 
   return (
       <div className="wrapper">
-        <div className="fadeInDown login-fadeInDown" >
+        <div className="fadeInDown login-fadeInDown">
           <div key='logIn' className="selected logIn" style={{border: isLogIn ? '3px solid white' : ''}} onClick={() => logInSelect(true)}>{t('login.login')}</div>
           <div key='register' className="selected register" style={{border: isLogIn ? '' : '3px solid white' }} onClick={() => logInSelect(false)}>{t('login.register')}</div>
         </div>
@@ -176,17 +175,17 @@ const Login = (props) => {
         <div className="fadeIn first">
           <div className="logo"/>
         </div>
-        <div className="login-input" >
+        <div className="login-input">
           <input type="text" id="email"  onChange={(c) => setEmail(c.target.value)} className="fadeIn second login-input-content" name="login" placeholder="email"/>
           <input type="password" id="password" onChange={(c) => setPassword(c.target.value)} className="fadeIn third login-input-content" name="login" placeholder={t('login.password')}/>
         </div>
         <input type="submit" className="fadeIn fourth login-submit" value={isLogIn ? t('login.login') : t('login.register') } onClick={actionForSubmit}/>
-        { isLogIn && <div id="formFooter" className='forget-PWD' >
-            <a className="underlineHover" href="#" onClick={openForgetPWD} >{t("forgotPassword")}</a>
+        { isLogIn && <div id="formFooter" className='forget-PWD'>
+            <a className="underlineHover" href="#" onClick={openForgetPWD}>{t("forgotPassword")}</a>
           </div> 
         }
         </div>}
-        {isOpenForgetPWD && <div className="input-forgetPWD-content" >
+        {isOpenForgetPWD && <div className="input-forgetPWD-content">
           <input type="text" id="email"  onChange={(c) => setResetEmail(c.target.value)} className="fadeIn second login-input-content" name="login" placeholder={t('login.email')}/>
           <input key={'backToLogIn'}  onClick={closeForgetPWD} type="button" className="fadeIn fourth login-forget back" value={'back'}/>
           <input  type="submit" className="fadeIn fourth login-forget submit" value={'submit to mail'} onClick={resetPWD}/>

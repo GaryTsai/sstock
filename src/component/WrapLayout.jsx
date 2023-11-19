@@ -1,8 +1,9 @@
 import React from 'react'
-import Navbar from './navbar/navbar'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+
+import Navbar from './navbar/navbar'
 
 const WrapLayout = ({children}) => {
     const navigate = useNavigate()

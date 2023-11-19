@@ -210,7 +210,7 @@ const DualColumnChart = ({ chartInfo,  type }) => {
                 width: '25%',
               }
             }}
-          >
+         >
             {selectList.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}

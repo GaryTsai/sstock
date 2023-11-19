@@ -113,7 +113,7 @@ const ColumnChart = ({
           marginRight: 50,
       },
       title: {
-          text: `<span style="color: #cc2222;" >${year} ${ t("chart.yearDividendChart") }:</span>` + dividendMap.reduce((previousValue, currentValue, idx, diviends)=>previousValue + currentValue[1] , 0) + t("twDollars"),
+          text: `<span style="color: #cc2222;">${year} ${ t("chart.yearDividendChart") }:</span>` + dividendMap.reduce((previousValue, currentValue, idx, diviends)=>previousValue + currentValue[1] , 0) + t("twDollars"),
           align: "right",
           style:{
             color: "#333333",
@@ -213,11 +213,11 @@ const ColumnChart = ({
     },[chartInfo])
 
   return (<div style={{ height: '60vh' }}>
-    <SummaryInfo >
+    <SummaryInfo>
     <ChartTitle>{t("tIncome")}<ChartValue>{getSummary() + t('twDollars')}</ChartValue></ChartTitle>
-    <ChartTitle > 
-                { t("tDividend") } < ChartValue > { yearDividend.reduce((previousValue, currentValue) => previousValue + currentValue, 0)  + t('twDollars')} </ChartValue> 
-                </ChartTitle > 
+    <ChartTitle> 
+                { t("tDividend") } < ChartValue> { yearDividend.reduce((previousValue, currentValue) => previousValue + currentValue, 0)  + t('twDollars')} </ChartValue> 
+                </ChartTitle> 
     </SummaryInfo>
     {showPerDividend && <> <button type="button" className="btn btn-warning"  style={{display: "flex",alignItems: "center", position: "absolute", zIndex: 1}} 
     onClick={()=> {

@@ -1,12 +1,13 @@
-import styled from '@emotion/styled'
 import React, { useState, useEffect, useCallback, useRef } from 'react'
-import api from '../../../api/api';
-import _ from "lodash";
-import { useSelector } from 'react-redux';
-import { fetchStockComment } from '../../../slices/apiDataSlice';
-import { useDispatch } from 'react-redux';
-import './style.css';
+import { useDispatch, useSelector} from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import styled from '@emotion/styled'
+import _ from "lodash";
+
+import api from '../../../api/api';
+import { fetchStockComment } from '../../../slices/apiDataSlice';
+import './style.css';
+
 
 const StockComment = () => {
   const { stockComment } = useSelector((state) => state.apiDataReducer)

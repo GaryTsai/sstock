@@ -1,5 +1,6 @@
 import React from 'react';
 import { styled } from "@mui/material";
+
 const sourceMapping = {
   '股利': 1,
   '薪資': 2,
