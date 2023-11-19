@@ -6,9 +6,9 @@ import { useMediaQuery } from '@mui/material';
 import Swal from 'sweetalert2'
 import "react-datepicker/dist/react-datepicker.css";
 
-import utils from "./../utils/dateFormat";
-import api from './../api/api'
-import { fetchStock } from '../slices/apiDataSlice';
+import utils from "../../../utils/dateFormat";
+import api from '../../../api/api'
+import { fetchStock } from '../../../slices/apiDataSlice';
 
 
 

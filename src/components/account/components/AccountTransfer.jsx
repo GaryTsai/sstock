@@ -4,9 +4,9 @@ import { useDispatch } from 'react-redux';
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from 'sweetalert2'
 
-import api from "../../api/api";
-import { fetchAccountSummary, fetchRecords } from '../../slices/apiDataSlice';
-import './style.css'
+import api from "../../../api/api";
+import { fetchAccountSummary, fetchRecords } from '../../../slices/apiDataSlice';
+import './../style.css'
 
 const initialState = {
   date: new Date(),

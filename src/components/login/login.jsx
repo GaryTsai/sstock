@@ -9,9 +9,9 @@ import * as firebase from "firebase/app";
 import "firebase/analytics";
 import "firebase/database";
 
-import settings from './../settings/settings'
-import utils from './../../utils/dateFormat'
-import { changeLoginStatus } from './../../slices/mutualState';
+import settings from '../settings/settings'
+import utils from '../../utils/dateFormat'
+import { changeLoginStatus } from '../../slices/mutualState';
 import './style.css'
 
 const initialState = {

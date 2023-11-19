@@ -7,7 +7,7 @@ import "firebase/database";
 import "firebase/auth";
 import "firebase/firestore";
 import d from "../utils/dateFormat";
-import settings from './../component/settings/settings'
+import settings from '../components/settings/settings'
 
 const fireBaseConfig = {
     apiKey: process.env.REACT_APP_APP_KEY,

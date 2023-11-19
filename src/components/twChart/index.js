@@ -3,10 +3,10 @@ import { useSelector, useDispatch} from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import Grid from '@mui/material/Grid';
 
-import YearColumnChart from '../../custom/YearColumnChart';
-import DualColumnChart from '../../custom/DulaColumnChart';
-import DividendChart from '../../custom/YearDividendChart';
-import Report from '../../custom/Report';
+import YearColumnChart from './components/YearColumnChart';
+import DualColumnChart from './components/DulaColumnChart';
+import DividendChart from './components/YearDividendChart';
+import Report from './components/Report';
 import api from '../../api/api'
 import { fetchStock } from '../../slices/apiDataSlice';
 

@@ -5,8 +5,8 @@ import _ from "lodash";
 import { useTranslation } from "react-i18next";
 
 import Stock from "./stock";
-import InputRegion from "../inputRegion";
-import Input from "../input";
+import InputRegion from "./components/inputRegion";
+import Input from "./components/input";
 import { fetchStock, fetchAccountSummary } from "../../slices/apiDataSlice";
 import { changeInitLoading } from "../../slices/mutualState";
 import settings from "../settings/settings";

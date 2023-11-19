@@ -6,10 +6,10 @@ import { useTranslation } from "react-i18next";
 import { useMediaQuery } from '@mui/material';
 import Swal from 'sweetalert2'
 
-import { updateQueryData } from '../slices/apiDataSlice';
-import { changeQueryStatus } from '../slices/mutualState';
-import utils from "./../utils/dateFormat";
-import "./styles.css";
+import { updateQueryData } from '../../../slices/apiDataSlice';
+import { changeQueryStatus } from '../../../slices/mutualState';
+import utils from "../../../utils/dateFormat";
+import "./../../styles.css";
 
 const InputRegion = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');

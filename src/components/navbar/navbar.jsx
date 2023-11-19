@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from "react-i18next";
 import { FormGroup, FormControlLabel, Switch } from '@mui/material'
 import './style.css';
-import { changeLoginStatus, changeStockMergeState } from './../../slices/mutualState';
+import { changeLoginStatus, changeStockMergeState } from '../../slices/mutualState';
 import SummaryList from './components/summaryList'
 import StockComment from './components/stockComment';
 

@@ -4,10 +4,10 @@ import { BiSolidArrowToTop } from "react-icons/bi";
 import { styled, useMediaQuery } from "@mui/material"
 import { useTranslation } from 'react-i18next';
 
-import Record from './record'
-import AccountTransfer from './AccountTransfer'
+import Record from './components/record'
+import AccountTransfer from './components/AccountTransfer'
 import './style.css'
-import { fetchRecords, fetchAccountSummary} from './../../slices/apiDataSlice';
+import { fetchRecords, fetchAccountSummary} from '../../slices/apiDataSlice';
 
 
 

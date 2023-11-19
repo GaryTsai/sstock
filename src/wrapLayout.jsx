@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import Navbar from './navbar/navbar'
+import Navbar from './components/navbar/navbar'
 
 const WrapLayout = ({children}) => {
     const navigate = useNavigate()
@@ -21,7 +21,7 @@ const WrapLayout = ({children}) => {
     return (
         <div>
             {initLoading === true &&<div className="loading-image-frame">
-                <img  alt="" className='loading-image'src={require('./../assets/img/loading.gif')}/></div>}
+                <img  alt="" className='loading-image'src={require('./assets/img/loading.gif')}/></div>}
             { account && <Navbar/>}
             {children}
         </div>
