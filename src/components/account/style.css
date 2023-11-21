@@ -78,6 +78,12 @@
     font-size: small;
     margin-right: 5px;
 }
+.input-sale-frame{
+    margin:0px 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+    border-radius: 0px;
+}
 @media (min-width: 768px){
     .account-input-frame {
         margin: 3px auto;

@@ -86,8 +86,8 @@ const Account = () => {
       </nav>
       <div className="tab-content" id="nav-tabContent">
         <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-          {isMobile && !isAssetTransfer && <button className="btn btn-warning from-group col-sm-2 col-md-12 input-sale-frame" type="submit" onClick={() => hideAssetTransfer()}>{t("transferProperty")}</button>}
-          {isMobile && isAssetTransfer  && <button className="btn btn-secondary from-group col-sm-2 col-md-12 input-sale-frame" type="submit" onClick={() => hideAssetTransfer()}>{t("hide")}</button>}
+          {isMobile && !isAssetTransfer && <button className="btn btn-warning from-group col-sm-12 col-md-12 input-sale-frame" type="submit" onClick={() => hideAssetTransfer()}>{t("transferProperty")}</button>}
+          {isMobile && isAssetTransfer  && <button className="btn btn-secondary from-group col-sm-12 col-md-12 input-sale-frame" type="submit" onClick={() => hideAssetTransfer()}>{t("hide")}</button>}
           {isAssetTransfer && <AccountTransfer/>}
           <div className="container">
             <table className="table table-striped">

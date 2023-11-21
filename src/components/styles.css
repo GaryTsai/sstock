@@ -5,12 +5,6 @@
     border: 0;
     width:inherit;
 }
-.input-sale-frame{
-    margin:0px 0px;
-    padding-right: 0px;
-    padding-left: 0px;
-    border-radius: 0px;
-}
 .react-datepicker__input-container input{
     width: 100%;
 }
@@ -44,50 +38,11 @@
     box-sizing: border-box;
     box-shadow: 0 0 0 0.2rem rgb(241 183 179);
 }
-.from-group.col-md-2.input-sale-info-frame{
-    margin: 3px 0px;
-}
-.input-sale-info-frame{
-    margin: 3px 0px;
-}
-.show-all-stock {
-    margin: 3px 0px;
-    height: 40px;
-}
-.show-all-stock-mobile {
-    margin: 6px 0px 0px 0px;
-}
-.query-region-group {
-     margin: 3px 0px;
- }
-.query-region-group-mobile {
-    margin: 0px 0px;
-}
-.query-region-submit {
-    margin: 3px 0px;
-}
 .stock-status {
     margin: 3px 0px;
 }
 .stock-status-mobile {
     margin: 0px 0px;
-}
-
-.stock-input-fields {
-    margin: 3px 0px;
-}
-
-.mobile-show {
-    display: none;
-}
-
-.input-frame {
-    margin: 0 5px;
-}
-
-.input-confirm {
-    border-radius: 5px;
-    margin: 3px 0px;
 }
 .loading-image {
     display: flex;
@@ -119,9 +74,6 @@
 @media (min-width: 768px){
     .navbar-expand-md .navbar-nav {
         flex: none;
-    }
-    .query-region-submit {
-        padding: 0
     }
 }@media (max-width: 768px){
     .mobile-show {

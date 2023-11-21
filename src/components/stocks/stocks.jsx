@@ -9,7 +9,7 @@ import InputRegion from "./components/inputRegion";
 import Input from "./components/input";
 import { fetchStock, fetchAccountSummary } from "../../slices/apiDataSlice";
 import { changeInitLoading } from "../../slices/mutualState";
-import settings from "../settings/settings";
+import settings from "../../settings";
 import './style.css'
 
 const Stocks = () => {
