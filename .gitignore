@@ -24,3 +24,5 @@ yarn-error.log*
 
 # api config
 .env
+/src/utils/browserUtils.js
+/src/utils/workbook.js
