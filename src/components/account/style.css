@@ -1,5 +1,5 @@
 .nav-item.nav-link.active{
-    color: #495057;
+    color: #ffffff;
     background-color: #ff4845;
     border-color: #dee2e6 #dee2e6 #fff;
 }
@@ -25,7 +25,6 @@
 }
 .dividend {
     margin-right: 0.5rem;
-    border: 1px solid rgb(200, 35, 10);
 }
 .arrowToTop {
     position: fixed;
@@ -83,6 +82,9 @@
     padding-right: 0px;
     padding-left: 0px;
     border-radius: 0px;
+}
+.text-nowrap {
+    white-space:nowrap;
 }
 @media (min-width: 768px){
     .account-input-frame {

@@ -1,15 +1,13 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { BiSolidArrowToTop } from "react-icons/bi";
 import { styled, useMediaQuery } from "@mui/material"
 import { useTranslation } from 'react-i18next';
 
-import Record from './components/record'
+import Records from './components/records'
 import AccountTransfer from './components/AccountTransfer'
 import './style.css'
 import { fetchRecords, fetchAccountSummary} from '../../slices/apiDataSlice';
-
-
 
 const Account = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
@@ -17,19 +15,18 @@ const Account = () => {
   const [accountInfo, setAccountInfo] = useState({
     isAssetTransfer: true,
   })
+  const { records, recordsLoading, acTime, acMoney, acStock, acSummary } = useSelector((state) => state.apiDataReducer)
+  const [isFilter, setIsFilter] = useState(false)
   const [topIconState, setTopIconState] = useState(false)
   const [dividendBtn, setDividendBtn] = useState(false)
-
-
+  // const [salaryBtn, setSalaryBtn] = useState(false)
+  const [dividendRecords, setDividendRecords] = useState(records)
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const { records, recordsLoading, acTime, acMoney, acStock, acSummary } = useSelector((state) => state.apiDataReducer)
-  const [dividendRecords, setDividendRecords] = useState(records)
 
   useEffect(() => {
     !isMobile && setAccountInfo({ isAssetTransfer: true})
   }, [isMobile])
-
 
   useEffect(() => {
 
@@ -43,31 +40,44 @@ const Account = () => {
       }
     })
   }, [])
-
+  
   useEffect(() => {
-    setDividendRecords(()=> dividendBtn ? records.filter((record)=>{
-      return (/股利/).test(record.source)
-    }) : records)
+    setDividendRecords(()=> dividendBtn ? records.filter((record)=> {
+      return (/股利/).test(record.source)}) : records)
   }, [dividendBtn, records])
+
+  // useEffect(() => {
+  //   setDividendRecords(()=> salaryBtn ? records.filter((record)=> {
+  //     return (/薪資/).test(record.source)}) : records)
+  // }, [salaryBtn, records])
   
   const hideAssetTransfer = () => setAccountInfo({...accountInfo, isAssetTransfer: !isAssetTransfer});
 
   const { isAssetTransfer} = accountInfo;
   //styled-component
-  const Dividend = styled('div')`
+  const FilterBtnDiv = styled('div')`
     position: relative;
     width: 100%;
     margin-bottom: 0.5rem;
     margin-right: 0.5rem;
     text-align: right;
   `
-  const DividendButton = () => (
-    <button type="button" style={{ backgroundColor: dividendBtn ? "rgb(200, 35, 10)" : "transparent", color: dividendBtn ? "white": "black"}} 
-            className="btn dividend" onClick={()=> setDividendBtn(!dividendBtn)}>
-      {t('dividend')}
-    </button>
-  );
 
+  const WrapperFiltereButton = ({sourceType, confiremBtn, setFunction}) => {
+    const colorMap ={
+      'dividend': "rgb(200, 35, 10)",
+      'salary': "rgb(0,128,0)",
+    }
+    return (
+    <button type="button" style={{ backgroundColor: confiremBtn ? colorMap[sourceType]: "transparent", color: confiremBtn ? "white": "black", border: `1px solid ${colorMap[sourceType]}`}} 
+            className={`btn ${sourceType}`} onClick={()=> {
+              setFunction(!confiremBtn)
+              setIsFilter(confiremBtn === false ? true : false)
+            }}>
+      {t(`${sourceType}`)}
+    </button>
+  )};
+ const resultRecords = isFilter ?  dividendRecords : records
   return (
     <div>
       {
@@ -109,13 +119,15 @@ const Account = () => {
               </tbody>
             </table>
           </div>
-          <Dividend>
-              <DividendButton/>
+          <FilterBtnDiv>
+              {/* <WrapperFiltereButton sourceType={'salary'} confiremBtn={salaryBtn} setFunction={setSalaryBtn}/>
+              <span className="source-comment"> #來源需要標註<strong style={{ color: "green" }}>薪資</strong> </span> */}
+              <WrapperFiltereButton sourceType={'dividend'} confiremBtn={dividendBtn} setFunction={setDividendBtn}/>
               <span className="source-comment"> #來源需要標註<strong style={{ color: "red" }}>股利</strong> </span>
-          </Dividend>
+          </FilterBtnDiv>
           <div>
-            <div className="table-responsive" style={{ overflowX: 'unset' }}>
-              <table className="table">
+            <div className="table-responsive" style={{ overflowX: 'auto' }}>
+              <table className="table text-nowrap">
                 <thead>
                 <tr className="account-table-tr">
                   <th scope="col">#</th>
@@ -128,13 +140,7 @@ const Account = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {
-                  !recordsLoading && dividendRecords.map((record, index) => (
-                    <Record key={index} record={record} index={index}/>
-                  ))
-                }
-                {recordsLoading && <div className="content-loading">
-                    <img  alt="" className="content-loading-img"src={require('./../../assets/img/contentLoading.png')}/></div>}
+                <Records recordsLoading={recordsLoading} records={resultRecords}/>
                 </tbody>
               </table>
             </div>
@@ -169,7 +175,6 @@ const Account = () => {
               <thead>
               <tr>
                 <th scope="col">#</th>
-
                 <th>{t("accountMoney")}($)</th>
                 <th>{t("stockAccount")}($)</th>
                 <th scope="col">{t("price")}({t("iIncome")})</th>

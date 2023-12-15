@@ -13,6 +13,7 @@
             "avgPrice": "平均單價",
             "handingFee": "手續費",
             "cost": "購買成本",
+            "salePrice": "賣出價格",
             "sellTotalPrice": "賣出總價",
             "income": "損益"
       },
@@ -105,5 +106,6 @@
       "sell": "賣出",
       "sellInfo": "賣出資訊",
       "sellPrice": "賣出單價",
-      "dividend": "股利"
+      "dividend": "股利",
+      "salary": "薪資"
 }

@@ -12,6 +12,8 @@ import { changeInitLoading } from "../../slices/mutualState";
 import settings from "../../settings";
 import './style.css'
 
+const { HANDLING_CHARGE_RATE, MINIMUM_HANDLING_FEE } = settings
+
 const Stocks = () => {
   const { queryStatus, isMerge } = useSelector(
     (state) => state.mutualStateReducer
@@ -37,7 +39,7 @@ const Stocks = () => {
     const result = datas.reduce((mergeResult, prev, next) => {
       const isNotExist =
         mergeResult && mergeResult.filter((item) => _.trim(item.number) === _.trim(prev.number)).length === 0;
-        let handingFee = prev.price * 1000 * prev.sheet * 0.001425 < 20 ? 20 : Math.floor(prev.price * 1000 * prev.sheet * 0.001425);
+        let handingFee = prev.price * 1000 * prev.sheet * HANDLING_CHARGE_RATE < MINIMUM_HANDLING_FEE ? MINIMUM_HANDLING_FEE : Math.round(prev.price * 1000 * prev.sheet * HANDLING_CHARGE_RATE);
 
       if (isNotExist) {
         mergeResult.push({
@@ -110,9 +112,10 @@ const Stocks = () => {
               <th scope="col">{t("input.handingFee")}</th>
               <th scope="col">{t("input.cost")}</th>
               <th scope="col">{t("state")}</th>
-              <th scope="col">{t("input.sellTotalPrice")}</th>
-              <th scope="col">{t("input.income")}</th>
-              {!isStockHistory && <th scope="col">{t("delete")}</th>}
+              {isStockHistory && <th scope="col">{t("input.salePrice")}</th>}
+              {isStockHistory && <th scope="col">{t("input.sellTotalPrice")}</th>}
+              {isStockHistory && <th scope="col">{t("input.income")}</th>}
+              {!isStockHistory && !isMerge && <th scope="col">{t("delete")}</th>}
             </tr>
           </thead>
           <tbody>

@@ -140,10 +140,11 @@ const InputRegion = () => {
   const getStyleOfButton = () =>{
     if(isMobile) {
       return {
-        margin: '0px 0px',
+        margin: '5px 0px',
         paddingRight: '0px',
         paddingLeft: '0px',
         whiteSpace: 'nowrap'
+        
       }
     }else{
       return {

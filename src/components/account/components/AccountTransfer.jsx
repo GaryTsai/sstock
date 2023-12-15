@@ -52,7 +52,7 @@ const AccountTransfer = (props) => {
     }
   };
 
-  const handleChange = price => setAccountInfo({...accountInfo, price: price.trim()})
+  const handlePriceChange = price => setAccountInfo({...accountInfo, price: price.trim()})
 
   const getTransferOptions = (e) => setAccountInfo({...accountInfo, transferStatus: e.target.value});
 
@@ -60,7 +60,7 @@ const AccountTransfer = (props) => {
     <div className="account-transfer-frame">
       <div className="form-row">
         <div className="col">
-          <input type="text" className="form-control input-sale-info-frame" placeholder={t("price")} onChange={(c) => handleChange(c.target.value)} value={accountInfo.price}/>
+          <input type="text" className="form-control input-sale-info-frame" placeholder={t("price")} onChange={(c) => handlePriceChange(c.target.value)} value={accountInfo.price}/>
         </div>
         <div className="from-group col-md-2 input-sale-info-frame">
           <input type="text" className="form-control" placeholder={t("source")} onChange={(c) => inputSource(c.target.value)} value={accountInfo.source}/>
@@ -73,7 +73,7 @@ const AccountTransfer = (props) => {
             <input type="radio" name="stockOption" id="mutual" value='transferOut' autoComplete="off"/> {t("transfer")}
           </label>
         </div>
-        <button className="btn btn-primary from-group col-md-2 input-sale-frame account-confirm" type="submit" onClick={submitTrade}>{t("confirm")}
+        <button className="btn btn-primary from-group col-md-2 account-confirm" type="submit" onClick={submitTrade}>{t("confirm")}
         </button>
       </div>
     </div>

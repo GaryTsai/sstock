@@ -84,6 +84,8 @@ const ColumnChart = ({
             cursor: 'pointer',
             events: {
                 click: function (event) {
+                    if(!dividend[event.point.category])
+                      return 
                     dividend[event.point.category].map((record)=>{
                       if(!dividendMap.flat().includes(record.source)){
                         dividendMap.push([record.source, Number(record.transfer)])

@@ -67,7 +67,7 @@ const Navbar = () => {
             </li>
           </ul>
         </div>
-        { currentStockPage && <div className="summary-list report">
+        { currentStockPage && <div className="summary-list report background-blur">
               <SummaryList title={t("navBar.currentTotalcost")} value={totalCost + t("twDollars")}/>
             </div>}
         { isStockHistory && <div className="summary-list report" style={{display: 'inherit'}}>

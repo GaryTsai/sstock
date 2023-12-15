@@ -9,6 +9,9 @@ import { fetchStock } from '../../slices/apiDataSlice';
 import api from '../../api/api';
 import { changeContentLoading } from '../../slices/mutualState';
 import './style.css'
+import settings from './../../settings'
+
+const { HANDLING_CHARGE_RATE, MINIMUM_HANDLING_FEE } = settings
 
 const Stock = (props) =>{
   const priceRef = useRef(null);
@@ -40,7 +43,7 @@ const Stock = (props) =>{
     else{
             dispatch(changeContentLoading(true))
             api.updateStock(salePrice, stock.sheet, stock).then(() => {
-                const stockInfo = {'price': salePrice, 'sheet': stock.sheet, 'cost': stock.cost, 'date': stock.date, 'purchaseTimestamp': stock.timestamp};
+                const stockInfo = {'price': salePrice, 'sheet': stock.sheet, 'cost': stock.cost, 'date': stock.date, 'purchaseTimestamp': stock.timestamp, 'number': stock.number};
                 api.updateAccountRecord(stockInfo, true);
                 dispatch(fetchStock())
                 dispatch(changeContentLoading(false))
@@ -53,11 +56,11 @@ const Stock = (props) =>{
   const handleDeleteStock = () => {
     const { stock } = props;
     dispatch(changeContentLoading(true))
-    if(stock.status === 'unsale') {
-        api.deleteStock(stock.timestamp)
-    }
-    dispatch(fetchStock())
     api.updateDataForDeleteStock(stock).then(()=>{
+        if(stock.status === 'unsale') {
+          api.deleteStock(stock.timestamp)
+          dispatch(fetchStock())
+        }
         dispatch(changeContentLoading(false))
     })
   };
@@ -66,10 +69,10 @@ const Stock = (props) =>{
     return Number(n) === n && n % 1 !== 0;
   }
   const { stock, index, isMerge } = props;
-  const averagePrice = parseFloat((stock.price * 1.001425).toFixed(2));
-  const handlingFee = stock.price * 1000 * stock.sheet * 0.001424 < 20 ? 20 : Math.round(stock.price * 1000 * stock.sheet * 0.001424);
+  const averagePrice = parseFloat((stock.price * (1 + HANDLING_CHARGE_RATE)).toFixed(2));
+  const handlingFee = stock.price * 1000 * stock.sheet * HANDLING_CHARGE_RATE < MINIMUM_HANDLING_FEE ? MINIMUM_HANDLING_FEE : Math.round(stock.price * 1000 * stock.sheet * HANDLING_CHARGE_RATE);
   const isStockHistory = location.pathname === '/sstock/stockHistory'
-  
+
   return (
     <>
         {
@@ -109,7 +112,7 @@ const Stock = (props) =>{
               </div>
             </div>
           </td>}
-          {  (!isStockHistory && isMerge === false && stock.status === 'unsale')  && <td>{stock.date}</td>}
+          { (!isStockHistory && isMerge === false && stock.status === 'unsale')  && <td>{stock.date}</td>}
           { isStockHistory && <td>{stock.date}</td>}
           { isStockHistory && (stock.status === 'sale' ? <td>{stock.sale_date}</td> : <td></td>)}
           <td>{stock.name}</td>
@@ -119,8 +122,9 @@ const Stock = (props) =>{
           <td>{isMerge ? stock.handingFee : Math.floor(handlingFee)}</td>
           <td>{Math.floor(stock.cost)}</td>
           <td>{stock.status === "unsale" ? t("inputRegion.unsale") : t("inputRegion.sale")}</td>
-          <td>{Math.floor(stock.sale_cost)}</td>
-          <td style={{ 'color': stock.income < 0 ? '#30ff30' : 'rgb(255 19 19)'}}>{Math.floor(stock.income)}</td>
+          { isStockHistory && <td>{stock.sale_price === 0 ? '' : stock.sale_price}</td>}
+          { isStockHistory && <td>{Math.floor(stock.sale_cost)}</td>}
+          { isStockHistory && <td style={{ 'color': stock.income < 0 ? '#30ff30' : 'rgb(255 19 19)'}}>{Math.floor(stock.income)}</td>}
           { !isStockHistory && isMerge === false && <td>
             <button type="button" className="btn btn-danger" onClick={handleDeleteStock}>{t("delete")}</button>
           </td>}
