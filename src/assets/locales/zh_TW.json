@@ -15,7 +15,8 @@
             "cost": "購買成本",
             "salePrice": "賣出價格",
             "sellTotalPrice": "賣出總價",
-            "income": "損益"
+            "income": "損益",
+            "breakevenPrice": "損益平衡點(約略)"
       },
       "navBar": {
             "totalCost": "投入成本:",

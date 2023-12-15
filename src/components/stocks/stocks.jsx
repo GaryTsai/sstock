@@ -108,6 +108,9 @@ const Stocks = () => {
               <th scope="col">{t("input.stockName")}</th>
               <th scope="col">{t("input.stockNumber")}</th>
               <th scope="col">{t("input.avgPrice")}</th>
+              {!isStockHistory && isMerge === true && (
+                <th scope="col">{t("input.breakevenPrice")}</th>
+              )}
               <th scope="col">{t("input.stockSheet")}</th>
               <th scope="col">{t("input.handingFee")}</th>
               <th scope="col">{t("input.cost")}</th>

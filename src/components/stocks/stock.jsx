@@ -11,7 +11,7 @@ import { changeContentLoading } from '../../slices/mutualState';
 import './style.css'
 import settings from './../../settings'
 
-const { HANDLING_CHARGE_RATE, MINIMUM_HANDLING_FEE } = settings
+const { HANDLING_CHARGE_RATE, MINIMUM_HANDLING_FEE, BREAK_EVEN_RATE } = settings
 
 const Stock = (props) =>{
   const priceRef = useRef(null);
@@ -70,6 +70,7 @@ const Stock = (props) =>{
   }
   const { stock, index, isMerge } = props;
   const averagePrice = parseFloat((stock.price * (1 + HANDLING_CHARGE_RATE)).toFixed(2));
+  const breakEvenPrice = parseFloat((stock.price * (1 + BREAK_EVEN_RATE)).toFixed(2));
   const handlingFee = stock.price * 1000 * stock.sheet * HANDLING_CHARGE_RATE < MINIMUM_HANDLING_FEE ? MINIMUM_HANDLING_FEE : Math.round(stock.price * 1000 * stock.sheet * HANDLING_CHARGE_RATE);
   const isStockHistory = location.pathname === '/sstock/stockHistory'
 
@@ -118,6 +119,7 @@ const Stock = (props) =>{
           <td>{stock.name}</td>
           <td>{stock.number}</td>
           <td>{isMerge ? (averagePrice / (stock.sheet)).toFixed(4) : averagePrice }</td>
+          { isMerge && <td>{(breakEvenPrice / (stock.sheet)).toFixed(4)}</td> }
           <td>{isFloat(stock.sheet) ? stock.sheet.toFixed(3) : stock.sheet}</td>
           <td>{isMerge ? stock.handingFee : Math.floor(handlingFee)}</td>
           <td>{Math.floor(stock.cost)}</td>
