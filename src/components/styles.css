@@ -1,0 +1,107 @@
+.react-datepicker-wrapper {
+    margin: 2px 0px;
+    display: inline-block;
+    padding: 0;
+    border: 0;
+    width: inherit;
+}
+
+.react-datepicker__input-container input {
+    width: 100%;
+}
+
+.btn-group-vertical {
+    flex-direction: unset;
+    align-items: center;
+    font-size: 13px;
+}
+
+.btn-outline-primary:focus {
+    border: 2px solid red;
+    box-sizing: border-box;
+    color: red;
+    box-shadow: 0 0 0 0.2rem rgb(241 183 179);
+}
+
+.btn-outline-primary {
+    color: unset;
+    border-color: unset;
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled).active,
+.btn-outline-primary:not(:disabled):not(.disabled):active,
+.show>.btn-outline-primary.dropdown-toggle {
+    color: unset;
+    background-color: unset;
+    border-color: unset;
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled).active:focus,
+.btn-outline-primary:not(:disabled):not(.disabled):active:focus,
+.show>.btn-outline-primary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgb(255 255 255);
+}
+
+.btn-outline-primary:hover {
+    background-color: #ffffff;
+    color: red;
+    border: 2px solid #ff7261;
+    box-sizing: border-box;
+    box-shadow: 0 0 0 0.2rem rgb(241 183 179);
+}
+
+.stock-status {
+    margin: 3px 0px;
+}
+
+.stock-status-mobile {
+    margin: 0px 0px;
+}
+
+.loading-image {
+    display: flex;
+    width: 128px;
+    height: 128px;
+    position: relative;
+    margin: 0px auto;
+    background-size: 100%;
+    top: calc(50% - 50px);
+}
+
+.loading-image-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: block;
+    z-index: 7;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.query-time-fields {
+    margin: 3px 0;
+    float: left;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+.input-sale-frame.input-confirm {
+    border-radius: 5px;
+    margin: 3px 0 3px 0
+}
+@media (min-width: 768px) {
+    .navbar-expand-md .navbar-nav {
+        flex: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-show {
+        display: block;
+    }
+    .input-sale-frame.input-confirm {
+        margin: 5px 0 5px 5px;
+        max-width: calc(100% - 10px);
+    }
+}

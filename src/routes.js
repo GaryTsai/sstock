@@ -1,10 +1,10 @@
 import React from "react";
-import Stocks from "./component/stocks/stocks";
-import Account from "./component/account/account";
-import TwChart from "./component/twChart";
-import NotFound from "./component/NotFound";
-import Login from "./component/login/login";
-import WrapLayout from "./component/WrapLayout";
+import Stocks from "./components/stocks/stocks";
+import Account from "./components/account/account";
+import TwChart from "./components/twChart";
+import NotFound from "./notFound";
+import Login from "./components/login/login";
+import WrapLayout from "./wrapLayout";
 
 const routes = [
     {
@@ -14,7 +14,7 @@ const routes = [
     },
     {
         path: "/sstock/login",
-        element: <Login/>,
+        element: <WrapLayout children={<Login/>}></WrapLayout>,
         children: [],
     },
     {

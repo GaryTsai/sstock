@@ -7,7 +7,7 @@ import "firebase/database";
 import "firebase/auth";
 import "firebase/firestore";
 import d from "../utils/dateFormat";
-import settings from './../component/settings/settings'
+import settings from '../settings'
 
 const fireBaseConfig = {
     apiKey: process.env.REACT_APP_APP_KEY,
@@ -24,6 +24,7 @@ firebase.initializeApp(fireBaseConfig);
 firebase.analytics();
 
 var stockData;
+const { HANDLING_CHARGE_RATE, HANDLING_CHARGE_ETF_RATE, HANDLING_CHARGE_STOCK_RATE} = settings
 settings.user_id = localStorage.getItem('account-stock')
 
 const api = {
@@ -111,7 +112,10 @@ const api = {
 
     async updateStock(salePrice, saleSheet, stock) {
         const isDayTrading = stock.date === d.dateFormat(new Date());
-        let handlingFee = isDayTrading ? Math.floor(salePrice * 1000 * saleSheet * 0.001425) + Math.floor(salePrice * 1000 * saleSheet * 0.003 * (isDayTrading ? 0.5 : 1)) : Math.floor(salePrice * 1000 * saleSheet * 0.004425)
+        let transactionTax = HANDLING_CHARGE_STOCK_RATE
+        if(settings.ETF.includes(stock.number))
+            transactionTax = HANDLING_CHARGE_ETF_RATE
+        let handlingFee = isDayTrading ? Math.floor(salePrice * 1000 * saleSheet * HANDLING_CHARGE_RATE) + Math.floor(salePrice * 1000 * saleSheet * transactionTax * (isDayTrading ? 0.5 : 1)) : Math.round(salePrice * 1000 * saleSheet * (transactionTax + HANDLING_CHARGE_RATE))
         let income = Math.round(salePrice * 1000 * saleSheet) - handlingFee - stock.cost;
         let sale_cost = Math.round(salePrice * 1000 * saleSheet) - handlingFee;
         let sale_date = d.dateFormat(new Date());
@@ -199,14 +203,20 @@ const api = {
         let stock = 0;
         let cost = 0;
         let salePrice = 0;
+
+        let transactionTax = HANDLING_CHARGE_STOCK_RATE
+        if(settings.ETF.includes(stock.number))
+            transactionTax = HANDLING_CHARGE_ETF_RATE
+
         const isDayTrading = stockInfo.date === d.dateFormat(new Date());
-        let handlingFee = isDayTrading ? Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425) + Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.003 * (isDayTrading ? 0.5 : 1)) : Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.004425)
+        let handlingFee = isDayTrading ? Math.floor(stockInfo.price * 1000 * stockInfo.sheet * HANDLING_CHARGE_RATE) + Math.floor(stockInfo.price * 1000 * stockInfo.sheet * transactionTax * (isDayTrading ? 0.5 : 1)) : Math.round(stockInfo.price * 1000 * stockInfo.sheet * (transactionTax + HANDLING_CHARGE_RATE))
+
         if (sale) {
             salePrice = Math.round(stockInfo.price * 1000 * stockInfo.sheet) - handlingFee;
             money = accountData.accountMoney + salePrice;
             stock = accountData.accountStock - stockInfo.cost;
         } else {
-            cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet) + Math.floor(stockInfo.price * 1000 * stockInfo.sheet * 0.001425);
+            cost = Math.round(stockInfo.price * 1000 * stockInfo.sheet) + Math.round(stockInfo.price * 1000 * stockInfo.sheet * HANDLING_CHARGE_RATE);
             money = accountData.accountMoney - cost;
             stock = accountData.accountStock + cost;
         }
@@ -258,11 +268,12 @@ const api = {
             snapshot.forEach(element => {
                 accountInfo.unshift(element.val());
             });
-            accountRecord = accountInfo[2]
+            accountRecord = accountInfo[3]
+
         });
+
         const deleteRecord = Object.fromEntries(Object.entries(accountRecord).filter(([key]) => key.includes(timestamp)))
         let newRecords = Object.fromEntries(Object.entries(accountRecord).filter(([key]) => !key.includes(timestamp)))
-
         Object.entries(newRecords).forEach(([key, record]) => {
             if (deleteRecord[timestamp].timestamp < record.timestamp) {
                 if (deleteRecord[timestamp].transferStatus === '存入') {
@@ -274,8 +285,8 @@ const api = {
                 }
             }
         });
-
-        firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}`).update({ 'account_record': newRecords })
+        console.log('newRecords=>',newRecords);
+        // firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}`).update({ 'account_record': newRecords })
 
         api.getAccount().then(async(account) => {
             let getRefOfAccount = firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/account_summary`);
@@ -295,15 +306,16 @@ const api = {
             });
         });
         if (stock.status === 'sale') {
-            await firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stock_info`).child(timestamp).update({
-                ...stock,
-                income: 0,
-                sale_cost: 0,
-                sale_date: '',
-                sale_price: 0,
-                sale_sheet: 0,
-                status: "unsale"
-            });
+            console.log('stock=>',stock);
+            // await firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}/stock_info`).child(timestamp).update({
+            //     ...stock,
+            //     income: 0,
+            //     sale_cost: 0,
+            //     sale_date: '',
+            //     sale_price: 0,
+            //     sale_sheet: 0,
+            //     status: "unsale"
+            // });
         }
         return stock
     },
@@ -316,8 +328,6 @@ const api = {
         return { stockComment };
     },
     async updateStockComment(stockComment) {
-        console.log(stockComment)
-
         firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}`).update({ 'stock_comment': stockComment })
     },
 };

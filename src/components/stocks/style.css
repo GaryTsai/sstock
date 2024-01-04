@@ -1,0 +1,110 @@
+.arrowToTop {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 50px;
+    height: 50px;
+    font-size: 40px;
+    background-color: cornflowerblue;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: black !important;
+}
+.content-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: block;
+    z-index: 7;
+}
+
+.content-loading-img {
+    display:flex;
+    width: 64px;
+    height: 64px;
+    position: relative;
+    margin: 0px auto;
+    background-size: 100%;
+    top: calc(50% - 50px);
+}
+.sticky-tr{
+    position: sticky;
+    top: 0px;
+    background-color: black;
+}
+.stock-noData {
+    position: absolute;
+    top: 50%;
+    left: 0,;
+    height: 50%;
+    width: 100%;
+    display: block;
+    z-index: 7,
+}
+.stock-noData-content {
+    position: relative;
+    margin: 0px auto;
+    color: black;
+    font-size: 32px;
+    text-align: center;
+}
+ /* Input  */
+.input-sale-frame{
+    margin:0px 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+    border-radius: 0px;
+}
+.mobile-show {
+    display: none;
+}
+.from-group.col-md-2.input-sale-info-frame{
+    margin: 3px 0px;
+}
+.input-sale-info-frame{
+    margin: 3px 0px;
+}
+.input-confirm {
+    border-radius: 5px;
+    margin: 5px 0 5px 0px;
+}
+.stock-input-fields {
+    margin: 3px 0px;
+}
+.input-frame {
+    margin: 0 5px;
+}
+/* InputRegion */
+.query-region-submit {
+    margin: 3px 0px;
+}
+.query-time-fields {
+    margin:3px 0;
+    float: left;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+.query-region-group {
+    margin: 3px 0px;
+}
+.query-region-group-mobile {
+   margin: 0px 0px;
+}
+.show-all-stock {
+    margin: 3px 0px;
+    height: 40px;
+}
+.show-all-stock-mobile {
+    margin: 6px 0px 0px 0px;
+}
+@media (min-width: 768px){
+    .query-region-submit {
+        padding: 0
+    }
+}
