@@ -119,7 +119,7 @@ const Stock = (props) =>{
           <td>{stock.name}</td>
           <td>{stock.number}</td>
           <td>{isMerge ? (averagePrice / (stock.sheet)).toFixed(4) : averagePrice }</td>
-          { isMerge && <td>{(breakEvenPrice / (stock.sheet)).toFixed(4)}</td> }
+          { !isStockHistory && isMerge && <td>{(breakEvenPrice / (stock.sheet)).toFixed(4)}</td> }
           <td>{isFloat(stock.sheet) ? stock.sheet.toFixed(3) : stock.sheet}</td>
           <td>{isMerge ? stock.handingFee : Math.floor(handlingFee)}</td>
           <td>{Math.floor(stock.cost)}</td>

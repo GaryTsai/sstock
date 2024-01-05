@@ -34,7 +34,7 @@
 }
 .sticky-tr{
     position: sticky;
-    top: 0px;
+    top: -1px;
     background-color: black;
 }
 .stock-noData {
