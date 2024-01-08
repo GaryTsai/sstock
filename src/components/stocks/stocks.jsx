@@ -92,7 +92,7 @@ const Stocks = () => {
     <div>
       <Input />
       {<InputRegion />}
-      <div style={{ overflowY: "unset" }}>
+      <div style={{ overflowY: "unset", overflowX: "auto" }}>
         <table className="table table-dark" style={{ whiteSpace: "nowrap" }}>
           <thead>
             <tr className="sticky-tr">
