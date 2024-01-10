@@ -39,6 +39,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    z-index: 1;
 }
 .nav-link.tw-property {
     width: 100%;
