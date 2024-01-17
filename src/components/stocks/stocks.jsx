@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import _ from "lodash";
 import { useTranslation } from "react-i18next";
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 import Stock from "./stock";
 import InputRegion from "./components/inputRegion";
@@ -11,17 +13,18 @@ import { fetchStock, fetchAccountSummary } from "../../slices/apiDataSlice";
 import { changeInitLoading } from "../../slices/mutualState";
 import settings from "../../settings";
 import './style.css'
+import utils from "../../utils/dataHandle";
 
-const { HANDLING_CHARGE_RATE, MINIMUM_HANDLING_FEE } = settings
+const { BREAK_EVEN_RATE } = settings
 
 const Stocks = () => {
   const { queryStatus, isMerge } = useSelector(
     (state) => state.mutualStateReducer
   );
-  const { allStocks, unSaleStocks, showStocks, loading } = useSelector(
+  const { allStocks, unSaleStocks, showStocks, loading, stockRealtimePrice, stockRealtimePriceStatus, stockRealtimePriceOffset} = useSelector(
     (state) => state.apiDataReducer
   );
-
+  const [incomeSort, setIncomeSort] = useState({sort: null })
   const location = useLocation();
   const dispatch = useDispatch();
   const { t } = useTranslation()
@@ -35,50 +38,36 @@ const Stocks = () => {
     dispatch(fetchStock());
   }, []);
 
-  const infoMerge = (datas) => {
-    const result = datas.reduce((mergeResult, prev, next) => {
-      const isNotExist =
-        mergeResult && mergeResult.filter((item) => _.trim(item.number) === _.trim(prev.number)).length === 0;
-        let handingFee = prev.price * 1000 * prev.sheet * HANDLING_CHARGE_RATE < MINIMUM_HANDLING_FEE ? MINIMUM_HANDLING_FEE : Math.round(prev.price * 1000 * prev.sheet * HANDLING_CHARGE_RATE);
-
-      if (isNotExist) {
-        mergeResult.push({
-          cost: prev.cost,
-          income: 0,
-          name: prev.name,
-          number: prev.number,
-          price: prev.price * prev.sheet,
-          sale_cost: 0,
-          sale_date: 0,
-          sale_price: 0,
-          sale_sheet: 0,
-          sheet: prev.sheet,
-          status: "unsale",
-          handingFee: handingFee
-        });
-      } else {
-        const index = _.findIndex(
-          mergeResult,
-          (e) => _.trim(e.number) === _.trim(prev.number),
-          0
-        );
-        mergeResult[index] = {
-          ...mergeResult[index],
-          cost: mergeResult[index].cost + prev.cost,
-          price: mergeResult[index].price + prev.price * prev.sheet,
-          sheet: mergeResult[index].sheet + prev.sheet,
-          handingFee: mergeResult[index].handingFee +  handingFee
-        };
+  const stocks = isStockHistory ? queryStatus === "all" ? allStocks : showStocks : isMerge ? utils.infoMerge(unSaleStocks) : unSaleStocks;
+  const sortStocks = (stocks) => {
+    if(stockRealtimePrice !== null && incomeSort.sort !== null && isMerge === true){
+      Object.entries(stocks).map((stock)=>{
+        const breakEvenPrice = parseFloat((stock[1].price * (1 + BREAK_EVEN_RATE)).toFixed(2));
+        stock[1]['currentIncome'] = parseFloat((stockRealtimePrice[stock[1].number] - (breakEvenPrice / (stock[1].sheet))).toFixed(2)) * 1000 * stock[1].sheet 
+      })
+      function compare( a, b ) {
+        if(incomeSort.sort === true){
+          if ( a.currentIncome > b.currentIncome ){
+            return -1;
+          }
+          if ( a.currentIncome < b.currentIncome ){
+            return 1;
+          }
+          return 0;
+        } else {
+          if ( a.currentIncome < b.currentIncome ){
+            return -1;
+          }
+          if ( a.currentIncome > b.currentIncome ){
+            return 1;
+          }
+          return 0;
+        }
       }
-
-      return mergeResult;
-    }, []);
-
-    return result;
-  };
-
-  const stocks = isStockHistory ? queryStatus === "all" ? allStocks : showStocks : isMerge ? infoMerge(unSaleStocks) : unSaleStocks;
-  
+      stocks.sort( compare );
+    }
+    return stocks
+  }
   if (stocks === "No Data" || stocks.length === 0) {
     if(settings.isFirst){
       dispatch(changeInitLoading(false));
@@ -111,6 +100,17 @@ const Stocks = () => {
               {!isStockHistory && isMerge === true && (
                 <th scope="col">{t("input.breakevenPrice")}</th>
               )}
+              {!isStockHistory && isMerge === true && (
+                <th scope="col">{t("input.realtimePrice")}</th>
+              )}
+              {!isStockHistory && isMerge === true && (
+                <th scope="col">{t("input.currentOffset")}</th>
+              )}
+              {!isStockHistory && isMerge === true && (
+                <th scope="col" style={{cursor: 'pointer'}} onClick={() => {
+                  if(stockRealtimePrice !== null && loading !== true) 
+                    setIncomeSort({sort: !incomeSort.sort})}}>{t("input.currentIncome")}{incomeSort.sort === null ? '' : incomeSort.sort ===  true ? <ArrowDropUpIcon/> : <ArrowDropDownIcon/>}</th>
+              )}
               <th scope="col">{t("input.stockSheet")}</th>
               <th scope="col">{t("input.handingFee")}</th>
               <th scope="col">{t("input.cost")}</th>
@@ -125,12 +125,15 @@ const Stocks = () => {
             {!loading &&
               stocks !== "No Data" &&
               stocks.length !== 0 &&
-              stocks.map((stock, index) => (
+              sortStocks(stocks).map((stock, index) => (
                 <Stock
                   key={stock.number + index}
                   stock={stock}
                   index={index + 1}
                   isMerge={isMerge}
+                  stockRealtimePrice={stockRealtimePrice}
+                  stockRealtimePriceStatus={stockRealtimePriceStatus}
+                  stockRealtimePriceOffset={stockRealtimePriceOffset}
                 />
               ))}
             {!settings.isFirst && loading && (

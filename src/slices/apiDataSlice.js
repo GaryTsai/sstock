@@ -25,6 +25,12 @@ export const fetchStockComment = createAsyncThunk("stock/fetchStockComment", asy
     return response;
 });
 
+export const fetchRealtimePrice = createAsyncThunk("stock/fetchRealtimePrice", async(stock_info) => {
+    console.log('-----------fetchRealtimePrice-------------');
+    const response = await api.getStockRealtimePrice(stock_info);
+    return response
+});
+
 export const apiDataSlice = createSlice({
     name: "stock",
     initialState: {
@@ -46,6 +52,9 @@ export const apiDataSlice = createSlice({
         acStock: 0,
         acSummary: 0,
         stockComment: '',
+        stockRealtimePrice: null,
+        stockRealtimePriceStatus: null,
+        stockRealtimePriceOffset: null
     },
     reducers: {
         updateQueryData: (state, action) => {
@@ -125,7 +134,18 @@ export const apiDataSlice = createSlice({
             state.stockComment = payload.stockComment ? payload.stockComment : state.stockComment
         },
 
-        [fetchStockComment.rejected]: (state) => {}
+        [fetchStockComment.rejected]: (state) => {},
+        //fetchRealtimePrice
+        [fetchRealtimePrice.pending]: (state) => {
+            state.stockRealtimePriceStatus = false
+        },
+        [fetchRealtimePrice.fulfilled]: (state, { payload }) => {
+            state.stockRealtimePrice = payload.priceData
+            state.stockRealtimePriceOffset = payload.priceOffset
+            state.stockRealtimePriceStatus = true
+        },
+
+        [fetchRealtimePrice.rejected]: (state) => {}
     }
 });
 export const { updateQueryData } = apiDataSlice.actions

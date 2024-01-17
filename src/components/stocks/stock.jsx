@@ -10,6 +10,7 @@ import api from '../../api/api';
 import { changeContentLoading } from '../../slices/mutualState';
 import './style.css'
 import settings from './../../settings'
+import { color } from 'highcharts';
 
 const { HANDLING_CHARGE_RATE, MINIMUM_HANDLING_FEE, BREAK_EVEN_RATE } = settings
 
@@ -68,11 +69,12 @@ const Stock = (props) =>{
   const isFloat = (n) => {
     return Number(n) === n && n % 1 !== 0;
   }
-  const { stock, index, isMerge } = props;
+  const { stock, index, isMerge, stockRealtimePrice, stockRealtimePriceStatus, stockRealtimePriceOffset} = props;
   const averagePrice = parseFloat((stock.price * (1 + HANDLING_CHARGE_RATE)).toFixed(2));
   const breakEvenPrice = parseFloat((stock.price * (1 + BREAK_EVEN_RATE)).toFixed(2));
   const handlingFee = stock.price * 1000 * stock.sheet * HANDLING_CHARGE_RATE < MINIMUM_HANDLING_FEE ? MINIMUM_HANDLING_FEE : Math.round(stock.price * 1000 * stock.sheet * HANDLING_CHARGE_RATE);
   const isStockHistory = location.pathname === '/sstock/stockHistory'
+  const currentStockPage = location.pathname === '/sstock' || location.pathname === '/sstock/'
 
   return (
     <>
@@ -120,6 +122,9 @@ const Stock = (props) =>{
           <td>{stock.number}</td>
           <td>{isMerge ? (averagePrice / (stock.sheet)).toFixed(4) : averagePrice }</td>
           { !isStockHistory && isMerge && <td>{(breakEvenPrice / (stock.sheet)).toFixed(4)}</td> }
+          { currentStockPage && isMerge && <td style={{'color': stockRealtimePriceOffset && stockRealtimePriceOffset[stock.number] <= 0 ? '#1ec41e' : '#e55454'}}>{stockRealtimePriceStatus === false ? <div class="loader"></div> : stockRealtimePrice && stockRealtimePrice[stock.number] ? parseFloat(stockRealtimePrice[stock.number]).toFixed(2) +' '+ `(${stockRealtimePriceOffset[stock.number]})`: ''}</td> }
+          { currentStockPage && isMerge && <td style={{'color': ((breakEvenPrice / (stock.sheet)).toFixed(4) > (stockRealtimePriceStatus === true && stockRealtimePrice && stockRealtimePrice[stock.number] && parseFloat(stockRealtimePrice[stock.number]).toFixed(2))) ? '#1ec41e' : '#e55454'}}>{stockRealtimePriceStatus === false ? <div class="loader"></div> : stockRealtimePrice && stockRealtimePrice[stock.number] ? `${(parseFloat(stockRealtimePrice[stock.number]).toFixed(2) - (breakEvenPrice / (stock.sheet)).toFixed(2)).toFixed(2)}`: ''}</td> }
+          { currentStockPage && isMerge && <td style={{'color': ((breakEvenPrice / (stock.sheet)).toFixed(4) > (stockRealtimePriceStatus === true && stockRealtimePrice && stockRealtimePrice[stock.number] && parseFloat(stockRealtimePrice[stock.number]).toFixed(2))) ? '#1ec41e' : '#e55454'}}>{stockRealtimePriceStatus === false ? <div class="loader"></div> : stockRealtimePrice && stockRealtimePrice[stock.number] ? `${((parseFloat(stockRealtimePrice[stock.number]).toFixed(2) - (breakEvenPrice / (stock.sheet)).toFixed(2)).toFixed(2) * 1000 * stock.sheet).toFixed(0)}`: ''}</td> }
           <td>{isFloat(stock.sheet) ? stock.sheet.toFixed(3) : stock.sheet}</td>
           <td>{isMerge ? stock.handingFee : Math.floor(handlingFee)}</td>
           <td>{Math.floor(stock.cost)}</td>

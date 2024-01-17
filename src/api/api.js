@@ -8,7 +8,6 @@ import "firebase/auth";
 import "firebase/firestore";
 import d from "../utils/dateFormat";
 import settings from '../settings'
-
 const fireBaseConfig = {
     apiKey: process.env.REACT_APP_APP_KEY,
     authDomain: process.env.REACT_APP_AUTHDOMAIN,
@@ -330,6 +329,28 @@ const api = {
     async updateStockComment(stockComment) {
         firebase.database().ref(`/account_data/${settings.user_id}/${settings.country}`).update({ 'stock_comment': stockComment })
     },
+    async getStockRealtimePrice(stock_info) {
+        let priceData = null
+        let priceOffset = null
+        try {
+            await fetch("https://web-api-test.onrender.com/realtime_price/", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(stock_info),
+            }).then((res) => res.json())
+              .then((data) => {
+                priceData = data[0]
+                priceOffset = data[1]
+            });
+        } catch (error) {
+            console.log(error)
+            console.error('API Server is shut down, please send dat after few minute.')
+            
+        }
+        return { priceData, priceOffset };
+    }
 };
 
 export default api;

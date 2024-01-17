@@ -31,12 +31,18 @@ const StockComment = () => {
   
   
   const ImgComment = () => {
-      return <>
+      return <DivCenter>
           <ImgCommentStyle src={require('./../../../assets/img/comment.png')} onClick={() => {
             setIsShowComment(!isShowComment)
             }} isShowComment={isShowComment}/>
-      </>
+      </DivCenter>
   }
+  const DivCenter = styled("div")`
+    @media (max-width: 768px) {
+      width: 100%;
+      text-align: center;
+    }
+  `
 
   const ImgCommentStyle = styled("img")(({ isShowComment }) => ({
     boxShadow: isShowComment ? "0 0 20px #d71313" : 'unset',
