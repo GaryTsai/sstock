@@ -18,7 +18,7 @@ import utils from "../../utils/dataHandle";
 const { BREAK_EVEN_RATE } = settings
 
 const Stocks = () => {
-  const { queryStatus, isMerge } = useSelector(
+  const { queryStatus, isMerge, isStocksDetail, stocksDetailNumber } = useSelector(
     (state) => state.mutualStateReducer
   );
   const { allStocks, unSaleStocks, showStocks, loading, stockRealtimePrice, stockRealtimePriceStatus, stockRealtimePriceOffset} = useSelector(
@@ -29,7 +29,7 @@ const Stocks = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation()
   const isStockHistory = location.pathname === "/sstock/stockHistory";
-
+  const currentStockPage = location.pathname === "/sstock";
   useEffect(() => {
     if(settings.isFirst){
       dispatch(changeInitLoading(true));
@@ -125,7 +125,7 @@ const Stocks = () => {
             {!loading &&
               stocks !== "No Data" &&
               stocks.length !== 0 &&
-              sortStocks(stocks).map((stock, index) => (
+              sortStocks(stocks).map((stock, index) => (<>
                 <Stock
                   key={stock.number + index}
                   stock={stock}
@@ -134,8 +134,27 @@ const Stocks = () => {
                   stockRealtimePrice={stockRealtimePrice}
                   stockRealtimePriceStatus={stockRealtimePriceStatus}
                   stockRealtimePriceOffset={stockRealtimePriceOffset}
+                  isStocksDetail={false}
+                  isMergeInof={true}
                 />
-              ))}
+                {currentStockPage && isMerge && isStocksDetail && stock.stocksDetail.map((stock, index)=>(
+                  <>
+                    {stocksDetailNumber === stock.number && <Stock
+                      key={stock.number + index}
+                      stock={stock}
+                      index={index + 1}
+                      isMerge={isMerge}
+                      stockRealtimePrice={stockRealtimePrice}
+                      stockRealtimePriceStatus={stockRealtimePriceStatus}
+                      stockRealtimePriceOffset={stockRealtimePriceOffset}
+                      bgColor={"#595f65"}
+                      isStocksDetail={isStocksDetail}
+                    />}
+                </>
+                ))}
+                </>
+              ))
+              }
             {!settings.isFirst && loading && (
               <div className="content-loading">
                 <img alt="" className="content-loading-img" src={require("./../../assets/img/contentLoading.png")} />

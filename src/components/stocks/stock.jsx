@@ -1,16 +1,18 @@
 import React, {useRef, useEffect, useState} from 'react';
 import { useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import Swal from 'sweetalert2'
 import { useTranslation } from 'react-i18next';
 import { BiSolidArrowToTop } from "react-icons/bi";
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { styled } from "@mui/material";
 
 import { fetchStock } from '../../slices/apiDataSlice';
 import api from '../../api/api';
-import { changeContentLoading } from '../../slices/mutualState';
+import { changeContentLoading, changeStocksDetail, showStocksDetail } from '../../slices/mutualState';
 import './style.css'
 import settings from './../../settings'
-import { color } from 'highcharts';
 
 const { HANDLING_CHARGE_RATE, MINIMUM_HANDLING_FEE, BREAK_EVEN_RATE } = settings
 
@@ -20,6 +22,7 @@ const Stock = (props) =>{
   const location = useLocation()
   const dispatch = useDispatch()
   const { t } = useTranslation()
+
   useEffect(() => {
     window.addEventListener('scroll', () => {
 
@@ -69,13 +72,19 @@ const Stock = (props) =>{
   const isFloat = (n) => {
     return Number(n) === n && n % 1 !== 0;
   }
-  const { stock, index, isMerge, stockRealtimePrice, stockRealtimePriceStatus, stockRealtimePriceOffset} = props;
+
+  const { stock, index, isMerge, stockRealtimePrice, stockRealtimePriceStatus, stockRealtimePriceOffset, bgColor, isStocksDetail} = props;
   const averagePrice = parseFloat((stock.price * (1 + HANDLING_CHARGE_RATE)).toFixed(2));
   const breakEvenPrice = parseFloat((stock.price * (1 + BREAK_EVEN_RATE)).toFixed(2));
   const handlingFee = stock.price * 1000 * stock.sheet * HANDLING_CHARGE_RATE < MINIMUM_HANDLING_FEE ? MINIMUM_HANDLING_FEE : Math.round(stock.price * 1000 * stock.sheet * HANDLING_CHARGE_RATE);
   const isStockHistory = location.pathname === '/sstock/stockHistory'
   const currentStockPage = location.pathname === '/sstock' || location.pathname === '/sstock/'
-
+  const TDmergeInfoHover = styled('td')(({ isMerge, isStocksDetail }) => ({
+    ':hover': {
+      backgroundColor: isMerge && !isStocksDetail ? '#4d657d' : 'unset'
+    }
+    }));
+  
   return (
     <>
         {
@@ -86,8 +95,8 @@ const Stock = (props) =>{
               </div>
           </div>
         }
-        <tr>
-          <th scope="row">{index}</th>
+        <tr style={{backgroundColor: `${isStocksDetail && bgColor}` }}>
+          <th scope="row" style={{ fontSize: !isStocksDetail && '15px', color: !!isStocksDetail && 'black'}} >{index}</th>
           {!isStockHistory && isMerge === false && <td key={stock.timestamp}>
             {<button type="button" className="btn btn-info" data-toggle="modal" data-target={`#modal-${stock.timestamp}`}>{t("sell")}</button>}
             <div>
@@ -118,15 +127,23 @@ const Stock = (props) =>{
           { (!isStockHistory && isMerge === false && stock.status === 'unsale')  && <td>{stock.date}</td>}
           { isStockHistory && <td>{stock.date}</td>}
           { isStockHistory && (stock.status === 'sale' ? <td>{stock.sale_date}</td> : <td></td>)}
-          <td>{stock.name}</td>
+          {<TDmergeInfoHover
+            isStocksDetail={isStocksDetail}
+            isMerge={isMerge}
+            onClick={()=> {
+            if(isStocksDetail)
+              return 
+            dispatch(showStocksDetail(stock.number))
+            dispatch(changeStocksDetail())
+            }} style={{cursor: !isStocksDetail && isMerge && 'pointer' }}>{stock.name}</TDmergeInfoHover>}
           <td>{stock.number}</td>
-          <td>{isMerge ? (averagePrice / (stock.sheet)).toFixed(4) : averagePrice }</td>
-          { !isStockHistory && isMerge && <td>{(breakEvenPrice / (stock.sheet)).toFixed(4)}</td> }
-          { currentStockPage && isMerge && <td style={{'color': stockRealtimePriceOffset && stockRealtimePriceOffset[stock.number] <= 0 ? '#1ec41e' : '#e55454'}}>{stockRealtimePriceStatus === false ? <div class="loader"></div> : stockRealtimePrice && stockRealtimePrice[stock.number] ? parseFloat(stockRealtimePrice[stock.number]).toFixed(2) +' '+ `(${stockRealtimePriceOffset[stock.number]})`: ''}</td> }
-          { currentStockPage && isMerge && <td style={{'color': ((breakEvenPrice / (stock.sheet)).toFixed(4) > (stockRealtimePriceStatus === true && stockRealtimePrice && stockRealtimePrice[stock.number] && parseFloat(stockRealtimePrice[stock.number]).toFixed(2))) ? '#1ec41e' : '#e55454'}}>{stockRealtimePriceStatus === false ? <div class="loader"></div> : stockRealtimePrice && stockRealtimePrice[stock.number] ? `${(parseFloat(stockRealtimePrice[stock.number]).toFixed(2) - (breakEvenPrice / (stock.sheet)).toFixed(2)).toFixed(2)}`: ''}</td> }
-          { currentStockPage && isMerge && <td style={{'color': ((breakEvenPrice / (stock.sheet)).toFixed(4) > (stockRealtimePriceStatus === true && stockRealtimePrice && stockRealtimePrice[stock.number] && parseFloat(stockRealtimePrice[stock.number]).toFixed(2))) ? '#1ec41e' : '#e55454'}}>{stockRealtimePriceStatus === false ? <div class="loader"></div> : stockRealtimePrice && stockRealtimePrice[stock.number] ? `${((parseFloat(stockRealtimePrice[stock.number]).toFixed(2) - (breakEvenPrice / (stock.sheet)).toFixed(2)).toFixed(2) * 1000 * stock.sheet).toFixed(0)}`: ''}</td> }
+          <td>{isMerge ? (averagePrice / (isStocksDetail ? 1 : stock.sheet)).toFixed(2) : averagePrice }</td>
+          { !isStockHistory && isMerge && <td>{(breakEvenPrice / (isStocksDetail ? 1 : stock.sheet)).toFixed(2)}</td> }
+          { isStocksDetail ? <td></td> : currentStockPage && isMerge && <td style={{'color': stockRealtimePriceOffset && stockRealtimePriceOffset[stock.number] <= 0 ? '#1ec41e' : '#e55454'}}>{stockRealtimePriceStatus === false ? <div class="loader"></div> : stockRealtimePrice && stockRealtimePrice[stock.number] ? parseFloat(stockRealtimePrice[stock.number]).toFixed(2) +' '+ `(${stockRealtimePriceOffset[stock.number]})`: ''}</td> }
+          { isStocksDetail ? <td></td> : currentStockPage && isMerge && <td style={{'color': ((breakEvenPrice / stock.sheet).toFixed(4) > (stockRealtimePriceStatus === true && stockRealtimePrice && stockRealtimePrice[stock.number] && parseFloat(stockRealtimePrice[stock.number]).toFixed(2))) ? '#1ec41e' : '#e55454'}}>{stockRealtimePriceStatus === false ? <div class="loader"></div> : stockRealtimePrice && stockRealtimePrice[stock.number] ? `${(parseFloat(stockRealtimePrice[stock.number]).toFixed(2) - (breakEvenPrice / (stock.sheet)).toFixed(2)).toFixed(2)}`: ''}</td> }
+          { isStocksDetail ? <td></td> : currentStockPage && isMerge && <td style={{'color': ((breakEvenPrice / stock.sheet).toFixed(4) > (stockRealtimePriceStatus === true && stockRealtimePrice && stockRealtimePrice[stock.number] && parseFloat(stockRealtimePrice[stock.number]).toFixed(2))) ? '#1ec41e' : '#e55454'}}>{stockRealtimePriceStatus === false ? <div class="loader"></div> : stockRealtimePrice && stockRealtimePrice[stock.number] ? `${((parseFloat(stockRealtimePrice[stock.number]).toFixed(2) - (breakEvenPrice / (stock.sheet)).toFixed(2)).toFixed(2) * 1000 * stock.sheet).toFixed(0)}`: ''}</td> }
           <td>{isFloat(stock.sheet) ? stock.sheet.toFixed(3) : stock.sheet}</td>
-          <td>{isMerge ? stock.handingFee : Math.floor(handlingFee)}</td>
+          <td>{currentStockPage && isMerge ? stock.handingFee : Math.floor(handlingFee)}</td>
           <td>{Math.floor(stock.cost)}</td>
           <td>{stock.status === "unsale" ? t("inputRegion.unsale") : t("inputRegion.sale")}</td>
           { isStockHistory && <td>{stock.sale_price === 0 ? '' : stock.sale_price}</td>}

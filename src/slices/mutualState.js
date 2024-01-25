@@ -5,7 +5,9 @@ const initialState = {
     contentLoading: false,
     isMerge: false,
     logInStatus: false,
-    queryStatus: 'all'
+    queryStatus: 'all',
+    isStocksDetail: false,
+    stocksDetailNumber: null
 }
 export const mutualStateSlice = createSlice({
     name: 'mutualState',
@@ -25,11 +27,17 @@ export const mutualStateSlice = createSlice({
         },
         changeQueryStatus: (state, action) => {
             state.queryStatus = action.payload
-        }
+        },
+        changeStocksDetail: (state, action) => {
+            state.isStocksDetail = !state.isStocksDetail
+        },
+        showStocksDetail: (state, action) => {
+            state.stocksDetailNumber = action.payload
+        },
     }
 
 })
 
-export const { changeInitLoading, changeContentLoading, changeStockMergeState, changeLoginStatus, changeQueryStatus} = mutualStateSlice.actions
+export const { changeInitLoading, changeContentLoading, changeStockMergeState, changeLoginStatus, changeQueryStatus, changeStocksDetail, showStocksDetail} = mutualStateSlice.actions
 
 export default mutualStateSlice.reducer

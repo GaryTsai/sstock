@@ -103,6 +103,9 @@
 .show-all-stock-mobile {
     margin: 6px 0px 0px 0px;
 }
+.mergeInfo-hover:hover{
+    color: goldenrod;
+}
 /* loader */
 .loader {
     width: 5px;
@@ -111,12 +114,12 @@
     animation: l5 1s infinite linear alternate;
     margin: auto;
   }
-  @keyframes l5 {
-      0%  {box-shadow: 20px 0 #ffffff, -20px 0 #0002;background: #ffffff }
-      33% {box-shadow: 20px 0 #ffffff, -20px 0 #0002;background: #0002}
-      66% {box-shadow: 20px 0 #0002,-20px 0 #ffffff; background: #0002}
-      100%{box-shadow: 20px 0 #0002,-20px 0 #ffffff; background: #ffffff }
-  }     
+@keyframes l5 {
+    0%  {box-shadow: 20px 0 #ffffff, -20px 0 #0002;background: #ffffff }
+    33% {box-shadow: 20px 0 #ffffff, -20px 0 #0002;background: #0002}
+    66% {box-shadow: 20px 0 #0002,-20px 0 #ffffff; background: #0002}
+    100%{box-shadow: 20px 0 #0002,-20px 0 #ffffff; background: #ffffff }
+}     
 @media (min-width: 768px){
     .query-region-submit {
         padding: 0

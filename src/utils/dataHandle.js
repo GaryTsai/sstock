@@ -21,7 +21,8 @@ const utils = {
           sale_sheet: 0,
           sheet: prev.sheet,
           status: "unsale",
-          handingFee: handingFee
+          handingFee: handingFee,
+          stocksDetail: [prev]
         });
       } else {
         const index = _.findIndex(
@@ -36,11 +37,10 @@ const utils = {
           sheet: mergeResult[index].sheet + prev.sheet,
           handingFee: mergeResult[index].handingFee +  handingFee
         };
+        mergeResult[index]['stocksDetail'].push(prev)
       }
-
       return mergeResult;
     }, []);
-
     return result;
   }
 };
