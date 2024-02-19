@@ -31,16 +31,24 @@ const StockComment = () => {
   
   
   const ImgComment = () => {
-      return <DivCenter>
-          <ImgCommentStyle src={require('./../../../assets/img/comment.png')} onClick={() => {
-            setIsShowComment(!isShowComment)
-            }} isShowComment={isShowComment}/>
+      return <DivCenter onClick={() => {
+        setIsShowComment(!isShowComment)
+        }}>
+          <ImgCommentStyle src={require('./../../../assets/img/comment.png')} isShowComment={isShowComment}/>
       </DivCenter>
   }
   const DivCenter = styled("div")`
     @media (max-width: 768px) {
       width: 100%;
       text-align: center;
+      border: 3px solid;
+      border-radius: 25px;
+      background-color: #d5d5ef;
+      margin-top: 5px;
+      cursor: pointer;
+      :hover {
+      background-color: #7d7dbe ;
+      }
     }
   `
 

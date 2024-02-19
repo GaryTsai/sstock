@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from "react-i18next";
@@ -46,8 +46,14 @@ const Navbar = () => {
   @media (max-width: 768px) {
     width: 100%;
     text-align: center;
-  }
-`
+    border: 3px solid;
+    border-radius: 25px;
+    background-color: #d5d5ef ;
+    cursor: pointer;
+    :hover {
+      background-color: #7d7dbe ;
+    }
+  }`
 
   return (
     <div>
@@ -71,10 +77,11 @@ const Navbar = () => {
             {currentStockPage && <FormGroup sx={{whiteSpace: "nowrap"}}>
               <FormControlLabel sx={{marginBottom: 0, ".MuiFormControlLabel-label": {fontWeight: "bold"}}} control={<Switch checked={isMerge} onChange={() => handleMerge()} color="warning"/>} label={t("navBar.stockMerge")} />
             </FormGroup>}
-            {currentStockPage && isMerge && <DivCenter><img className="realtime-update" src={require('./../../assets/img/update.png')} onClick={()=> {
+            {currentStockPage && isMerge && <DivCenter 
+            onClick={()=> {
               const stock_info = {stock_list: utils.infoMerge(unSaleStocks).map((stock) =>  { return stock.number; })}
               dispatch(fetchRealtimePrice(stock_info))
-              }}/></DivCenter>}
+              }}><img className="realtime-update" src={require('./../../assets/img/update.png')} /></DivCenter>}
             <StockComment/>
             <li className="nav-item logout"  data-toggle="collapse" data-target=".navbar-collapse.show">
               <div className="nav-link logout-button" onClick={() => logOut()}>{t("logout")}</div>
