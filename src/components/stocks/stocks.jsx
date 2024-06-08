@@ -100,6 +100,7 @@ const Stocks = () => {
               {!isStockHistory && isMerge === true && (
                 <th scope="col">{t("input.breakevenPrice")}</th>
               )}
+              <th scope="col">{t("input.stockSheet")}</th>
               {!isStockHistory && isMerge === true && (
                 <th scope="col">{t("input.realtimePrice")}</th>
               )}
@@ -111,7 +112,6 @@ const Stocks = () => {
                   if(stockRealtimePrice !== null && loading !== true) 
                     setIncomeSort({sort: !incomeSort.sort})}}>{t("input.currentIncome")}{incomeSort.sort === null ? '' : incomeSort.sort ===  true ? <ArrowDropUpIcon/> : <ArrowDropDownIcon/>}</th>
               )}
-              <th scope="col">{t("input.stockSheet")}</th>
               <th scope="col">{t("input.handingFee")}</th>
               <th scope="col">{t("input.cost")}</th>
               <th scope="col">{t("state")}</th>

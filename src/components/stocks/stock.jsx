@@ -139,10 +139,10 @@ const Stock = (props) =>{
           <td>{stock.number}</td>
           <td>{isMerge ? (averagePrice / (isStocksDetail ? 1 : stock.sheet)).toFixed(2) : averagePrice }</td>
           { !isStockHistory && isMerge && <td>{(breakEvenPrice / (isStocksDetail ? 1 : stock.sheet)).toFixed(2)}</td> }
+          <td>{isFloat(stock.sheet) ? stock.sheet.toFixed(3) : stock.sheet}</td>
           { isStocksDetail ? <td></td> : currentStockPage && isMerge && <td style={{'color': stockRealtimePriceOffset && stockRealtimePriceOffset[stock.number] <= 0 ? '#1ec41e' : '#e55454'}}>{stockRealtimePriceStatus === false ? <div class="loader"></div> : stockRealtimePrice && stockRealtimePrice[stock.number] ? parseFloat(stockRealtimePrice[stock.number]).toFixed(2) +' '+ `(${stockRealtimePriceOffset[stock.number]})`: ''}</td> }
           { isStocksDetail ? <td></td> : currentStockPage && isMerge && <td style={{'color': ((breakEvenPrice / stock.sheet).toFixed(4) > (stockRealtimePriceStatus === true && stockRealtimePrice && stockRealtimePrice[stock.number] && parseFloat(stockRealtimePrice[stock.number]).toFixed(2))) ? '#1ec41e' : '#e55454'}}>{stockRealtimePriceStatus === false ? <div class="loader"></div> : stockRealtimePrice && stockRealtimePrice[stock.number] ? `${(parseFloat(stockRealtimePrice[stock.number]).toFixed(2) - (breakEvenPrice / (stock.sheet)).toFixed(2)).toFixed(2)}`: ''}</td> }
           { isStocksDetail ? <td></td> : currentStockPage && isMerge && <td style={{'color': ((breakEvenPrice / stock.sheet).toFixed(4) > (stockRealtimePriceStatus === true && stockRealtimePrice && stockRealtimePrice[stock.number] && parseFloat(stockRealtimePrice[stock.number]).toFixed(2))) ? '#1ec41e' : '#e55454'}}>{stockRealtimePriceStatus === false ? <div class="loader"></div> : stockRealtimePrice && stockRealtimePrice[stock.number] ? `${((parseFloat(stockRealtimePrice[stock.number]).toFixed(2) - (breakEvenPrice / (stock.sheet)).toFixed(2)).toFixed(2) * 1000 * stock.sheet).toFixed(0)}`: ''}</td> }
-          <td>{isFloat(stock.sheet) ? stock.sheet.toFixed(3) : stock.sheet}</td>
           <td>{currentStockPage && isMerge ? stock.handingFee : Math.floor(handlingFee)}</td>
           <td>{Math.floor(stock.cost)}</td>
           <td>{stock.status === "unsale" ? t("inputRegion.unsale") : t("inputRegion.sale")}</td>

@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     initLoading: false,
     contentLoading: false,
-    isMerge: false,
+    isMerge: true,
     logInStatus: false,
     queryStatus: 'all',
     isStocksDetail: false,
