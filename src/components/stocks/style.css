@@ -103,9 +103,6 @@
 .show-all-stock-mobile {
     margin: 6px 0px 0px 0px;
 }
-.mergeInfo-hover:hover{
-    color: goldenrod;
-}
 /* loader */
 .loader {
     width: 5px;

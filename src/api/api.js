@@ -48,12 +48,16 @@ const api = {
                 let total = 0;
                 let profitAndLoss = 0;
                 let saleCost = 0;
+                let historicalProfitAndLoss = 0;
                 for (let item in items) {
                     total += items[item].status === "unsale" ? items[item].cost : 0;
                 }
                 for (let item in items) {
                     profitAndLoss += items[item].status === "sale" ? items[item].income : 0;
                     saleCost += items[item].status === "sale" ? items[item].cost : 0;
+                }
+                for (let item in items) {
+                    historicalProfitAndLoss += items[item].status === "sale" ? items[item].income : 0;
                 }
                 let lastYearROI = await this.getLastYearROI(items);
 
@@ -64,6 +68,7 @@ const api = {
                     saleStocks: saleStocks,
                     unSaleStocks: unSaleStocks,
                     totalCost: total,
+                    historicalProfitAndLoss: historicalProfitAndLoss,
                     profitAndLoss: profitAndLoss,
                     saleCost: saleCost,
                     profit: ((profitAndLoss / saleCost) * 100).toFixed(2)

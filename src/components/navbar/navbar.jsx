@@ -16,12 +16,13 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation()
   const { isMerge } = useSelector((state) => state.mutualStateReducer)
-  const { totalCost, profit, profitAndLoss, lastYearROI, unSaleStocks} = useSelector((state) => state.apiDataReducer)
+  const { historicalProfitAndLoss, totalCost, profit, profitAndLoss, lastYearROI, unSaleStocks} = useSelector((state) => state.apiDataReducer)
   const { t } = useTranslation();
 
   const currentStockPage = location.pathname === '/sstock' || location.pathname === '/sstock/'
   const isStockHistory = location.pathname === '/sstock/stockHistory'
   const summaryTitle = {
+    [t("navBar.historicalProfitAndLoss")]: historicalProfitAndLoss + t("twDollars"),
     [t("navBar.totalCost")]: totalCost + t("twDollars"),
     [t("navBar.profitAndLoss")]: profitAndLoss + t("twDollars"),
     [t("navBar.profit")]: profit + t("percent"),
@@ -39,7 +40,7 @@ const Navbar = () => {
   }
 
   const summary = Object.entries(summaryTitle).map(([key, value])=>{
-    return <SummaryList key={key} title={key} value={value}/>
+    return <SummaryList key={key} title={key} value={value} color={key === t("navBar.historicalProfitAndLoss") ? '#FFEB3B' : 'red'}/>
   })
 
   const DivCenter = styled("div")`

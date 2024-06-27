@@ -44,6 +44,7 @@ export const apiDataSlice = createSlice({
         unSaleStocks: [],
         showStocks: [],
         totalCost: 0,
+        historicalProfitAndLoss: 0,
         records: [],
         recordsLoading: false,
         chartLoading: false,
@@ -80,7 +81,15 @@ export const apiDataSlice = createSlice({
                     return result
                 } else if (queryCondition.stockStatus === 'mutual') {}
             };
+            const updateHistoricalProfitAndLoss = (stocks) => {
+                let calculation = 0;
+                for (let stock in stocks) {
+                    calculation += stocks[stock].status === "sale" ? stocks[stock].income : 0;
+                }
+                return calculation
+            }
             state.showStocks = updateData(action.payload)
+            state.historicalProfitAndLoss = updateHistoricalProfitAndLoss(state.showStocks)
         }
     },
     extraReducers: {
@@ -102,6 +111,7 @@ export const apiDataSlice = createSlice({
             state.unSaleStocks = payload.unSaleStocks;
             state.showStocks = payload.showStocks;
             state.totalCost = payload.totalCost;
+            state.historicalProfitAndLoss = payload.historicalProfitAndLoss; 
         },
         [fetchStock.rejected]: (state) => {
             state.loading = false;

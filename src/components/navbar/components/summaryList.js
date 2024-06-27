@@ -7,10 +7,10 @@ const summaryTitle = {
 const summaryFontSize = {
     fontSize: '24px'
 }
-const SummaryList = ({ title, value }) => {
+const SummaryList = ({ title, value, color }) => {
     return (<div className="report-item">
         <div style={summaryTitle}> {title} </div>
-        <div style={summaryFontSize}> {value} </div>
+        <div style={{color: color, ...summaryFontSize}}> {value} </div>
     </div>)
 
 }

@@ -31,7 +31,8 @@
             "myAccount": "我的帳戶",
             "incomeChart": "損益圖表",
             "currentTotalcost": "目前投入總成本",
-            "stockMerge": "股票統整"
+            "stockMerge": "股票統整",
+            "historicalProfitAndLoss": "歷史紀錄損益:"
       },
       "inputRegion": {
             "startIsGreaterThanEnd":  "起始時間不可大於結束時間!",

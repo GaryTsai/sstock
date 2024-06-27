@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef} from 'react';
 import { useLocation } from 'react-router-dom';
 import "react-datepicker/dist/react-datepicker.css";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from "react-i18next";
 import { useMediaQuery } from '@mui/material';
 import Swal from 'sweetalert2'
@@ -12,6 +12,7 @@ import utils from "../../../utils/dateFormat";
 import "./../../styles.css";
 
 const InputRegion = () => {
+  const { queryStatus } = useSelector((state) => state.mutualStateReducer);
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [inputInfo, setInputInfo] = useState({
     startStandardDate: '',
@@ -23,10 +24,20 @@ const InputRegion = () => {
     queryState: '',
     isQueryOpen: isMobile ? false : true,
   })
+
   const timeRegionInputRef = useRef({})
   const dispatch = useDispatch()
   const location = useLocation()
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if(queryStatus === 'all')
+      dispatch(updateQueryData({
+          dateRegion1: utils.dateFormat(new Date(1950, 0, 1)),
+          dateRegion2: utils.dateFormat(new Date(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate())),
+          saleStatus: 'all',
+          stockStatus:'individual'}))
+  }, [queryStatus])
 
   useEffect(() => {
     !isMobile && setInputInfo({...inputInfo, isQueryOpen: true})
@@ -166,7 +177,10 @@ const InputRegion = () => {
       {isStockHistory && isQueryOpen && <button style={{borderRadius: '0px'}} className="btn btn-secondary from-group col-sm-12 col-md-12 mobile-show" type="submit" onClick={() => setQueryOpen(false)}>{t('hide')}</button>}
     {isStockHistory && isQueryOpen && <div>
         <div className="form-row" style={{margin:'0 5px', overflowY: 'unset', whiteSpace: 'nowrap'}}>
-          <button type="button" className={"btn btn-info from-group col-md-1" + (isMobile ? ' show-all-stock-mobile' : ' show-all-stock')}  onClick={()=> dispatch(changeQueryStatus('all'))}>{t('inputRegion.allStock')}</button>
+          <button type="button" className={"btn btn-info from-group col-md-1" + (isMobile ? ' show-all-stock-mobile' : ' show-all-stock')}  onClick={()=> {
+            dispatch(changeQueryStatus('all'))
+            inActiveTimeRegionGroup()
+            }}>{t('inputRegion.allStock')}</button>
           <button type="button"  className={"btn btn-group btn-group-toggle" + (isMobile ? ' from-group col-md-6' : ' from-group' +' col-md-2')} data-toggle="buttons" style={{margin: '0px 10px', zIndex: 0, ...getStyleOfButton()}}>
             <label className="btn btn-secondary active" onClick={getSaleOptions}>
               <input type="radio" name="saleOption" id="saleOption1" value='all' autoComplete="off" /> {t('inputRegion.all')}
