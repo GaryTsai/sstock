@@ -31,6 +31,12 @@ export const fetchRealtimePrice = createAsyncThunk("stock/fetchRealtimePrice", a
     return response
 });
 
+export const fetchDividendInfo = createAsyncThunk("stock/fetchDividendInfo", async(stock_info) => {
+    console.log('-----------fetchDividendInfo-------------');
+    const response = await api.getStockDividendInfo(stock_info);
+    return response
+});
+
 export const apiDataSlice = createSlice({
     name: "stock",
     initialState: {
@@ -55,7 +61,8 @@ export const apiDataSlice = createSlice({
         stockComment: '',
         stockRealtimePrice: null,
         stockRealtimePriceStatus: null,
-        stockRealtimePriceOffset: null
+        stockRealtimePriceOffset: null,
+        stockDividendInfo: null
     },
     reducers: {
         updateQueryData: (state, action) => {
@@ -155,7 +162,14 @@ export const apiDataSlice = createSlice({
             state.stockRealtimePriceStatus = true
         },
 
-        [fetchRealtimePrice.rejected]: (state) => {}
+        [fetchRealtimePrice.rejected]: (state) => {},
+        //fetchDividendInfo
+        [fetchDividendInfo.pending]: (state) => {},
+        [fetchDividendInfo.fulfilled]: (state, { payload }) => {
+            state.stockDividendInfo = payload.dividendInfo
+        },
+
+        [fetchDividendInfo.rejected]: (state) => {}
     }
 });
 export const { updateQueryData } = apiDataSlice.actions
