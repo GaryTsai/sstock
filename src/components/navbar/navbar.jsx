@@ -7,7 +7,7 @@ import styled from '@emotion/styled'
 
 import './style.css';
 import { changeLoginStatus, changeStockMergeState } from '../../slices/mutualState';
-import { fetchRealtimePrice, fetchDividendInfo } from '../../slices/apiDataSlice';
+import { fetchRealtimePrice } from '../../slices/apiDataSlice';
 import SummaryList from './components/summaryList'
 import StockComment from './components/stockComment';
 import utils from "../../utils/dataHandle";
@@ -83,12 +83,6 @@ const Navbar = () => {
               const stock_info = {stock_list: utils.infoMerge(unSaleStocks).map((stock) =>  { return stock.number; })}
               dispatch(fetchRealtimePrice(stock_info))
               }}><img className="realtime-update" src={require('./../../assets/img/update.png')} /></DivCenter>}
-             {currentStockPage && isMerge && <DivCenter 
-            onClick={()=> {
-              const stock_info = {stock_list: utils.infoMerge(unSaleStocks).map((stock) =>  { return stock.number; })}
-              console.log(stock_info);
-              dispatch(fetchDividendInfo(stock_info))
-              }}><img className="realtime-update" src={require('./../../assets/img/dividend.png')} /></DivCenter>}  
             <StockComment/>
             <li className="nav-item logout"  data-toggle="collapse" data-target=".navbar-collapse.show">
               <div className="nav-link logout-button" onClick={() => logOut()}>{t("logout")}</div>
