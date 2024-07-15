@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/sstock/static/css/main.72174a69.chunk.css",
-    "main.js": "/sstock/static/js/main.102bad56.chunk.js",
-    "main.js.map": "/sstock/static/js/main.102bad56.chunk.js.map",
+    "main.js": "/sstock/static/js/main.f6b7b9db.chunk.js",
+    "main.js.map": "/sstock/static/js/main.f6b7b9db.chunk.js.map",
     "runtime-main.js": "/sstock/static/js/runtime-main.ce3411f0.js",
     "runtime-main.js.map": "/sstock/static/js/runtime-main.ce3411f0.js.map",
     "static/css/2.db713b68.chunk.css": "/sstock/static/css/2.db713b68.chunk.css",
-    "static/js/2.366f0683.chunk.js": "/sstock/static/js/2.366f0683.chunk.js",
-    "static/js/2.366f0683.chunk.js.map": "/sstock/static/js/2.366f0683.chunk.js.map",
+    "static/js/2.4b1cdac4.chunk.js": "/sstock/static/js/2.4b1cdac4.chunk.js",
+    "static/js/2.4b1cdac4.chunk.js.map": "/sstock/static/js/2.4b1cdac4.chunk.js.map",
     "index.html": "/sstock/index.html",
-    "precache-manifest.cc0201a896e27c2da065052674c06fea.js": "/sstock/precache-manifest.cc0201a896e27c2da065052674c06fea.js",
+    "precache-manifest.d425fde9fdbb7a32aae7ee0a2da896be.js": "/sstock/precache-manifest.d425fde9fdbb7a32aae7ee0a2da896be.js",
     "service-worker.js": "/sstock/service-worker.js",
     "static/css/2.db713b68.chunk.css.map": "/sstock/static/css/2.db713b68.chunk.css.map",
     "static/css/main.72174a69.chunk.css.map": "/sstock/static/css/main.72174a69.chunk.css.map",
-    "static/js/2.366f0683.chunk.js.LICENSE.txt": "/sstock/static/js/2.366f0683.chunk.js.LICENSE.txt",
-    "static/js/main.102bad56.chunk.js.LICENSE.txt": "/sstock/static/js/main.102bad56.chunk.js.LICENSE.txt",
+    "static/js/2.4b1cdac4.chunk.js.LICENSE.txt": "/sstock/static/js/2.4b1cdac4.chunk.js.LICENSE.txt",
+    "static/js/main.f6b7b9db.chunk.js.LICENSE.txt": "/sstock/static/js/main.f6b7b9db.chunk.js.LICENSE.txt",
     "static/media/contentLoading.png": "/sstock/static/media/contentLoading.aee8afdb.png",
     "static/media/loading.gif": "/sstock/static/media/loading.a57e7c9a.gif",
     "static/media/style.css": "/sstock/static/media/logo.e27c8735.png"
@@ -22,8 +22,8 @@
   "entrypoints": [
     "static/js/runtime-main.ce3411f0.js",
     "static/css/2.db713b68.chunk.css",
-    "static/js/2.366f0683.chunk.js",
+    "static/js/2.4b1cdac4.chunk.js",
     "static/css/main.72174a69.chunk.css",
-    "static/js/main.102bad56.chunk.js"
+    "static/js/main.f6b7b9db.chunk.js"
   ]
 }
