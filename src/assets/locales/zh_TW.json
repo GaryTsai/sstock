@@ -32,7 +32,10 @@
             "incomeChart": "損益圖表",
             "currentTotalcost": "目前投入總成本",
             "stockMerge": "股票統整",
-            "historicalProfitAndLoss": "歷史紀錄損益:"
+            "historicalProfitAndLoss": "歷史紀錄損益:",
+            "dividendInfo": "除息資訊",
+            "dividendDate": "除息日",
+            "realtimePriceInfo": "即時股價資訊"
       },
       "inputRegion": {
             "startIsGreaterThanEnd":  "起始時間不可大於結束時間!",
@@ -112,5 +115,6 @@
       "sellInfo": "賣出資訊",
       "sellPrice": "賣出單價",
       "dividend": "股利",
-      "salary": "薪資"
+      "salary": "薪資",
+      "dividendDate": "股利發放日"
 }

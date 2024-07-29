@@ -69,11 +69,29 @@ const Stock = (props) =>{
     })
   };
 
+  const getDividendeDate = (dividendInfo) => {
+    let day = new Date().getDate()
+    let month = new Date().getMonth() + 1
+    if (day < 10) {
+      day = '0' + day;
+    }
+  
+    if (month < 10) {
+        month = `0${month}`;
+    }
+    const today = new Date().getFullYear()+'/' + month + '/' + day
+
+    if(dividendInfo['distributeDividend-date_second'] && dividendInfo['distributeDividend-date_second'] >= today){
+      return  t('dividendDate')+ ': ' + dividendInfo['distributeDividend-date_second']
+    }else if(dividendInfo['distributeDividend-date'] >= today){
+      return t('dividendDate') + ': ' + dividendInfo['distributeDividend-date']
+    } 
+  }
   const isFloat = (n) => {
     return Number(n) === n && n % 1 !== 0;
   }
 
-  const { stock, index, isMerge, stockRealtimePrice, stockRealtimePriceStatus, stockRealtimePriceOffset, bgColor, isStocksDetail} = props;
+  const { stock, index, isMerge, stockRealtimePrice, stockRealtimePriceStatus, stockRealtimePriceOffset, bgColor, isStocksDetail, dividendInfo} = props;
   const averagePrice = parseFloat((stock.price * (1 + HANDLING_CHARGE_RATE)).toFixed(2));
   const breakEvenPrice = parseFloat((stock.price * (1 + BREAK_EVEN_RATE)).toFixed(2));
   const handlingFee = stock.price * 1000 * stock.sheet * HANDLING_CHARGE_RATE < MINIMUM_HANDLING_FEE ? MINIMUM_HANDLING_FEE : Math.round(stock.price * 1000 * stock.sheet * HANDLING_CHARGE_RATE);
@@ -117,7 +135,7 @@ const Stock = (props) =>{
                       </div>
                     </div>
                     <div className="modal-footer">
-                      <button type="button" className="btn btn-primary"  data-dismiss="modal" aria-label="Close"onClick={ updateStockStatus}>{t("confirm")}{stock.name}</button>
+                      <button type="button" className="btn btn-primary"  data-dismiss="modal" aria-label="Close"onClick={ updateStockStatus }>{t("confirm")}{stock.name}</button>
                     </div>
                   </div>
                 </div>
@@ -135,7 +153,7 @@ const Stock = (props) =>{
               return 
             dispatch(showStocksDetail(stock.number))
             dispatch(changeStocksDetail())
-            }} style={{cursor: !isStocksDetail && isMerge && 'pointer' }}>{stock.name}</TDmergeInfoHover>}
+            }} style={{cursor: !isStocksDetail && isMerge && 'pointer' }}>{stock.name}{dividendInfo !== undefined && <span className='dividendDate'> {getDividendeDate(dividendInfo)}</span>}</TDmergeInfoHover>}
           <td>{stock.number}</td>
           <td>{isMerge ? (averagePrice / (isStocksDetail ? 1 : stock.sheet)).toFixed(2) : averagePrice }</td>
           { !isStockHistory && isMerge && <td>{(breakEvenPrice / (isStocksDetail ? 1 : stock.sheet)).toFixed(2)}</td> }

@@ -355,6 +355,26 @@ const api = {
             
         }
         return { priceData, priceOffset };
+    },
+    async getStockDividendInfo(stock_info) {
+        let dividendInfo = null
+        try {
+            await fetch("https://web-api-test.onrender.com/dividend/", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(stock_info),
+            }).then((res) => res.json())
+              .then((data) => {
+                dividendInfo = data[0]
+            });
+        } catch (error) {
+            console.log(error)
+            console.error('API Server is shut down, please send dat after few minute.')
+            
+        }
+        return { dividendInfo };
     }
 };
 

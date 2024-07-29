@@ -21,7 +21,7 @@ const Stocks = () => {
   const { queryStatus, isMerge, isStocksDetail, stocksDetailNumber } = useSelector(
     (state) => state.mutualStateReducer
   );
-  const { allStocks, unSaleStocks, showStocks, loading, stockRealtimePrice, stockRealtimePriceStatus, stockRealtimePriceOffset} = useSelector(
+  const { allStocks, unSaleStocks, showStocks, loading, stockRealtimePrice, stockRealtimePriceStatus, stockRealtimePriceOffset, stockDividendInfo} = useSelector(
     (state) => state.apiDataReducer
   );
   const [incomeSort, setIncomeSort] = useState({sort: null })
@@ -30,6 +30,7 @@ const Stocks = () => {
   const { t } = useTranslation()
   const isStockHistory = location.pathname === "/sstock/stockHistory";
   const currentStockPage = location.pathname === "/sstock";
+
   useEffect(() => {
     if(settings.isFirst){
       dispatch(changeInitLoading(true));
@@ -75,6 +76,16 @@ const Stocks = () => {
     }
   } else {
     dispatch(changeInitLoading(false));
+  }
+
+  const getMappingDividend = (stock) => {
+
+    const  dividendInfo = stockDividendInfo?.find((dividend) => {
+      if(stock.number === dividend['stock_number']) {
+        return  dividend
+      }
+    })
+    return dividendInfo
   }
 
   return (
@@ -136,6 +147,7 @@ const Stocks = () => {
                   stockRealtimePriceOffset={stockRealtimePriceOffset}
                   isStocksDetail={false}
                   isMergeInof={true}
+                  dividendInfo={getMappingDividend(stock)}
                 />
                 {currentStockPage && isMerge && isStocksDetail && stock.stocksDetail.map((stock, index)=>(
                   <>

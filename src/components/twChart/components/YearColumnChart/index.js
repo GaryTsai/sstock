@@ -210,6 +210,7 @@ const ColumnChart = ({
             allStockDividend += Number(record.transfer)
             return allStockDividend
           }, 0) : 0)
+          return {}
       })
       setYearDividend(_yearDividend)
     },[chartInfo])

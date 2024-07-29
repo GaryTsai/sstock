@@ -103,6 +103,10 @@
 .show-all-stock-mobile {
     margin: 6px 0px 0px 0px;
 }
+.dividendDate {
+    color: #28bbad;
+    font-size: 12px;
+}
 /* loader */
 .loader {
     width: 5px;

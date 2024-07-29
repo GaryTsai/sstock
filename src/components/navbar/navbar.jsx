@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from "react-i18next";
@@ -7,7 +7,7 @@ import styled from '@emotion/styled'
 
 import './style.css';
 import { changeLoginStatus, changeStockMergeState } from '../../slices/mutualState';
-import { fetchRealtimePrice } from '../../slices/apiDataSlice';
+import { fetchRealtimePrice, fetchDividendInfo } from '../../slices/apiDataSlice';
 import SummaryList from './components/summaryList'
 import StockComment from './components/stockComment';
 import utils from "../../utils/dataHandle";
@@ -16,7 +16,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation()
   const { isMerge } = useSelector((state) => state.mutualStateReducer)
-  const { historicalProfitAndLoss, totalCost, profit, profitAndLoss, lastYearROI, unSaleStocks} = useSelector((state) => state.apiDataReducer)
+  const { historicalProfitAndLoss, totalCost, profit, profitAndLoss, lastYearROI, unSaleStocks, stockDividendInfoStatus} = useSelector((state) => state.apiDataReducer)
   const { t } = useTranslation();
 
   const currentStockPage = location.pathname === '/sstock' || location.pathname === '/sstock/'
@@ -49,6 +49,7 @@ const Navbar = () => {
     text-align: center;
     border: 3px solid;
     border-radius: 25px;
+    margin-top: 5px;
     background-color: #d5d5ef ;
     cursor: pointer;
     :hover {
@@ -82,7 +83,12 @@ const Navbar = () => {
             onClick={()=> {
               const stock_info = {stock_list: utils.infoMerge(unSaleStocks).map((stock) =>  { return stock.number; })}
               dispatch(fetchRealtimePrice(stock_info))
-              }}><img className="realtime-update" src={require('./../../assets/img/update.png')} /></DivCenter>}
+              }}><img className="navbarImgStyle" title={t("navBar.realtimePriceInfo")} src={require('./../../assets/img/update.png')} /></DivCenter>}
+             {currentStockPage && isMerge && <DivCenter 
+            onClick={()=> {
+              const stock_info = {stock_list: utils.infoMerge(unSaleStocks).map((stock) =>  { return stock.number; })}
+              dispatch(fetchDividendInfo(stock_info))
+              }}>{stockDividendInfoStatus ? <img className="navbarImgStyle" title={t("navBar.dividendInfo")} src={require('./../../assets/img/dividend.png')}/> : <img className="navbarImgStyle" src={require('./../../assets/img/navbar-loading.png')}/>}</DivCenter>}  
             <StockComment/>
             <li className="nav-item logout"  data-toggle="collapse" data-target=".navbar-collapse.show">
               <div className="nav-link logout-button" onClick={() => logOut()}>{t("logout")}</div>
