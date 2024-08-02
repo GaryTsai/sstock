@@ -47,74 +47,128 @@ const StyledDiv = styled("div")`
 `;
 
 
-const DualColumnChart = ({ chartInfo,  type }) => {
-  const [selectTimeRange, setSelectTimeRange] = useState("all");
-  const [selectList, setSelectList] = useState([{value:'all', label: 'all'}]);
-  const [info, setInfo] = useState({ value: chartInfo.monthValue, rate: chartInfo.monthRate, date: chartInfo.categories });
+const DualColumnChart = ({ yearDividendInfo }) => {
+  const [selectTimeRange, setSelectTimeRange] = useState('all');
+  const [selectList, setSelectList] = useState([{value: 'all', label: 'all'}]);
+  const [info, setInfo] = useState({ value: [], date: [] });
   const chartComponentRef = useRef(null);
   const { t } = useTranslation();
+  useEffect(() => {
+    let yearList = []
+    for (const [key, value] of Object.entries(yearDividendInfo)) {
+      yearList.push(key)
+    } 
+    let selectYear = [{value: 'all', label: 'all'}]
+    for (const year of yearList) {
+      selectYear.push({value: year, label: year})
+    } 
+    setSelectList(selectYear);
+  }, []);
+
+  useEffect(() => {
+    let yearList = []
+    for (const [key, value] of Object.entries(yearDividendInfo)) {
+      yearList.push(key)
+    } 
+
+    let monthDateList = []
+    let monthDividendMap = {}
+    let monthDividendList = []
+    for(let year of yearList){
+      for(let i = 1; i < 13; i++){
+        monthDateList.push(`${year}-${i < 10 ? '0'+i: i}`)
+        monthDividendMap[`${year}-${i < 10 ? '0'+i: i}`] = 0
+      }
+    }
+
+    for (const [key, items] of Object.entries(yearDividendInfo)) {
+      for(let item of items){
+        monthDividendMap[item.transferTime.substring(0, 7)] += item.transfer
+      }
+    } 
+
+    for (const [key, items] of Object.entries(monthDividendMap)) {
+      monthDividendList.push(items)
+    } 
+
+    setInfo({
+      value: monthDividendList,
+      date: monthDateList,
+    });
+  }, []);
+
+  const setDividendInfoGForAll = () => {
+    let yearList = []
+    for (const [key, value] of Object.entries(yearDividendInfo)) {
+      yearList.push(key)
+    } 
+
+    let monthDateList = []
+    let monthDividendMap = {}
+    let monthDividendList = []
+    for(let year of yearList){
+      for(let i = 1; i < 13; i++){
+        monthDateList.push(`${year}-${i < 10 ? '0'+i: i}`)
+        monthDividendMap[`${year}-${i < 10 ? '0'+i: i}`] = 0
+      }
+    }
+
+    for (const [key, items] of Object.entries(yearDividendInfo)) {
+      for(let item of items){
+        monthDividendMap[item.transferTime.substring(0, 7)] += item.transfer
+      }
+    } 
+
+    for (const [key, items] of Object.entries(monthDividendMap)) {
+      monthDividendList.push(items)
+    } 
+
+    setInfo({
+      value: monthDividendList,
+      date: monthDateList,
+    });
+  }
+
+  useEffect(()=>{
+    let monthDividendMap = {}
+    let monthDateList = []
+    let monthDividendList = []
+    if(selectTimeRange === 'all'){
+      setDividendInfoGForAll()
+    } else {
+      for(let i = 1; i < 13; i++){
+          monthDateList.push(`${selectTimeRange}-${i < 10 ? '0'+i: i}`)
+          monthDividendMap[`${selectTimeRange}-${i < 10 ? '0'+i: i}`] = 0
+      }
+
+      for (let monthDividend of  Object.keys(monthDividendMap)){
+        for (const [key, item] of Object.entries(yearDividendInfo[selectTimeRange])) {
+          if(monthDividend === item.transferTime.substring(0, 7))
+            monthDividendMap[monthDividend] += item.transfer
+        }
+      }
+
+      for (const [key, item] of Object.entries(monthDividendMap)) {
+        monthDividendList.push(item)
+      } 
+
+      setInfo({
+        value: monthDividendList,
+        date: monthDateList,
+      });
+    }
+  }, [selectTimeRange])
 
   const getSummary = () => {
     if (!info.value) return;
 
     if (info.value.length === 0) return;
     let result = info.value.reduce(
-      (previousValue, currentValue) => previousValue + currentValue.y,
+      (previousValue, currentValue) => previousValue + currentValue,
       0
     );
     return result;
   };
-  useEffect(() => {
-    if(JSON.stringify(chartInfo) === '{}') return
-    if(selectTimeRange !== 'all'){
-      setInfo({
-        value: chartInfo.monthValue.filter((item)=> new RegExp(`${selectTimeRange}`).test(item.date) && item),
-        rate: chartInfo.monthRate.filter((item)=> new RegExp(`${selectTimeRange}`).test(item.date) && item),
-        date: chartInfo.categories.filter((item)=> new RegExp(`${selectTimeRange}`).test(item) && item),
-      });
-    }else{
-      setInfo({
-        value: chartInfo.monthValue,
-        rate: chartInfo.monthRate,
-        date: chartInfo.categories,
-      });
-    }
-  }, [selectTimeRange]);
-
-  useEffect(() => {
-    setInfo({
-      value: chartInfo.monthValue,
-      rate: chartInfo.monthRate,
-      date: chartInfo.categories,
-    });
-  }, []);
-
-  useEffect(() => {
-    const arrayEquals = (arrOne, arrTwo) => {
-      return Array.isArray(arrOne) &&
-          Array.isArray(arrTwo) &&
-          arrOne.length === arrTwo.length &&
-          arrOne.every((item, index) => item['value'] === arrTwo[index]['value']);
-  }
-  
-    if(JSON.stringify(chartInfo) === '{}') return
-    let list = chartInfo.yearCategories && chartInfo.yearCategories.map((year) => {
-      return { value: year, label: year };
-    });
-
-    if(!list){
-      setSelectList(selectList)
-    }else if( arrayEquals(selectList.slice(1), list)){
-    }else {
-      setSelectList(selectList.concat(list))
-    }
-
-    setInfo({
-      value: chartInfo.monthValue,
-      rate: chartInfo.monthRate,
-      date: chartInfo.categories,
-    });
-  }, [chartInfo]);          
 
   const options = {
     chart: {
@@ -186,7 +240,7 @@ const DualColumnChart = ({ chartInfo,  type }) => {
     <div style={{ height: "60vh"}}>
       <Container className="row">
         <ChartTitle className="col-sm-12 col-md-6">
-          {t("tIncome")}<ChartValue>{ getSummary() + t('twDollars')}</ChartValue>
+          {`${t("chart.yearDividendChart")}:`}<ChartValue>{ getSummary() + t('twDollars')}</ChartValue>
         </ChartTitle>
         <DropDownContainer className="col-sm-12 col-md-6">
           <StyledDiv>

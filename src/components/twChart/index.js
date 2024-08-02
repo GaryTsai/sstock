@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 import YearColumnChart from './components/YearColumnChart';
 import DualColumnChart from './components/DulaColumnChart';
 import DividendChart from './components/YearDividendChart';
+import MonthDividendChart from './components/MonthDividendChart';
 import Report from './components/Report';
 import api from '../../api/api'
 import { fetchStock } from '../../slices/apiDataSlice';
@@ -21,7 +22,8 @@ const TwChart = () => {
       monthRate: [],
       yearCategories: [],
       yearValue: []
-    }
+    },
+    yearOfDividend: []
   })
   
   const [chartTab, setChartTab] = useState("monthIncome")
@@ -158,6 +160,7 @@ const TwChart = () => {
           <button type="button" className={`btn btn-info ${chartTab === "monthIncome" && 'active'}`} onClick={()=> setChartTab("monthIncome")}>{t("chart.monthIncomeChart")}</button>
           <button type="button" className={`btn btn-info ${chartTab === "yearIncome" && 'active'}`} onClick={()=> setChartTab("yearIncome")}>{t("chart.yearIncomeChart")}</button>
           <button type="button" className={`btn btn-info ${chartTab === "dividend" && 'active'}`} onClick={()=> setChartTab("dividend")}>{t("chart.dividendChart")}</button>
+          <button type="button" className={`btn btn-info ${chartTab === "monthDividend" && 'active'}`} onClick={()=> setChartTab("monthDividend")}>{t("chart.dividendMonthChart")}</button>
           <button type="button" className={`btn btn-info ${chartTab === "report" && 'active'}`} onClick={()=> setChartTab("report")}>{t("chart.yearIncomeReport")}</button>
         </div>
         {loading && <div style={{position: 'absolute',
@@ -174,6 +177,9 @@ const TwChart = () => {
                   backgroundSize: '100%',
                   top: 'calc(50% - 50px)'
                 }} src={require('./../../assets/img/contentLoading.png')}/></div>}
+        { !loading && chartTab === "monthDividend" && <Grid item xs={12} md={6}>
+          <MonthDividendChart yearDividendInfo={dividendInfo.yearDividend}/>
+        </Grid>}
         { !loading && chartTab === "monthIncome" && <Grid item xs={12} md={6}>
           <DualColumnChart chartInfo={dividendInfo.chartInfo} monthValue={dividendInfo.chartInfo.monthValue} type={'year'}/>
         </Grid>}

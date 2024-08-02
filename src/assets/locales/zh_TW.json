@@ -63,9 +63,10 @@
       "chart": {
             "monthIncomeChart": "月損益圖", 
             "yearIncomeChart": "歷年損益圖",
-            "dividendChart": "股利圖表",
+            "dividendChart": "股利總圖表",
             "yearDividendChart": "該年總股利",
             "yearIncomeReport": "年損益報表",
+            "dividendMonthChart": "月股利報表",
             "yearSelect": "選擇年份:",
             "to": "至:",
             "yearCost": "該年投入",
